@@ -19,13 +19,13 @@
   <div class=" collapse navbar-collapse" id="navbarNavDropdown">
     <ul class=" ml-auto mr-0 navbar-nav">
       <li class="nav-item <?php if ($link == "") {echo 'active';}?>">
-        <a class="nav-link" href="<?=base_url()?>">Home </a>
+        <a class="nav-link btn" href="<?=base_url()?>">Home </a>
       </li>
-      <li class="nav-item <?php if ($link == "login") {echo 'active';}?>">
-        <a class="nav-link" href="<?=base_url('/login')?>">Login</a>
+      <li class="nav-item mx-1<?php if ($link == "login") {echo 'active';}?>">
+        <a class="nav-link btn btn-success" href="<?=base_url('/login')?>">Login</a>
       </li>
-      <li class="nav-item <?php if ($link == "about-us") {echo 'active';}?>">
-        <a class="nav-link" href="<?=base_url('/about-us');?>">About us </a>
+      <li class="nav-item  <?php if ($link == "about-us") {echo 'active';}?>">
+        <a class="nav-link btn " href="<?=base_url('/about-us');?>">About us </a>
       </li>
       <li class="nav-item dropdown d-none">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

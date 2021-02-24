@@ -36,6 +36,7 @@ $routes->get('/indexold', 'Home::indexold');
 $routes->get('/indexold', 'Home::index');
 $routes->get('/about-us', 'Home::aboutus');
 $routes->get('/login', 'User::login');
+$routes->get('/register', 'User::register');
 
 /*
  * --------------------------------------------------------------------
