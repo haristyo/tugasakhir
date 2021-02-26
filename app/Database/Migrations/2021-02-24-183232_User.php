@@ -50,6 +50,10 @@ class User extends Migration
 			'updated_user' => [
 				'type'           => 'DATETIME',
 				'null'           => true,
+			],
+			'is_admin' => [
+				'type'           => 'char',
+				'null'           => true,
 			]
 
 	]);

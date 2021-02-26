@@ -13,10 +13,11 @@ class Home extends BaseController
 		$title = [
 			'title' => 'Home | Scrum Tool',
 			'link' => 	$this->request->uri->getSegment(1)
+
 		];
-		echo view('header1',$title);
+		echo view('header1_v',$title);
 		echo ("ini tampilan home");
-		echo view('footer1');
+		echo view('footer1_v');
 	}
 	public function aboutus()
 	{
@@ -25,8 +26,8 @@ class Home extends BaseController
 			'link' => 	$this->request->uri->getSegment(1)
 		];
 	// dd($this->request->uri->getSegment(1));
-		echo view('header1',$title);
+		echo view('header1_v',$title);
 		echo ("ini tampilan About US");
-		echo view('footer1');
+		echo view('footer1_v');
 	}
 }
