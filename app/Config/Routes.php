@@ -36,7 +36,10 @@ $routes->get('/indexold', 'Home::indexold');
 $routes->get('/indexold', 'Home::index');
 $routes->get('/about-us', 'Home::aboutus');
 $routes->get('/login', 'User::login');
+$routes->get('/logout', 'User::logout');
 $routes->get('/register', 'User::register');
+$routes->get('/profil', 'User::profil');
+$routes->get('/profil/edit/','User::edit');
 
 /*
  * --------------------------------------------------------------------

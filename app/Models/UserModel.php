@@ -9,7 +9,7 @@ class UserModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_user';
     protected $updatedField  = 'updated_user';
-    protected $allowedFields = ['username','nama_user','email','password','foto_profil','alamat','is_admin'];
+    protected $allowedFields = ['username','nama_user','email','password','foto_profile','is_admin'];
 
 
 }

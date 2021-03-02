@@ -32,9 +32,6 @@
                 <div class="form-group">
                     <label for="password1">Kata Sandi</label>
                     <input type="password" class="form-control <?= ($validation->hasError('password1')) ? 'is-invalid' : '' ;?>" id="password1" name="password1" value="<?= old('password1')?>">
-
-
-                    
                     <div class="invalid-feedback">
                         <?=$validation->getError('password1');?>
                     </div>

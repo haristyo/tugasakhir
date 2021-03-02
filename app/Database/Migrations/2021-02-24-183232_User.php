@@ -31,7 +31,7 @@ class User extends Migration
 				'type'           => 'VARCHAR',
 				'constraint'     => '255',
 				'null'           => true,
-				'default'		 => 'img/profil/default.jpg',
+				'default'		 => 'default.jpg',
 			],
 			'email' => [
 				'type'           => 'VARCHAR',

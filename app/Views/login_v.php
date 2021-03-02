@@ -1,25 +1,33 @@
-<div class="container-fluid w-75 h-100"  style="background-color:white; border-radius:10px; margin-top:7%; padding:1%;">
-    <div class="row  p-4">
-        <div class="col-6 col-sm-12 col-md-6 h-100">
+<div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px; margin-top:7%; padding:1%;">
+    <div class="row p-4">
+        <div class="col-12 col-sm-12 col-md-6 h-100 mb-2">
             <img src="<?=base_url('/img/register.jpg')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
         </div>
-        <div class="col-6 col-sm-12 col-md-6 h-100 w-100">
-            <form class="">
+        <div class="col-12 col-xs-12 col-sm-12 col-md-6 h-100 w-100">
+        <div class="section-title text-center">
+            <?php if(session()->getFlashData('pesan')) :?>
+              <div class="alert alert-success" role="alert">
+                <?= session()->getFlashData('pesan') ?>
+              </div>
+            <?php endif;?>
+        </div>
+            <form class="" method="post" action="/user/auth">
+            <?= csrf_field(); ?>
                 <div class="form-group">
-                    <label for="useremail">Email address or Username</label>
-                    <input type="text" class="form-control" id="useremail" name="email">
-                    <small id="emailHelp" class="form-text text-muted">enter your email or username</small>
+                    <label for="useremail">Alamat Surel atau Nama Pengguna</label>
+                    <input type="text" class="form-control" id="useremail" name="useremail"  value="<?=old('useremail')?>">
+                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password">
+                    <label for="password">Kata Sandi</label>
+                    <input type="password" class="form-control" id="password" name="password"  value="<?=old('password')?>">
                 </div>
                 <div class="form-group">
-                    <label class="form-check-label" for="exampleCheck1">Don't have a account ? 
-                    <a class="" href="<?= base_url('/register');?>">Register</a>
+                    <label class="form-check-label" for="exampleCheck1">Belum Punya Akun ? 
+                    <a class="" href="<?= base_url('/register');?>">Daftar</a>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-success">Masuk</button>
             </form>
         </div>
 
