@@ -1,15 +1,15 @@
-<div class="container-fluid w-75 h-100"  style="background-color:white; border-radius:10px;padding:1%;">
+<div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px;padding:1%;">
     <div class="row  p-4">
         <div class="col-6 col-sm-12 col-md-6 h-100 p-2">
             <img src="<?=base_url('/img/register.jpg')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
         </div>
         <div class="col-6 col-sm-12 col-md-6 h-100 w-100">
+        <form class="" action="/user/addUser" method="post">
         <?= csrf_field(); ?>
-            <form class="" action="/user/addUser" method="post">
             <input type="hidden" name="is_admin" value="N">
                 <div class="form-group">
                     <label for="username">Nama User</label>
-                    <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ;?>" id="username" name="username" autofocus value="<?= old('email')?>">
+                    <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ;?>" id="username" name="username" autofocus value="<?= old('username')?>">
                     <small id="emailHelp" class="form-text text-muted">masukkan username</small>
                     <div class="invalid-feedback">
                         <?=$validation->getError('username');?>
@@ -43,11 +43,7 @@
                         <?=$validation->getError('password2');?>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-check-label " for="exampleCheck1">Sudah Memiliki akun ? 
-                    <a class="" href="<?= base_url('/login');?>">Masuk</a>
-                    </label>
-                </div>
+
                 <div class="form-check">
                     <input class="form-check-input <?= ($validation->hasError('sk')) ? 'is-invalid' : '' ;?>" type="checkbox" value="1" id="defaultCheck1" name="sk"  >
                     <label class="form-check-label" for="defaultCheck1">
@@ -58,6 +54,11 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary my-2 w-100">Daftar</button>
+                <div class="form-group">
+                    <label class="form-check-label " for="exampleCheck1">Sudah Memiliki akun ? 
+                    <a class="" href="<?= base_url('/login');?>">Masuk</a>
+                    </label>
+                </div>
             </form>
         </div>
 

@@ -28,9 +28,9 @@
                 </div>
                 <div class="form-group">
                     <label for="password2">Konfirmasi Password Baru</label>
-                    <input type="password" class="form-control <?= ($validation->hasError('password1')) ? 'is-invalid' : '' ;?>" id="password2" name="password2"  value="<?=old('password2')?>">
+                    <input type="password" class="form-control <?= ($validation->hasError('password2')) ? 'is-invalid' : '' ;?>" id="password2" name="password2"  value="<?=old('password2')?>">
                     <div class="invalid-feedback">
-                        <?=$validation->getError('password1');?>
+                        <?=$validation->getError('password2');?>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Masuk</button>

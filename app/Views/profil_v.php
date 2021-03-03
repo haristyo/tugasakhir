@@ -1,4 +1,6 @@
 <div class="container px-2 w-75 py-4 center"  style="background-color:#fbeeac; border-radius:10px; min-height:599px;">
+<h1 class="text-center"> Profil Saya</h1>
+<hr width="75%" color="black" style="height:5px;">
   <div class=" d-flex w-75 mx-auto">
     <a href="<?= base_url('/user/gantipassword/');?>" class="mr-0 ml-auto btn btn-outline-dark">Ubah Kata Sandi</a>
     <a href="<?= base_url('/profil/edit/');?>" class="mr-0 ml-2 btn btn-primary">Ubah Profil</a>
@@ -32,7 +34,8 @@
       <tr>
         <td>Tanggal Bergabung</td>
         <td>:</td>
-        <th><?= $profil['created_user'];?></th>
+        <th><?= date("d F Y H:i:s", strtotime($profil['created_user']))?></th>
+        
       </tr>
     </tbody>
   </table>

@@ -4,10 +4,12 @@ namespace App\Controllers;
 use App\Models\UserModel;
 class User extends BaseController
 {
-    protected $userModel;
+	protected $userModel;
+	protected $session;
 	public function __construct()
 	{
 		$this->userModel = new UserModel();
+		$this->session = \Config\Services::session();
 		// if (!isset($_SESSION['last'])) {
 		// 	$_SESSION['last'] = "";
 		// };
@@ -27,7 +29,6 @@ class User extends BaseController
         
     }
 	public function auth(){
-		$session = session();
 
 		$username = $this->request->getVar('useremail');
 		$password = $this->request->getVar('password');
@@ -39,7 +40,7 @@ class User extends BaseController
 		// dd($_SESSION['last']);
 		
 		if ($username =="" || $password =="") {
-			$session->setFlashdata('pesan', 'Username dan Password Wajib diisi');
+			$this->session->setFlashdata('pesan', 'Username dan Password Wajib diisi');
 			return redirect()->to(base_url('login'))->withInput();
 		}
 		else {
@@ -56,7 +57,7 @@ class User extends BaseController
 					'profil' => $data['foto_profile'],
 					'logged_in'=> TRUE
 					];
-					$session->set($sess_data);
+					$this->session->set($sess_data);
 					
 					// dd($_SESSION['last']);
 					
@@ -64,12 +65,12 @@ class User extends BaseController
 	
 				}
 				else {
-					$session->setFlashdata('pesan', 'Password salah');
+					$this->session->setFlashdata('pesan', 'Password salah');
 					return redirect()->to(base_url('login'))->withInput();
 				}
 			}
 			else {
-				$session->setFlashdata('pesan', 'Username / Email Tidak terdaftar');
+				$this->session->setFlashdata('pesan', 'Username / Email Tidak terdaftar');
 				return redirect()->to(base_url('login'))->withInput();
 			
 			}
@@ -145,39 +146,48 @@ class User extends BaseController
 	}
 	public function profil()
     {
-		$session = session();
-		$title = [
-			'title' => 'Profil Saya | Scrum Tool',
-			'link' => 	$this->request->uri->getSegment(1)
-		];
-		$id= $_SESSION['id_user'];
-		$data = [ 
-			'profil' => $this->userModel->where('id_user',$id)->first()
-		];
-		// dd($data);
-		echo view('header1_v',$title);
-		echo view('profil_v',$data);
-        // echo view('login_v');
-		echo view('footer1_v');
+		if($this->session->logged_in== TRUE) {
+			$title = [
+				'title' => 'Profil Saya | Scrum Tool',
+				'link' => 	$this->request->uri->getSegment(1)
+			];
+			$id= $_SESSION['id_user'];
+			$data = [ 
+				'profil' => $this->userModel->where('id_user',$id)->first()
+			];
+			// dd($data);
+			echo view('header1_v',$title);
+			echo view('profil_v',$data);
+			// echo view('login_v');
+			echo view('footer1_v');
+		}
+		else {
+			return redirect()->to(base_url('/login'));
+		}	
         
 	}
 	public function edit()
     {
-		$session = session();
-		$id= $_SESSION['id_user'];
-		$title = [
-			'title' => 'Edit Profil | Scrum Tool',
-			'link' => 	$this->request->uri->getSegment(1)
-		];
-		$data = [ 
-			'profil' => esc($this->userModel->where('id_user',$id)->first()),
-			'validation' =>  \Config\Services::validation(),
-			'back' => $_SESSION['_ci_previous_url']
-		];
-		//  dd( base_url('/user/update'));
-		echo view('header1_v',$title);
-		echo view('editprofil_v',$data);
-		echo view('footer1_v');
+		
+		if($this->session->logged_in==TRUE) {
+			$id= $this->session->id_user;
+			$title = [
+				'title' => 'Edit Profil | Scrum Tool',
+				'link' => 	$this->request->uri->getSegment(1)
+			];
+			$data = [ 
+				'profil' => esc($this->userModel->where('id_user',$id)->first()),
+				'validation' =>  \Config\Services::validation(),
+				'back' => $_SESSION['_ci_previous_url']
+			];
+			//  dd( base_url('/user/update'));
+			echo view('header1_v',$title);
+			echo view('editprofil_v',$data);
+			echo view('footer1_v');
+		}
+		else {
+			return redirect()->to(base_url('/login'));
+		}
         
 	}
 	public function update()
@@ -240,12 +250,13 @@ class User extends BaseController
 	}
 
 	public function gantipassword(){
+	
+	if($this->session->logged_in==TRUE) {
 		$title = [
 			'title' => 'Ganti Kata Sandi | Scrum Tool',
 			'link' => 	$this->request->uri->getSegment(1)
 		];
-		$session = session();
-		$id= $_SESSION['id_user'];
+		$id= $this->session->id_user;
 		$data = [
 			'profil' => esc($this->userModel->where('id_user',$id)->first()),
 			'validation' =>  \Config\Services::validation()
@@ -253,6 +264,10 @@ class User extends BaseController
 		echo view('header1_v',$title);
         echo view('gantipassword_v',$data);
 		echo view('footer1_v');
+	}
+	else {
+		return redirect()->to(base_url('/login'));
+	}
 		
 	}
 	public function updatepassword()

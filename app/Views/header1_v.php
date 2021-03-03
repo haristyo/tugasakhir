@@ -44,7 +44,7 @@
           <?php echo session()->get('username');?>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="<?= base_url('/project');?>">Proyek Saya</a>
+          <a class="dropdown-item" href="<?= base_url('/proyek');?>">Proyek Saya</a>
           <a class="dropdown-item" href="<?= base_url('/profil');?>">Profil</a>
           <div class="dropdown-divider"></div>
           <a class=" dropdown-item w-100 mr-4" style="color: white; background-color:red;"  href="<?= base_url('/logout');?>">Keluar</a>
