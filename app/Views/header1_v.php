@@ -4,18 +4,14 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+    <script src="<?= base_url('js/jquery-3.6.0.min.js');  ?>" type='text/javascript' ></script>
     <script src="<?= base_url('js/bootstrap.bundle.js');  ?>" type='text/javascript' ></script>
     
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="<?= base_url('css/fontawesome.css')?>">
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.css')?>">
-    <link rel="stylesheet"
-2
-      href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-3
-      integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
-4
-      crossorigin="anonymous">
+
 
     <title><?= $title?></title>
   </head>

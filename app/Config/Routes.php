@@ -33,13 +33,20 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/indexold', 'Home::indexold');
-$routes->get('/indexold', 'Home::index');
+$routes->get('/', 'Home::index');
 $routes->get('/about-us', 'Home::aboutus');
 $routes->get('/login', 'User::login');
-$routes->get('/logout', 'User::logout');
+$routes->get('/logout', 'User::logout',['filter' => 'LoginFilter']);
 $routes->get('/register', 'User::register');
-$routes->get('/profil', 'User::profil');
-$routes->get('/profil/edit/','User::edit');
+$routes->get('/profil', 'User::profil', ['filter' => 'LoginFilter']);
+$routes->get('/profil/edit/','User::edit',['filter' => 'LoginFilter']);
+$routes->get('/profil/gantipassword/','User::gantipassword',['filter' => 'LoginFilter']);
+$routes->get('/','Proyek::index',['filter' => 'LoginFilter']);
+$routes->get('/proyek/join','Proyek::join');
+$routes->get('/proyek/create','Proyek::create');
+$routes->get('/proyek/(:segment)','Proyek::detail/$1',['filter' => 'LoginFilter']);
+$routes->get('/proyek/meeting/(:segment)','Proyek::meeting/$1',['filter' => 'LoginFilter']);
+$routes->get('/proyek/presensi/(:segment)','Proyek::presensi/$1',['filter' => 'LoginFilter']);
 
 /*
  * --------------------------------------------------------------------

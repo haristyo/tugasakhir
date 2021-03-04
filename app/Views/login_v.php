@@ -13,6 +13,7 @@
         </div>
             <form class="" method="post" action="/user/auth">
             <?= csrf_field(); ?>
+            <input type=hidden value="<?=session()->get('_ci_previous_url');?>" name="back">
                 <div class="form-group">
                     <label for="useremail">Alamat Surel atau Nama Pengguna</label>
                     <input type="text" class="form-control" id="useremail" name="useremail"  value="<?=old('useremail')?>">

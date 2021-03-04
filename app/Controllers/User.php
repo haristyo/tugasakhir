@@ -29,7 +29,7 @@ class User extends BaseController
         
     }
 	public function auth(){
-
+		// $last =;
 		$username = $this->request->getVar('useremail');
 		$password = $this->request->getVar('password');
 		$data = esc($this->userModel->where('username',$username)->first());
@@ -61,7 +61,7 @@ class User extends BaseController
 					
 					// dd($_SESSION['last']);
 					
-						return redirect()->to(base_url());
+						return redirect()->to( base_url('proyek'));
 	
 				}
 				else {
@@ -146,7 +146,6 @@ class User extends BaseController
 	}
 	public function profil()
     {
-		if($this->session->logged_in== TRUE) {
 			$title = [
 				'title' => 'Profil Saya | Scrum Tool',
 				'link' => 	$this->request->uri->getSegment(1)
@@ -160,16 +159,11 @@ class User extends BaseController
 			echo view('profil_v',$data);
 			// echo view('login_v');
 			echo view('footer1_v');
-		}
-		else {
-			return redirect()->to(base_url('/login'));
-		}	
-        
 	}
 	public function edit()
     {
 		
-		if($this->session->logged_in==TRUE) {
+		
 			$id= $this->session->id_user;
 			$title = [
 				'title' => 'Edit Profil | Scrum Tool',
@@ -184,10 +178,6 @@ class User extends BaseController
 			echo view('header1_v',$title);
 			echo view('editprofil_v',$data);
 			echo view('footer1_v');
-		}
-		else {
-			return redirect()->to(base_url('/login'));
-		}
         
 	}
 	public function update()
@@ -251,7 +241,6 @@ class User extends BaseController
 
 	public function gantipassword(){
 	
-	if($this->session->logged_in==TRUE) {
 		$title = [
 			'title' => 'Ganti Kata Sandi | Scrum Tool',
 			'link' => 	$this->request->uri->getSegment(1)
@@ -264,10 +253,6 @@ class User extends BaseController
 		echo view('header1_v',$title);
         echo view('gantipassword_v',$data);
 		echo view('footer1_v');
-	}
-	else {
-		return redirect()->to(base_url('/login'));
-	}
 		
 	}
 	public function updatepassword()
