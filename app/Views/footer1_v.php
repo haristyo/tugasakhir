@@ -1,6 +1,8 @@
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="<?= base_url('js/popper.js');  ?>" type='text/javascript' ></script>
+    <script src="<?= base_url('js/main.js');  ?>" type='text/javascript' ></script>
     
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->

@@ -30,7 +30,7 @@ class Proyek extends BaseController
             $data = [
                 'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user)
             ];
-            
+            // dd($data);
             // echo ($this->memberModel->getMemberbyUserProject(1,1)['id_member']);
             // echo $data['memberuserproject']['id_member'];
             echo view('header1_v',$title);
@@ -85,7 +85,7 @@ class Proyek extends BaseController
             'deskripsi'     	=> $this->request->getVar('deskripsi')
 		
         ]);
-        $data = esc($this->proyekModel->where('kode_join',$this->request->getVar('kode_join'))->first());
+        $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
         $this->memberModel->save([
             'id_project'    => $data['id_project'],
             'id_user'       => $this->session->id_user,
@@ -114,7 +114,7 @@ class Proyek extends BaseController
     public function joined()
     {
         if (!$this->request->getVar('kode_join')=="") {
-            $data = esc($this->proyekModel->where('kode_join',$this->request->getVar('kode_join'))->first());
+            $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
             $joined = $this->memberModel->getMemberbyUserProject($this->session->id_user ,$data['id_project']);
         //  dd($joined['id_member']);
         }
@@ -140,7 +140,7 @@ class Proyek extends BaseController
 		]) || !$data['password_project'] == $this->request->getVar('password_project') || !$joined==null) {
 			// $validation = \Config\Services::validation();
             // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
-            if (!$joined==null && $joined['id_member']>0) { $this->session->setFlashdata('kode_join', 'Anda Telah bergabung dengan Proyek ini');}
+            if ($joined>0) { $this->session->setFlashdata('kode_join', 'Anda Telah bergabung dengan Proyek ini');}
 			return redirect()->to(base_url('/proyek/join'))->withInput();
         }
         $this->memberModel->save([
@@ -154,13 +154,15 @@ class Proyek extends BaseController
     {
         $data = [
 			'project' => esc($this->proyekModel->getProject($id_project)),
-			// 'member' => esc($this->memberModel->getArtikelUser($id_artikel))
+			'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project))
 		];
-        $title = ['title' => 'Detail Artikel | Panganku',
+        $title = ['title' => 'Detail Project | Scrum Tool',
         'link' => 	$this->request->uri->getSegment(1)];
 		// dd($data);
-		echo view('header1_v',$title);
-		echo view('detailproyek_v',$data);
+        echo view('header1_v',$title);
+        
+		echo view('sidebar',$data);
+		// echo view('detailproyek_v',$data);
 		echo view('footer1_v');
     }
 

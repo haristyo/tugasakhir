@@ -8,15 +8,19 @@
     <script src="<?= base_url('js/jquery-3.6.0.min.js');  ?>" type='text/javascript' ></script>
     <script src="<?= base_url('js/bootstrap.bundle.js');  ?>" type='text/javascript' ></script>
     
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('css/fontawesome.css')?>">
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.css')?>">
+    <link rel="stylesheet" href="<?= base_url('css/style1.css')?>">
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
     <title><?= $title?></title>
   </head>
   <body class="h-100 w-100" style="background-color:lightblue;">
-  <nav class="navbar navbar-expand-lg navbar-dark d-flex px-4 py-2" style="background-color:#28527a;">
+  <nav class="navbar navbar-expand-lg navbar-dark d-flex px-4 py-2" style="background-color:#3445b4;">
   <a class="navbar-brand mx-2 " href="<?=base_url()?>">Scrum Tool</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -35,11 +39,11 @@
       </li>
       <?php } else { ?>
       <li class="nav-item dropdown mx-2">
-        <a class="nav-link dropdown-toggle btn btn-success" style="border-radius:4px;" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img src="<?= base_url('/img/profil/'.session()->get('profil'))?>" class="img-fluid" style="object-fit: contain;border-radius:50%; max-height:20px;" alt=<?= session()->get('profil')?>">
-          <?php echo session()->get('username');?>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="nav-link dropdown-toggle btn btn-success" style="border-radius:4px; mr-4" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="<?= base_url('/img/profil/'.session()->get('profil'))?>" class="img-fluid" style="object-fit: contain;border-radius:50%; max-height:20px;" alt=<?= session()->get('profil')?>">
+          <?php echo session()->get('username')."&nbsp;"."&nbsp;";?>
+        </a>   
+        <div class="dropdown-menu" style="margin-left:20px;" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="<?= base_url('/proyek');?>">Proyek Saya</a>
           <a class="dropdown-item" href="<?= base_url('/profil');?>">Profil</a>
           <div class="dropdown-divider"></div>

@@ -28,6 +28,10 @@ class ProjectModel extends Model
            return $this->join('user','user.id_user=project.creator_project')->Where(['id_project' => $id_project])->first();
        }
     }
+    public function getProjectbyKode($kode_join)
+    {
+       return $this->where('kode_join', $kode_join)->first();
+    }
 
 
 }
