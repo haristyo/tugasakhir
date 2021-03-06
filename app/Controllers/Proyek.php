@@ -3,17 +3,23 @@
 namespace App\Controllers;
 use App\Models\ProjectModel;
 use App\Models\MemberModel;
+use App\Models\MeetingModel;
+use App\Models\PresensiModel;
 class Proyek extends BaseController
 {
     protected $session;   
     protected $proyekModel;
     protected $memberModel;
+    protected $meetingModel;
+    protected $presensiModel;
     
 	public function __construct()
 	{
        
         $this->proyekModel = new ProjectModel();
         $this->memberModel = new MemberModel();
+        $this->meetingModel = new MeetingModel();
+        $this->presensiModel = new PresensiModel();
         $this->session = \Config\Services::session();
 		// if (!isset($_SESSION['last'])) {
 		// 	$_SESSION['last'] = "";
@@ -173,9 +179,42 @@ class Proyek extends BaseController
             
     }
 
-    public function meeting($id_meeting)
+    public function meeting($id_project)
     {
-        # code...
+        $data = [
+			'project' => esc($this->proyekModel->getProject($id_project)),
+			'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
+            'members' => esc($this->memberModel->getMemberbyProject($id_project)),
+            'meetings' => esc($this->meetingModel->getMeetingbyProject($id_project))
+		];
+        $title = ['title' => 'Meeting | Scrum Tool',
+        'link' => 	$this->request->uri->getSegment(1)];
+        // dd($data['meeting']);
+        echo view('header1_v',$title);
+        echo view('sidebar',$data);
+        echo view('meeting_v',$data);
+        echo view('footer1_v');
+    }
+    public function meetingjoin($id_meeting)
+    {
+        $data = esc($this->meetingModel->getMeetingbyId($id_meeting));
+        $countpresensi = esc($this->presensiModel->getCountPresensibyUserMeeting($this->session->id_user,$id_meeting));
+        $present = esc($this->presensiModel->getIdbyUserMeeting($this->session->id_user,$id_meeting));
+        // d($countpresensi);
+        // dd($present['id_presensi']);
+        if ($countpresensi['id_presensi']>0){
+            $this->presensiModel->save([
+                'id_presensi' 		=> esc($present['id_presensi'])
+            ]);
+        ;}
+        else {
+            $this->presensiModel->save([
+                'id_meeting' 		=> $id_meeting,
+                'id_user'  	        => $this->session->id_user
+            ]);
+        }
+        
+        return redirect()->to($data['link_meeting']);
     }
     public function presensi($id_meeting)
     {

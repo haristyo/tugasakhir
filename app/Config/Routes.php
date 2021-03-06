@@ -45,7 +45,8 @@ $routes->get('/','Proyek::index',['filter' => 'LoginFilter']);
 $routes->get('/proyek/join','Proyek::join');
 $routes->get('/proyek/create','Proyek::create');
 $routes->get('/proyek/(:segment)','Proyek::detail/$1',['filter' => 'LoginFilter']);
-$routes->get('/proyek/meeting/(:segment)','Proyek::meeting/$1',['filter' => 'LoginFilter']);
+$routes->get('/proyek/(:segment)/meeting','Proyek::meeting/$1',['filter' => 'LoginFilter']);
+$routes->get('/proyek/meetingjoin/(:segment)','Proyek::meetingjoin/$1',['filter' => 'LoginFilter']);
 $routes->get('/proyek/presensi/(:segment)','Proyek::presensi/$1',['filter' => 'LoginFilter']);
 
 /*
