@@ -22,7 +22,7 @@ class MemberModel extends Model
         if($id_user == false)
         { return $this->selectCount('member.id_member')->findAll();
         } else 
-        { return $this->selectCount('member.id_member')->where(['member.id_user' => $id_user, "member.id_project" => $id_project])->findAll();
+        { return $this->selectCount('member.id_member')->where(['member.id_user' => $id_user, "member.id_project" => $id_project])->orderBy('position', 'DESC')->findAll();
         }
     }
     public function getMemberbyProject($id_project = false)
@@ -31,7 +31,7 @@ class MemberModel extends Model
         {return $this->join('user','user.id_user=member.id_user')
                 ->join('project','project.id_project=member.id_project')->findAll();}
         else {return $this->join('user','user.id_user=member.id_user')
-                ->join('project','project.id_project=member.id_project')->where('member.id_project',$id_project)->get()->getResultArray();}
+                ->join('project','project.id_project=member.id_project')->where('member.id_project',$id_project)->orderBy('position', 'DESC')->get()->getResultArray();}
     }
     public function getMemberDetailbyProject($id_project = false)
     {

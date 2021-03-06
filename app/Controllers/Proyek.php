@@ -154,16 +154,23 @@ class Proyek extends BaseController
     {
         $data = [
 			'project' => esc($this->proyekModel->getProject($id_project)),
-			'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project))
+			'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
+			'members' => esc($this->memberModel->getMemberbyProject($id_project))
 		];
         $title = ['title' => 'Detail Project | Scrum Tool',
         'link' => 	$this->request->uri->getSegment(1)];
-		// dd($data);
-        echo view('header1_v',$title);
-        
-		echo view('sidebar',$data);
-		// echo view('detailproyek_v',$data);
-		echo view('footer1_v');
+        // dd($data['members']);
+        if ($data['member'] == null)
+        {
+            return redirect()->to(base_url('/proyek/'));
+        }
+        else {
+            echo view('header1_v',$title);
+		    echo view('sidebar',$data);
+		    echo view('detailproyek_v',$data);
+            echo view('footer1_v');
+        }
+            
     }
 
     public function meeting($id_meeting)
