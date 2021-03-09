@@ -17,12 +17,12 @@ class MemberModel extends Model
         else {return $this->join('user','user.id_user=member.id_user')
                ->join('project','project.id_project=member.id_project')->where('member.id_user',$id_user)->get()->getResultArray();}
     }
-    public function getMemberbyUserProject($id_user = false, $id_project = false)
+    public function getCountMemberbyUserProject($id_user = false, $id_project = false)
     {
         if($id_user == false)
         { return $this->selectCount('member.id_member')->findAll();
         } else 
-        { return $this->selectCount('member.id_member')->where(['member.id_user' => $id_user, "member.id_project" => $id_project])->orderBy('position', 'DESC')->findAll();
+        { return $this->selectCount('member.id_member')->where(['member.id_user' => $id_user, "member.id_project" => $id_project])->first();
         }
     }
     public function getMemberbyProject($id_project = false)
@@ -41,6 +41,10 @@ class MemberModel extends Model
         else {return $this->select('member.id_member,member.id_user,user.nama_user as nama anggota,member.position,member.created_member as tanggal gabung,member.id_project,project.nama_project,project.creator_project,members.nama_user as nama_creator,member.created_member,project.created_project as tanggal pembuatan')->join('user','user.id_user=member.id_user')
                 ->join('project','project.id_project=member.id_project')->join('user as members','members.id_user=project.creator_project')->where('member.id_project',$id_project)->get()->getResultArray();}
     }
+    public function getIdbyUserProject($id_user,$id_project)
+    {
+        return $this->select('id_member')->where(['id_user' => $id_user, "id_project" => $id_project])->first();
+    }
     public function getMemberDetailbyUserProject($id_user = false, $id_project = false)
     {
         if($id_user == false)
@@ -51,5 +55,17 @@ class MemberModel extends Model
             ->join('project','project.id_project=member.id_project')->where(['member.id_user' => $id_user, "member.id_project" => $id_project])->first();
         }
     }
+    public function getCountMemberbyPosition($id_project = false,$type)
+    { $position = ['Product Owner'];
+        if ($type == "all") {
+            return $this->selectCount('member.id_member')->where("member.id_project", $id_project)->first();
+        }
+        else 
+        {
+            return $this->selectCount('member.id_member')->where('member.id_project', $id_project)->whereNotIn('member.position', $position)->first();
+        }
+    }
+
+    
 
 }

@@ -26,8 +26,8 @@
                     <label for="position">Posisi</label>
                     <select class="custom-select <?= ($validation->hasError('position')) ? 'is-invalid' : '' ;?>" name="position">
                         <option selected>Pilih Posisi</option>
-                        <option value="Development Team">Development Team</option>
-                        <option value="Product Owner">Product Owner</option>
+                        <option value="Development Team" <?php if (old('position')=="Development Team") {echo "selected='selected'";}?>>Development Team</option>
+                        <option value="Product Owner" <?php if (old('position')=="Product Owner") {echo "selected='selected'";}?>>Product Owner</option>
                     </select>
                     <div class="invalid-feedback">
                         <?=$validation->getError('position');?>

@@ -26,7 +26,7 @@ class Meeting extends Migration
 				'constraint'     => '25',
 				'null'           => false,
 			],
-			'deskripsi' => [
+			'deskripsi_meeting' => [
 				'type'           => 'text',
 				'null'           => true,
 			],
@@ -55,7 +55,7 @@ class Meeting extends Migration
 	]);
 	$this->forge->addKey('id_meeting', true);
 	$this->forge->addForeignKey('id_project','Project','id_project','CASCADE','CASCADE');
-	$this->forge->addForeignKey('creator_meeting','User','id_user','NO ACTION','CASCADE');
+	$this->forge->addForeignKey('creator_meeting','Member','id_member','NO ACTION','CASCADE');
 	$this->forge->createTable($this->table);
 	}
 

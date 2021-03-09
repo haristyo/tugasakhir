@@ -21,7 +21,7 @@ class Presensi extends Migration
 				'unsigned'		 => true,
 				'null'           => false,
 			],
-			'id_user' => [
+			'id_member' => [
 				'type'           => 'INT',
 				'unsigned'		 => true,
 				'null'           => false,
@@ -37,7 +37,7 @@ class Presensi extends Migration
 		]);
 		$this->forge->addKey('id_presensi', true);
 		$this->forge->addForeignKey('id_meeting','Meeting','id_meeting','CASCADE','CASCADE');
-		$this->forge->addForeignKey('id_user','User','id_user','NO ACTION','CASCADE');
+		$this->forge->addForeignKey('id_member','Member','id_member','NO ACTION','CASCADE');
 		$this->forge->createTable($this->table);
 	}
 

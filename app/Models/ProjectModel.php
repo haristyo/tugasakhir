@@ -32,6 +32,6 @@ class ProjectModel extends Model
     {
        return $this->where('kode_join', $kode_join)->first();
     }
-
+ 
 
 }

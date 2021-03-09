@@ -22,7 +22,7 @@
               <a href="<?=base_url('/proyek/'.$member['id_project'].'/meeting')?>"><span class="fa fa-briefcase mr-3"></span>Meeting</a>
 	          </li>
 	          <li>
-              <a href="#"><span class="fa fa-sticky-note mr-3"></span>Presensi</a>
+              <a href="<?=base_url('/proyek/'.$member['id_project'].'/presensi')?>"><span class="fa fa-sticky-note mr-3"></span>Presensi</a>
 	          </li>
 	          <li>
               <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>

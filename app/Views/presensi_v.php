@@ -1,10 +1,5 @@
     <div id="content" class="p-4 p-md-5 pt-5">
-        
-        
-        <h1 class="text-center"> <?=$member['nama_project'];?></h1>
-    <hr width="75%" color="black" style="height:5px;">
-    <!-- <h2> -->
-        <h3 class="text-center"> <?=$member['deskripsi'];?></h3>
+
         <table class="table table-dark">
           <thead>
             <tr>
@@ -12,7 +7,7 @@
               <th scope="col">Nama Pengguna</th>
               <th scope="col">Nama Lengkap</th>
               <th scope="col">Posisi</th>
-              <th scope="col">Tanggal Bergabung</th>
+              <th> Kehadiran </th>
               <th scope="col">Aksi</th>
             </tr>
           </thead>
@@ -23,7 +18,24 @@
               <td><?=$members['username'];?></td>
               <td><?=$members['nama_user'];?></td>
               <td><?=$members['position'];?></td>
-              <td><?=$members['created_member'];?></td>
+              <td>
+                <?php $x = 0;
+                foreach ($presensi as $presensis) {
+                  if ($presensis['id_member'] == $members['id_member']) {
+                    $x += $presensis['banyaknya'];
+                  }
+                }
+                echo $x;
+                ?>
+                Kehadiran dari
+                <?php if ($members['position']=="Product Owner") {
+                    
+                    echo $meetingex['id_meeting'];
+                }
+                else {
+                    echo $meetingall['id_meeting'];
+                } ?>
+              </td>
               <td>Keluarkan</td>
             </tr>
             <?php }?>

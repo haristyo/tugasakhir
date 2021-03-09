@@ -8,13 +8,26 @@ class PresensiModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'join_time';
     protected $updatedField  = 'last_join_time';
-    protected $allowedFields = ['id_presensi','id_user','id_meeting'];
+    protected $allowedFields = ['id_presensi','id_member','id_meeting'];
     public function getCountPresensibyUserMeeting($id_user,$id_meeting)
     {
-        return $this->selectCount('id_presensi')->where(['id_user' => $id_user, 'id_meeting' => $id_meeting])->first();  
+        return $this->selectCount('id_presensi')->join('member','member.id_member=presensi.id_member')->where(['member.id_user' => $id_user, 'id_meeting' => $id_meeting])->first();  
     }
     public function getIdbyUserMeeting($id_user,$id_meeting)
     {
-        return $this->where(['id_user' => $id_user, 'id_meeting' => $id_meeting])->first();  
+        return $this->select('id_presensi')->join('member','member.id_member=presensi.id_member')->where(['member.id_user' => $id_user, 'id_meeting' => $id_meeting])->first();  
     }
+    
+    public function getCountUserbyProject($id_project)
+    {
+       return $this->select('presensi.id_meeting, id_project, count(id_presensi) as banyaknya')
+       ->join('meeting','meeting.id_meeting=presensi.id_meeting')->groupBy('presensi.id_meeting')->where('meeting.id_project',$id_project)->findAll();
+    }
+    public function getCountPresensiMemberbyProject($id_project)
+    {
+        return $this->select('presensi.id_member,user.username,count(id_presensi) as banyaknya,position')
+        ->join('meeting','meeting.id_meeting=presensi.id_meeting')
+        ->join('member','member.id_member=presensi.id_member')->join('user','user.id_user=member.id_user')->where('meeting.id_project',$id_project)->groupBy('presensi.id_member')->findAll();
+    }
+
 }
