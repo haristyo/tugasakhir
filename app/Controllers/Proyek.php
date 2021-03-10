@@ -267,7 +267,10 @@ class Proyek extends BaseController
 
             'presensi' => esc($this->presensiModel->getCountPresensiMemberbyProject($id_project)),
             'meetingall' => esc($this->meetingModel->getCountMeetingbyAgenda($id_project,'all')),
-            'meetingex' => esc($this->meetingModel->getCountMeetingbyAgenda($id_project,''))
+            'meetingex' => esc($this->meetingModel->getCountMeetingbyAgenda($id_project,'')),
+            'meetingsemua' => esc($this->meetingModel->getMeetingbyProject($id_project)),
+            'meetingexcept' => esc($this->meetingModel->getMeetingbyProject($id_project,"ex")),
+            'presensiall' => esc($this->presensiModel->getPresensibyProject($id_project))
         ];
         $title = ['title' =>    'Presensi | Scrum Tool',
                 'link' =>    $this->request->uri->getSegment(1)];
@@ -277,8 +280,9 @@ class Proyek extends BaseController
         }
         else {
             // d($data['meetingall']);
-            // dd($data['meetingex']);
-            // dd($data['presensi']);
+            // d($data['meetingall']);
+            // dd($data['members']);
+            // dd($data['presensiall']);
             echo view('header1_v',$title);
             echo view('sidebar',$data);
             echo view('presensi_v',$data);
