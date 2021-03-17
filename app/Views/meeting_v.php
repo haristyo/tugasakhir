@@ -1,4 +1,5 @@
 <div id="content" class="p-4 p-md-5 pt-5">
+    <?php if ($member['position'] == "Scrum Master") {?>
     <!-- Button trigger modal -->
     <div class=" d-flex w-100 mx-auto my-2">
         <button type="button" class="btn btn-success mr-0 ml-auto" data-toggle="modal" data-target="#exampleModal" clicked="clicked">
@@ -6,6 +7,7 @@
     </button>
     </div>
     <!-- end Button trigger modal -->
+    <?php ;}?>
     
 
     <!-- Modal -->
@@ -89,23 +91,28 @@
         <tr>
         <th scope="row"><?=$i;?></th>
         <td><?=date("d F Y", strtotime($meetings['time_meeting']));?></td>
-        <td><?=date("H:i:s", strtotime($meetings['time_meeting']));?></td>
+        <td><?=date("H:i", strtotime($meetings['time_meeting']));?></td>
         <td><?=$meetings['agenda'];?></td>
         <td><?=$meetings['deskripsi_meeting'];?></td>
         <td>
             <form action="/proyek/meetingjoin/<?=$meetings['id_meeting'];?>" method="post" target="_blank">
-            <?= csrf_field()?>
-            <button type="submit" class="btn btn-success" >Gabung</button>
+            <?= csrf_field();?>
+            <button type="submit" class="btn btn-success"
+            <?php if( (time() > (strtotime($meetings['time_meeting']) - 360)) && (time() < (strtotime($meetings['time_meeting']) + 360)) ) {} else {echo "disabled";}?>
+            >
+            Gabung</button>
             </form>
+           
+
         </td>
         <td>
         <?php
+        $kehadiran = 0;
         foreach ($yanghadir as $yanghadirs) {
             if($yanghadirs['id_meeting']==$meetings['id_meeting']) 
-            echo $yanghadirs['banyaknya'];
-            // if ($yanghadir['id_meeting']==1) {
-            // }
+            {$kehadiran += $yanghadirs['banyaknya'];} 
         }
+        echo $kehadiran;
         ?>
         Kehadiran dari
         <?php if ($meetings['agenda']=="Sprint Planning" || $meetings['agenda'] == "Sprint Review") {

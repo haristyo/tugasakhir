@@ -38,6 +38,7 @@ $routes->get('/about-us', 'Home::aboutus');
 $routes->get('/login', 'User::login');
 $routes->get('/logout', 'User::logout',['filter' => 'LoginFilter']);
 $routes->get('/register', 'User::register');
+$routes->get('/registeradmin', 'User::registeradmin');
 $routes->get('/profil', 'User::profil', ['filter' => 'LoginFilter']);
 $routes->get('/profil/edit/','User::edit',['filter' => 'LoginFilter']);
 $routes->get('/profil/gantipassword/','User::gantipassword',['filter' => 'LoginFilter']);
@@ -48,6 +49,17 @@ $routes->get('/proyek/(:segment)','Proyek::detail/$1',['filter' => 'LoginFilter'
 $routes->get('/proyek/(:segment)/meeting','Proyek::meeting/$1',['filter' => 'LoginFilter']);
 $routes->get('/proyek/(:segment)/presensi','Proyek::presensi/$1',['filter' => 'LoginFilter']);
 $routes->get('/proyek/meetingjoin/(:segment)','Proyek::meetingjoin/$1',['filter' => 'LoginFilter']);
+$routes->get('/proyek/deletemember/(:segment)/(:segment)','Proyek::deletemember/$1/$2',['filter' => 'LoginFilter']);
+$routes->get('/dashboard','Admin::dashboard',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/proyek','Admin::project',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/proyek/(:segment)','Admin::project/$1',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/member','Admin::member',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/member/(:segment)','Admin::member/$1',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/meeting','Admin::meeting',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/meeting/(:segment)','Admin::meeting/$1',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/user','Admin::user',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/user/(:segment)','Admin::user/$1',['filter' => 'AdminFilter']);
+// $routes->get('/dashboard/member/(:segment)/(:segment)','Admin::member/$1/$2',['filter' => 'AdminFilter']);
 
 /*
  * --------------------------------------------------------------------

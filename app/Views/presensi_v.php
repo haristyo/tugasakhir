@@ -2,13 +2,13 @@
 
         <table class="table table-dark">
           <thead>
-            <tr>
+            <tr class="text-center">
               <th scope="col"></th>
               <th scope="col">Nama Pengguna</th>
               <th scope="col">Nama Lengkap</th>
               <th scope="col">Posisi</th>
               <th> Kehadiran </th>
-              <th scope="col">Aksi</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -18,8 +18,11 @@
               <td><?=$members['username'];?></td>
               <td><?=$members['nama_user'];?></td>
               <td><?=$members['position'];?></td>
-              <td>
-                <?php $x = 0;
+              <td> 
+              <!-- Button trigger modal -->
+              <div class=" d-flex w-100 mx-auto my-2">
+                  <button type="button" class="btn btn-success mr-0 ml-auto" data-toggle="modal" data-target="#exampleModal<?=$members['id_member'];?>" clicked="clicked">
+                  <?php $x = 0;
                 foreach ($presensi as $presensis) {
                   if ($presensis['id_member'] == $members['id_member']) {
                     $x += $presensis['banyaknya'];
@@ -35,12 +38,7 @@
                 else {
                     echo $meetingall['id_meeting'];
                 } ?>
-              </td>
-              <td> 
-              <!-- Button trigger modal -->
-              <div class=" d-flex w-100 mx-auto my-2">
-                  <button type="button" class="btn btn-success mr-0 ml-auto" data-toggle="modal" data-target="#exampleModal<?=$members['id_member'];?>" clicked="clicked">
-                  Detail
+                pertemuan
                   </button>
                 </div>
               <!-- end Button trigger modal -->
@@ -48,9 +46,15 @@
               <div class="modal fade" id="exampleModal<?=$members['id_member'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-lg">
                       <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel"><?=$members['username'];?></h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <div class="modal-header d-flex">
+                              <h5 class="modal-title mr-auto" id="exampleModalLabel"><?=$members['username'];?></h5>
+                              <form action="/proyek/deletemember/<?=$members['id_project'];?>/<?=$members['id_member'];?>/" method="post">
+                              <?= csrf_field();?>
+                              <?php if ($member['position'] == "Scrum Master" && $member['id_user'] != $members['id_user']) {?>
+                              <button type="submit" class="btn btn-danger ml-auto mr-0">Keluarkan</button>
+                              <?php ;} ?>
+                              </form>
+                              <button type="button" class="ml-0 close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                               </button>
                           </div>

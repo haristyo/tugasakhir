@@ -39,7 +39,11 @@ class Member extends Migration
 			'updated_member' => [
 				'type'           => 'DATETIME',
 				'null'           => true,
-			]
+			],
+			'left_at' => [
+				'type'           => 'DATETIME',
+				'null'           => true,
+			],
 
 	]);
 	$this->forge->addKey('id_member', true);

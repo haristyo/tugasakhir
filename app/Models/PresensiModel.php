@@ -31,8 +31,10 @@ class PresensiModel extends Model
     }
     public function getPresensibyProject($id_project)
     {
+        $notnull = "! null";
+        //,'member.left_at'=>$notnull]
         return $this->select('id_presensi,meeting.id_project,presensi.id_meeting,member.id_user')->join('meeting','meeting.id_meeting=presensi.id_meeting')
-        ->join('member','member.id_member=presensi.id_member')->where('meeting.id_project',$id_project)->findAll();
+        ->join('member','member.id_member=presensi.id_member')->where(['meeting.id_project'=>$id_project])->findAll();
     }
 
 }

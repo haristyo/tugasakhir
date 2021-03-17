@@ -7,7 +7,7 @@
 	        </button>
         </div>
 		<div class="p-4">
-			<h1><a href="index.html" class="logo"><?=$member['nama_project'];?> <span><?=$member['position'];?></span></a></h1>
+			<h1><a href="<?=base_url('/proyek/'.$member['id_project'])?>" class="logo"><?=$member['nama_project'];?> <span><?=$member['position'];?></span></a></h1>
 	        <ul class="list-unstyled components mb-5">
 	          <li class="active">
 	            <a href="<?=base_url('/proyek/'.$member['id_project'])?>"><span class="fa fa-home mr-3"></span>Detail</a>
@@ -24,11 +24,13 @@
 	          <li>
               <a href="<?=base_url('/proyek/'.$member['id_project'].'/presensi')?>"><span class="fa fa-sticky-note mr-3"></span>Presensi</a>
 	          </li>
-	          <li>
-              <a href="#"><span class="fa fa-cogs mr-3"></span> Services</a>
-	          </li>
-	          <li>
-              <a href="#"><span class="fa fa-paper-plane mr-3"></span> Contacts</a>
+	          <li class="p-0 m-0">
+			  <form action="/proyek/deletemember/<?=$member['id_project'];?>/<?=$member['id_member'];?>/" method="post">
+				<?= csrf_field();?>
+				<button type="submit" class="btn btn-danger text-left pl-0  m-0 w-100">
+					<span class="fa fa-paper-plane mr-3"></span> Keluar Proyek
+				</button>
+			  </form>
 	          </li>
 	        </ul>
 

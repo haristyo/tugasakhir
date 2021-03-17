@@ -5,6 +5,7 @@ use App\Models\ProjectModel;
 use App\Models\MemberModel;
 use App\Models\MeetingModel;
 use App\Models\PresensiModel;
+use App\Models\UserModel;
 class Proyek extends BaseController
 {
     protected $session;   
@@ -12,6 +13,7 @@ class Proyek extends BaseController
     protected $memberModel;
     protected $meetingModel;
     protected $presensiModel;
+    protected $userModel;
     
 	public function __construct()
 	{
@@ -20,6 +22,7 @@ class Proyek extends BaseController
         $this->memberModel = new MemberModel();
         $this->meetingModel = new MeetingModel();
         $this->presensiModel = new PresensiModel();
+        $this->userModel = new UserModel();
         $this->session = \Config\Services::session();
 		// if (!isset($_SESSION['last'])) {
 		// 	$_SESSION['last'] = "";
@@ -118,19 +121,31 @@ class Proyek extends BaseController
 
     }
     public function joined()
-    {
+    {   //dd(esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join'))));
+        // dd($this->memberModel->getCountMemberbyUserProject($this->session->id_user,$this->proyekModel->getProjectbyKode($this->request->getVar('kode_join'))));
         if (!$this->request->getVar('kode_join')=="") {
             $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
+            if($data != null) {
+                // dd($data);
+            // $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
             $joined = $this->memberModel->getCountMemberbyUserProject($this->session->id_user,$data['id_project']);
-        //  dd($joined['id_member']);
+            }
+            else {
+                $joined = 0;
+            }
+            // dd($joined['id_member']);
         }
+        else {
+            $joined = 0;
+        }
+        
         // $joined = $this->memberModel->getMemberbyUserProject($this->session->id_user ,$data['id_project'])['id_member'];
         // dd($joined);
         
 		if(!$this->validate([
             'kode_join' => ['rules'=>'required|is_not_unique[project.kode_join]|min_length[4]|max_length[32]',
                         'errors'=>[ 'required'=> 'Kode Join Harus diisi',
-                                    'is_unique'=>'Kode Gabung Tidak terdaftar',
+                                    'is_not_unique'=>'Kode Gabung Tidak terdaftar',
                                     'min_length'=>'Kode Gabung minimal 4 karakter',
                                     'max_length'=>'Kode Gabung maksimal 32 karakter']
                         ],
@@ -146,7 +161,7 @@ class Proyek extends BaseController
 		]) || !$data['password_project'] == $this->request->getVar('password_project') || $joined>0) {
 			// $validation = \Config\Services::validation();
             // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
-            if ($joined>0) { $this->session->setFlashdata('kode_join', 'Anda Telah bergabung dengan Proyek ini');}
+            if ($joined>0) { $this->session->setFlashdata('kode_join', 'Anda sudah pernah bergabung dengan Proyek ini');}
 			return redirect()->to(base_url('/proyek/join'))->withInput();
         }
         $this->memberModel->save([
@@ -193,6 +208,7 @@ class Proyek extends BaseController
 		];
         $title = ['title' =>    'Meeting | Scrum Tool',
                    'link' =>    $this->request->uri->getSegment(1)];
+                //    dd($data['yanghadir']);
         if ($data['member'] == null)
         {
             return redirect()->to(base_url('/proyek/'));
@@ -281,12 +297,46 @@ class Proyek extends BaseController
         else {
             // d($data['meetingall']);
             // d($data['meetingall']);
-            // dd($data['members']);
+            //  dd($data['members']);
             // dd($data['presensiall']);
             echo view('header1_v',$title);
             echo view('sidebar',$data);
             echo view('presensi_v',$data);
             echo view('footer1_v');
         }
+    }
+    public function deletemember($id_project,$id_member)
+    {
+        // d($id_project);
+        // d(time() );
+        // d(date('Y-m-d H:i:s', time()) );
+        // d(date('Y-m-d h-i-s'));
+        // dd($id_member);
+        $this->memberModel->save([
+            'id_member'    => $id_member,
+            'left_at'      => date('Y-m-d H:i:s', time())
+            ]);
+        return redirect()->to(base_url('/proyek/'.$id_project.'/presensi/'));
+
+    }
+    public function dashboard()
+    {
+        $title = [
+            'title' => 'Dashboard Admin | Scrum Tool',
+            'link' => 	$this->request->uri->getSegment(1)
+        ];
+        $data = [
+            'user' => $this->userModel->getDetailbyId($this->session->id_user)
+        ];
+        // dd($data);
+        // echo ($this->memberModel->getMemberbyUserProject(1,1)['id_member']);
+        // echo $data['memberuserproject']['id_member'];
+        // dd($data);
+        // dd( base_url('css/font-awesome.min.css'));
+        echo view('header1_v',$title);
+        echo view('sidebar_admin',$data);
+        // echo 'lol';
+        echo view('dashboard_v',$data);
+        echo view('footer1_v');
     }
 }

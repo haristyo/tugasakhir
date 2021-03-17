@@ -10,7 +10,6 @@
     
     
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="<?= base_url('css/fontawesome.css')?>">
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.css')?>">
     <link rel="stylesheet" href="<?= base_url('css/style1.css')?>">
 		
@@ -44,8 +43,14 @@
           <?php echo session()->get('username')."&nbsp;"."&nbsp;";?>
         </a>   
         <div class="dropdown-menu" style="margin-left:20px;" aria-labelledby="navbarDropdownMenuLink">
+        <?php if (session()->get('is_admin')=='N') {?>
+          # code...
           <a class="dropdown-item" href="<?= base_url('/proyek');?>">Proyek Saya</a>
           <a class="dropdown-item" href="<?= base_url('/profil');?>">Profil</a>
+        <?php ;} else {?>
+          <a class="dropdown-item" href="<?= base_url('/dashboard');?>">Dasbor</a>
+        <?php ;}?>
+
           <div class="dropdown-divider"></div>
           <a class=" dropdown-item w-100 mr-4" style="color: white; background-color:red;"  href="<?= base_url('/logout');?>">Keluar</a>
         </div>
