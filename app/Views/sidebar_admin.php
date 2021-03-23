@@ -9,19 +9,19 @@
 		<div class="p-4">
 			<h1><a href="<?=base_url('/dashboard/')?>" class="logo"><?=$user['username'];?> <span><?=$user['nama_user'];?></span></a></h1>
 	        <ul class="list-unstyled components mb-5">
-	          <li>
+	          <li class=" <?php if ($link == "user") {echo "active";} ?>">
 	              <a href="<?=base_url('/dashboard/user')?>"><span class="fa fa-user mr-3"></span>User</a>
 	          </li>
-	          <li>
+	          <li class=" <?php if ($link == "proyek") {echo "active";} ?>">
 	            <a href="<?=base_url('/dashboard/proyek')?>"><span class="fa fa-home mr-3"></span>Proyek</a>
 	          </li>
-			  <li>
+			  <li class=" <?php if ($link == "member") {echo "active";} ?>">
 			  <a href="<?=base_url('/dashboard/member')?>"><span class="fa fa-suitcase mr-3"></span> Member</a>
 			  </li>
-	          <li>
+	          <li class=" <?php if ($link == "meeting") {echo "active";} ?>">
               <a href="<?=base_url('/dashboard/meeting')?>"><span class="fa fa-briefcase mr-3"></span>Meeting</a>
 	          </li>
-	          <li class="p-0 m-0">
+	          <li class="p-0 m-0 <?php if ($link == "registerAdmin") {echo "active";} ?>">
 			  <a href="<?=base_url('user/registerAdmin');?>"><span class="fa fa-paper-plane mr-3"></span> Tambah Admin</a>
 	          </li>
 	        </ul>

@@ -8,7 +8,7 @@ class MemberModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_member';
     protected $updatedField  = 'updated_member';
-    protected $allowedFields = ['id_member','id_project','id_user','position','left_at'];
+    protected $allowedFields = ['id_project','id_user','position','left_at'];
     public function getMemberbyUser($id_user = false)
     {
         if($id_user == false)
@@ -38,8 +38,8 @@ class MemberModel extends Model
         if($id_project == false)
         {return $this->join('user','user.id_user=member.id_user')
                 ->join('project','project.id_project=member.id_project')->findAll();}
-        else {return $this->join('user','user.id_user=member.id_user')
-                ->join('project','project.id_project=member.id_project')->where(['member.id_project'=>$id_project])->orderBy('position', 'DESC')->get()->getResultArray();}
+        else { return $this->join('user','user.id_user=member.id_user')
+                ->join('project','project.id_project=member.id_project')->where(['member.id_project' => $id_project])->orderBy('position', 'DESC')->findAll();}
     }
     public function getMemberDetailbyProject($id_project = false)
     {

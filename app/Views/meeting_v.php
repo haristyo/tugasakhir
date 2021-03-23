@@ -1,13 +1,36 @@
 <div id="content" class="p-4 p-md-5 pt-5">
-    <?php if ($member['position'] == "Scrum Master") {?>
+    <h1 class="text-center"> Meeting </h1>
+      <hr width="75%" color="black" style="height:3px;">
+
+      <?php if ($member['position'] == "Scrum Master") {?>
     <!-- Button trigger modal -->
     <div class=" d-flex w-100 mx-auto my-2">
-        <button type="button" class="btn btn-success mr-0 ml-auto" data-toggle="modal" data-target="#exampleModal" clicked="clicked">
+        <button type="button" class="btn btn-success mr-0 ml-auto mb-2" data-toggle="modal" data-target="#exampleModal" clicked="clicked">
     Tambah Meeting
     </button>
     </div>
     <!-- end Button trigger modal -->
     <?php ;}?>
+
+      <div class="d-flex row">
+        <form action="" method="get">
+            <div class="input-group ml-3">
+                <input type="text" class="form-control "  name="search" value="<?= $keyword?>">
+                <select class="custom-select mx-2" name="agenda">
+                    <option selected value="">Semua Agenda</option>
+                    <option value="Sprint Planning" <?php if ($agenda=="Sprint Planning") {echo "selected='selected'";}?>>Sprint Planning</option>
+                    <option value="Daily Scrum" <?php if ($agenda=="Daily Scrum") {echo "selected='selected'";}?>>Daily Scrum</option>
+                    <option value="Sprint Review" <?php if ($agenda=="Sprint Review") {echo "selected='selected'";}?>>Sprint Review</option>
+                    <option value="Sprint Retrospective" <?php if ($agenda=="Sprint Retrospective") {echo "selected='selected'";}?>>Sprint Retrospective</option>
+                </select>
+                
+                <button class="btn btn-secondary" type="submit">Cari</button>
+                
+            </div>
+        </form>    
+        <div class="ml-auto mr-3 right"><?= $pager->links('meeting','pagers') ;?></div>
+      </div>
+    
     
 
     <!-- Modal -->
@@ -45,8 +68,9 @@
 
                         <div class="form-group">
                             <label for="link_meeting">Tautan</label>
-                            <input type="text" class="form-control <?php if ($validation->hasError('link_meeting')) {echo 'is-invalid';} elseif(session()->getFlashData('link_meeting')) {echo 'is-invalid';} ;?>" id="link_meeting" name="link_meeting"  value="<?=old('link_meeting')?>">
-                            <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                            <input type="text" class="form-control <?php if ($validation->hasError('link_meeting')) {echo 'is-invalid';} elseif(session()->getFlashData('link_meeting')) {echo 'is-invalid';} ;?>" id="link_meeting" name="link_meeting"  value="<?=old('link_meeting')?>"
+                            placeholder="ex: https://zoom.com / https://meet.google.com">
+                            <small  class="form-text text-muted">Masukkan tautan beserta protokolnya contoh:(http://,https://)</small>
                             <div class="invalid-feedback">
                                 <?=$validation->getError('link_meeting');?>
                                 <?=session()->getFlashData('link_meeting');?>
@@ -72,8 +96,7 @@
             </div>
         </div>
     </div>
-    <!-- end modal
-     -->
+    <!-- end modal-->
     <table class="table text-center table-dark" >
     <thead>
         <tr>
@@ -106,30 +129,183 @@
 
         </td>
         <td>
-        <?php
-        $kehadiran = 0;
-        foreach ($yanghadir as $yanghadirs) {
-            if($yanghadirs['id_meeting']==$meetings['id_meeting']) 
-            {$kehadiran += $yanghadirs['banyaknya'];} 
-        }
-        echo $kehadiran;
-        ?>
-        Kehadiran dari
-        <?php if ($meetings['agenda']=="Sprint Planning" || $meetings['agenda'] == "Sprint Review") {
-            echo $countall['id_member'];
-        }
-        else {
-            echo $countex['id_member'];
-        } ?>
+
+            <!-- Button trigger modal -->
+            <div class=" d-flex w-100 mx-auto ">
+                  <button type="button" class="btn btn-success mr-0 ml-auto w-100" data-toggle="modal" data-target="#exampleModal<?=$meetings['id_meeting'];?>" clicked="clicked">
+                    <?php
+                        $kehadiran = 0;
+                        foreach ($yanghadir as $yanghadirs) {
+                            if($yanghadirs['id_meeting']==$meetings['id_meeting']) 
+                            {$kehadiran += $yanghadirs['banyaknya'];} 
+                        }
+                        echo $kehadiran;
+                        ?>
+                    Kehadiran dari
+                        <?php if ($meetings['agenda']=="Sprint Planning" || $meetings['agenda'] == "Sprint Review") {
+                            echo $countall['id_member'];
+                        }
+                        else {
+                            echo $countex['id_member'];
+                        } ?>
+                    anggota
+                  </button>
+                  
+                </div>
+              <!-- end Button trigger modal -->
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal<?=$meetings['id_meeting'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                          <div class="modal-header d-flex">
+                              <h5 class="modal-title mr-auto" id="exampleModalLabel"><?=$meetings['agenda'].' '.date("d-F-Y", strtotime($meetings['time_meeting'])).' '.date("H:i", strtotime($meetings['time_meeting']));?></h5>
+                                <?php if ($member['position'] == "Scrum Master" ) {?>
+                                    <form action="/proyek/deleteMeeting/<?=$meetings['id_project'];?>/<?=$meetings['id_meeting'];?>/" method="post">
+                                    <?= csrf_field();?>
+                                    <button type="submit" class="btn btn-danger ml-auto mr-0" <?php if (time() > (strtotime($meetings['time_meeting']) + 86400)) {
+                                        echo "disabled";
+                                    } ?>>Hapus Meeting</button>
+                                    </form>
+                                <?php ;} ?>
+                              <button type="button" class="ml-0 close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                          <table class="table text-center table-dark" >
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Posisi</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php  $y=0; 
+
+                            foreach ($members as $memberss) { $y++;?>
+                                <tr>
+                                <th scope="row"><?=$y;?></th>
+                                <td><?= $memberss['username'];?></td>
+                                <td><?= $memberss['position'];?></td>
+                                <td> 
+                                <?php
+                                foreach ($presensiall as $presensialls ) {
+                                  if ($presensialls['id_user']==$memberss['id_user'] && $presensialls['id_meeting']==$meetings['id_meeting']) {
+                                    echo "hadir";
+                                  }
+                                }
+                                
+                                ?>
+                                </td>
+                            <?php }?>
+                                </tr>
+                            </tbody>
+                            </table>
+                              
+                          
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  
+                              </form>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- end modal -->
+
         </td>
-        <?php }?>
-        </tr>
+        <td>
+            <!-- Button trigger modal -->
+                <div class=" d-flex w-100 mx-auto">
+                    <button type="button" class="btn btn-warning mr-0 ml-auto mb-2" data-toggle="modal" data-target="#edit<?=$meetings['id_meeting'];?>" clicked="clicked">
+                        Ubah Meeting
+                </button>
+                </div>
+                <!-- end Button trigger modal -->
+                <!-- Modal -->
+                <div class="modal fade" id="edit<?=$meetings['id_meeting'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ubah Meeting</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="" method="post" action="/proyek/editmeeting/<?=$meetings['id_project'].'/'.$meetings['id_meeting'];?>">
+                                <?= csrf_field(); ?>
+                                <div class="form-group">
+                                    <label for="agenda<?=$meetings['id_meeting'];?>" class="text-left" style="color:black;">Agenda  <?=$meetings['time_meeting'].'   ';?><?=date("d/m/Y", strtotime($meetings['time_meeting'])).'T'.date("h:i", strtotime($meetings['time_meeting']))?></label>
+                                    <select class="custom-select <?= ($validation->hasError('agenda'.$meetings['id_meeting'])) ? 'is-invalid' : '' ;?>" name="agenda<?=$meetings['id_meeting'];?>">
+                                        <option selected>Pilih Agenda</option>
+                                        <option value="Sprint Planning" <?php if ($meetings['agenda'] == 'Sprint Planning') {echo "selected='selected'";}?>>Sprint Planning</option>
+                                        <option value="Daily Scrum" <?php if ($meetings['agenda']=="Daily Scrum") {echo "selected='selected'";}?>>Daily Scrum</option>
+                                        <option value="Sprint Review" <?php if ($meetings['agenda']=="Sprint Review") {echo "selected='selected'";}?>>Sprint Review</option>
+                                        <option value="Sprint Retrospective" <?php if ($meetings['agenda']=="Sprint Retrospective") {echo "selected='selected'";}?>>Sprint Retrospective</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <?=$validation->getError('agenda'.$meetings['id_meeting']);?>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="deskripsi_meeting">Deskripsi</label>
+                                    <textarea class="form-control" id="deskripsi_meeting" name="deskripsi_meeting<?=$meetings['id_meeting'];?>"> <?=$meetings['deskripsi_meeting'];?></textarea>
+                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="link_meeting">Tautan</label>
+                                    <input type="text" class="form-control <?php if ($validation->hasError('link_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} elseif(session()->getFlashData('link_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} ;?>" id="link_meeting<?=$meetings['id_meeting'];?>" name="link_meeting<?=$meetings['id_meeting'];?>"  value="<?=$meetings['link_meeting'];?>"
+                                    placeholder="ex: https://zoom.com / https://meet.google.com">
+                                    <small  class="form-text text-muted">Masukkan tautan beserta protokolnya contoh:(http://,https://)</small>
+                                    <div class="invalid-feedback">
+                                        <?=$validation->getError('link_meeting'.$meetings['id_meeting']);?>
+                                        <?=session()->getFlashData('link_meeting'.$meetings['id_meeting']);?>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="time_meeting<?=$meetings['id_meeting'];?>"> <?=$meetings['time_meeting'];?> Waktu</label>
+                                    <input  id="time_meeting<?=$meetings['id_meeting'];?>" type="datetime-local" class="form-control <?php if ($validation->hasError('time_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} elseif(session()->getFlashData('time_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} ;?>"  name="time_meeting<?=$meetings['id_meeting'];?>"  value="<?=date("Y-m-d", strtotime($meetings['time_meeting'])).'T'.date("h:i", strtotime($meetings['time_meeting']))?>">
+                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                    <div class="invalid-feedback">
+                                        <?=$validation->getError('time_meeting'.$meetings['id_meeting']);?>
+                                        <?=session()->getFlashData('time_meeting'.$meetings['id_meeting']);?>
+                                    </div>
+                                </div>
+                            
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Ubah Meeting</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <!-- end modal-->
+            <?php
+                if ($validation->hasError('time_meeting'.$meetings['id_meeting']) || $validation->hasError('agenda'.$meetings['id_meeting'])) 
+                {      
+                 echo       "Salah";}?>
+
+        </td>
+
+        
+    </tr>
+    <?php }?>
     </tbody>
     </table>
-</div>
 </div>
 <?php //jika salah auto membuka model kembali
 if ($validation->hasError('link_meeting') || $validation->hasError('time_meeting') || $validation->hasError('agenda')) {
     echo "<script> $('#exampleModal').modal('show'); </script>";
 }
 ?>
+
+</div>

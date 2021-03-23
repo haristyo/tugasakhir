@@ -37,7 +37,8 @@ class Proyek extends BaseController
                 'link' => 	$this->request->uri->getSegment(1)
             ];
             $data = [
-                'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user)
+                'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user),
+                'link' =>    $this->request->uri->getPath(),
             ];
             // dd($data);
             // echo ($this->memberModel->getMemberbyUserProject(1,1)['id_member']);
@@ -175,8 +176,10 @@ class Proyek extends BaseController
     {
         $data = [
 			'project' => esc($this->proyekModel->getProject($id_project)),
-			'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
-			'members' => esc($this->memberModel->getMemberbyProject($id_project))
+            'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
+            'link' =>    $this->request->uri->getPath(),
+            'members' => esc($this->memberModel->getMemberbyProject($id_project))
+            
 		];
         $title = ['title' => 'Detail Project | Scrum Tool',
         'link' => 	$this->request->uri->getSegment(1)];
@@ -196,16 +199,53 @@ class Proyek extends BaseController
 
     public function meeting($id_project)
     {
+        
+        $keyword =  $this->request->getVar('search');
+        $agenda =  $this->request->getVar('agenda');
+        if ($keyword) {
+            if($agenda) {
+            $meeting = $project = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
+                ->join('project','project.id_project=meeting.id_project')->where(['meeting.id_project'=>$id_project,'meeting.agenda'=>$agenda])->orderBy('time_meeting', 'DESC')
+                ->like('agenda',$keyword)->orLike('deskripsi_meeting',$keyword);
+            }
+            else {
+            $meeting = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
+                ->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC')
+                ->like('agenda',$keyword)->orLike('deskripsi_meeting',$keyword);
+            }
+        }
+        else {
+            if ($agenda) {
+                $meeting = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
+                ->join('project','project.id_project=meeting.id_project')->where(['meeting.id_project'=>$id_project,'meeting.agenda'=>$agenda])->orderBy('time_meeting', 'DESC');
+            }
+            else {
+                $meeting = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
+                ->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC');
+            }
+        }
+
         $data = [
 			'project' => esc($this->proyekModel->getProject($id_project)),
-			'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
+            'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
+            'members' => esc($this->memberModel->getMemberbyProject($id_project)),
+            'link' =>    $this->request->uri->getPath(),
 
-            'meetings' => esc($this->meetingModel->getMeetingbyProject($id_project)),
+            'meetings'=>esc($meeting->paginate(10,'meeting')),
+            'pager'=>$this->meetingModel->join('member','member.id_member=meeting.creator_meeting')->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC')->pager,
+            'page'=>$this->request->getVar('page_meeting'),
+            'keyword'=>esc($keyword),
+            'agenda'=>esc($agenda),
+
+            'presensiall' => esc($this->presensiModel->getPresensibyProject($id_project)),
+            //'meetings' => esc($this->meetingModel->getMeetingbyProject($id_project)),
             'countall' => esc($this->memberModel->getCountMemberbyPosition($id_project,"all")),
             'countex' => esc($this->memberModel->getCountMemberbyPosition($id_project,"")),
             'yanghadir' =>esc($this->presensiModel->getCountUserbyProject($id_project)),
             'validation' =>  \Config\Services::validation()
-		];
+        ];
+        // dd($data['meetings']);
+        // dd($data['meetings']);
         $title = ['title' =>    'Meeting | Scrum Tool',
                    'link' =>    $this->request->uri->getSegment(1)];
                 //    dd($data['yanghadir']);
@@ -251,6 +291,37 @@ class Proyek extends BaseController
         ]);
         return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'));
     }
+    public function editmeeting($id_project,$id_meeting)
+    {
+        // dd($_POST);
+        if(!$this->validate([
+            'link_meeting'.$id_meeting => ['rules'=>'required',
+                        'errors'=>[ 'required'=> 'Tautan Meeting Harus diisi']
+                        ],
+            'time_meeting'.$id_meeting => ['rules'=>'required',
+                        'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi']
+                        ],
+            'agenda'.$id_meeting => ['rules'=> 'in_list[Sprint Planning,Sprint Retrospective,Daily Scrum,Sprint Review]',
+                            'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
+                    ]
+		]) ) {
+			// $validation = \Config\Services::validation();
+            // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+			return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'))->withInput();
+        }
+        // $creator=$this->memberModel->getIdbyUserProject($this->session->id_user, $id_project);
+        // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'] );
+// dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project),);
+        $this->meetingModel->save([
+
+            'id_meeting'        => $id_meeting,
+            'agenda'            => $this->request->getVar('agenda'.$id_meeting),
+            'deskripsi_meeting' => $this->request->getVar('deskripsi_meeting'.$id_meeting),
+            'link_meeting'      => $this->request->getVar('link_meeting'.$id_meeting),
+            'time_meeting'      => $this->request->getVar('time_meeting'.$id_meeting)
+        ]);
+        return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'));
+    }
     public function meetingjoin($id_meeting)
     {
         $data = esc($this->meetingModel->getMeetingbyId($id_meeting));
@@ -280,6 +351,7 @@ class Proyek extends BaseController
             'project' => esc($this->proyekModel->getProject($id_project)),
             'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
             'members' => esc($this->memberModel->getMemberbyProject($id_project)),
+            'link' =>    $this->request->uri->getPath(),
 
             'presensi' => esc($this->presensiModel->getCountPresensiMemberbyProject($id_project)),
             'meetingall' => esc($this->meetingModel->getCountMeetingbyAgenda($id_project,'all')),
@@ -290,6 +362,7 @@ class Proyek extends BaseController
         ];
         $title = ['title' =>    'Presensi | Scrum Tool',
                 'link' =>    $this->request->uri->getSegment(1)];
+        // dd($data);
         if ($data['member'] == null)
         {
             return redirect()->to(base_url('/proyek/'));
@@ -319,24 +392,10 @@ class Proyek extends BaseController
         return redirect()->to(base_url('/proyek/'.$id_project.'/presensi/'));
 
     }
-    public function dashboard()
+
+    public function deleteMeeting($id_project,$id_meeting)
     {
-        $title = [
-            'title' => 'Dashboard Admin | Scrum Tool',
-            'link' => 	$this->request->uri->getSegment(1)
-        ];
-        $data = [
-            'user' => $this->userModel->getDetailbyId($this->session->id_user)
-        ];
-        // dd($data);
-        // echo ($this->memberModel->getMemberbyUserProject(1,1)['id_member']);
-        // echo $data['memberuserproject']['id_member'];
-        // dd($data);
-        // dd( base_url('css/font-awesome.min.css'));
-        echo view('header1_v',$title);
-        echo view('sidebar_admin',$data);
-        // echo 'lol';
-        echo view('dashboard_v',$data);
-        echo view('footer1_v');
+        $this->meetingModel->delete($id_meeting);
+        return redirect()->to(base_url('proyek/'.$id_project.'/meeting/'));
     }
 }

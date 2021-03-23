@@ -55,11 +55,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary my-2 w-100">Daftar</button>
-                <div class="form-group">
-                    <label class="form-check-label " for="exampleCheck1">Sudah Memiliki akun ? 
-                    <a class="" href="<?= base_url('/login');?>">Masuk</a>
-                    </label>
-                </div>
+
             </form>
         </div>
 

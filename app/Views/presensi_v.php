@@ -1,8 +1,9 @@
     <div id="content" class="p-4 p-md-5 pt-5">
-
-        <table class="table table-dark">
+      <h1 class="text-center"> Presensi <?=$project['nama_project'];?></h1>
+      <hr width="75%" color="black" style="height:3px;">
+        <table class="table text-center table-dark">
           <thead>
-            <tr class="text-center">
+            <tr class="">
               <th scope="col"></th>
               <th scope="col">Nama Pengguna</th>
               <th scope="col">Nama Lengkap</th>
@@ -20,7 +21,7 @@
               <td><?=$members['position'];?></td>
               <td> 
               <!-- Button trigger modal -->
-              <div class=" d-flex w-100 mx-auto my-2">
+              <div class=" d-flex w-100 mx-auto">
                   <button type="button" class="btn btn-success mr-0 ml-auto" data-toggle="modal" data-target="#exampleModal<?=$members['id_member'];?>" clicked="clicked">
                   <?php $x = 0;
                 foreach ($presensi as $presensis) {

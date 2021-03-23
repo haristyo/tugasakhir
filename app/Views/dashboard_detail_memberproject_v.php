@@ -1,7 +1,8 @@
 <div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
     <!-- <div class="table-responsive-sm" style="width:100%"> -->
-    <h1 class="text-center"> Dashboard Member</h1>
-<hr width="75%" color="black" style="height:5px;">
+    <h1 class="text-center"> Dashboard Member <?=$project['nama_project'];?></h1>
+    <hr width="75%" color="black" style="height:5px;">
+    <a class="btn btn-success my-2" href="<?= base_url('dashboard/proyek/'.$project['id_project']);?>">Kembali Ke detail Proyek</a>
     <table class="table table-dark">
           <thead>
             <tr>
@@ -33,19 +34,19 @@
                 echo 'Aktif';
               } ?></td>
               <td>
-                <form action="/admin/toScrumMaster/<?=$members['id_project'];?>/<?=$members['id_member'];?>" method="post">
+                <form action="/admin/toScrumMaster/<?=$members['id_member'].'/'.$members['id_project'];?>" method="post">
                     <?= csrf_field();?>
                     <button type="submit" class="btn btn-warning ml-auto mr-0">Ubah Menjadi Scrum master</button>
                 </form>      
             </td>
               <td>
-                <form action="/admin/toDevelopmentTeam/<?=$members['id_project'];?>/<?=$members['id_member'];?>" method="post">
+                <form action="/admin/toDevelopmentTeam/<?=$members['id_member'].'/'.$members['id_project'];?>" method="post">
                     <?= csrf_field();?>
                     <button type="submit" class="btn btn-danger ml-auto mr-0">Ubah Menjadi Development Team</button>
                 </form>      
             </td>
             <td>
-                  <form action="/admin/reactivation/<?=$members['id_project'];?>/<?=$members['id_member'];?>" method="post">
+                  <form action="/admin/reactivation/<?=$members['id_member'].'/'.$members['id_project'];?>" method="post">
                       <?= csrf_field();?>
                       <button type="submit" class="btn btn-secondary ml-auto mr-0">Aktivasi kembali</button>
                   </form>      

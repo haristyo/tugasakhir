@@ -18,7 +18,8 @@
 
     <title><?= $title?></title>
   </head>
-  <body class="h-100 w-100" style="background-color:lightblue;">
+  <!-- <body class="h-100 w-100" style="background-color:lightblue;" oncontextmenu="return false" onkeydown="return false" onmousedown="return false"> -->
+  <body class="h-100 w-100" style="background-color:lightblue;" oncontextmenu="return false">
   <nav class="navbar navbar-expand-lg navbar-dark d-flex px-4 py-2" style="background-color:#3445b4;">
   <a class="navbar-brand mx-2 " href="<?=base_url()?>">Scrum Tool</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +45,6 @@
         </a>   
         <div class="dropdown-menu" style="margin-left:20px;" aria-labelledby="navbarDropdownMenuLink">
         <?php if (session()->get('is_admin')=='N') {?>
-          # code...
           <a class="dropdown-item" href="<?= base_url('/proyek');?>">Proyek Saya</a>
           <a class="dropdown-item" href="<?= base_url('/profil');?>">Profil</a>
         <?php ;} else {?>

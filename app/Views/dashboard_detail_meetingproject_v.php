@@ -1,7 +1,8 @@
 <div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
     <!-- <div class="table-responsive-sm" style="width:100%"> -->
-    <h1 class="text-center"> Dashboard Meeting</h1>
+    <h1 class="text-center"> Dashboard Meeting <?=$project['nama_project'];?></h1>
 <hr width="75%" color="black" style="height:5px;">
+<a class="btn btn-success my-2" href="<?= base_url('dashboard/proyek/'.$project['id_project']);?>">Kembali Ke detail Proyek</a>
     <table class="table table-dark">
           <thead>
             <tr>
@@ -22,7 +23,7 @@
               <td><?=date('d-F-Y H:i:s', strtotime($meetings['time_meeting']));?></td>
               <td><?=$meetings['link_meeting'];?></td>
               <td>
-                <form action="/admin/deleteMeeting/<?=$meetings['id_project'];?>/<?=$meetings['id_meeting'];?>" method="post">
+                <form action="/admin/deleteMeeting/<?=$meetings['id_meeting'].'/'.$meetings['id_project'];?>" method="post">
                     <?= csrf_field();?>
                     <button type="submit" class="btn btn-danger ml-auto mr-0">Hapus Meeting</button>
                 </form>      

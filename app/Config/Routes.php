@@ -52,13 +52,14 @@ $routes->get('/proyek/meetingjoin/(:segment)','Proyek::meetingjoin/$1',['filter'
 $routes->get('/proyek/deletemember/(:segment)/(:segment)','Proyek::deletemember/$1/$2',['filter' => 'LoginFilter']);
 $routes->get('/dashboard','Admin::dashboard',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/proyek','Admin::project',['filter' => 'AdminFilter']);
-$routes->get('/dashboard/proyek/(:segment)','Admin::project/$1',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/proyek/(:segment)','Admin::detailProject/$1',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/member','Admin::member',['filter' => 'AdminFilter']);
-$routes->get('/dashboard/member/(:segment)','Admin::member/$1',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/proyek/(:segment)/member','Admin::projectMember/$1',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/meeting','Admin::meeting',['filter' => 'AdminFilter']);
-$routes->get('/dashboard/meeting/(:segment)','Admin::meeting/$1',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/proyek/(:segment)/meeting','Admin::projectMeeting/$1',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/user','Admin::user',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/user/(:segment)','Admin::user/$1',['filter' => 'AdminFilter']);
+$routes->get('/user/registerAdmin','User::registerAdmin',['filter' => 'AdminFilter']);
 // $routes->get('/dashboard/member/(:segment)/(:segment)','Admin::member/$1/$2',['filter' => 'AdminFilter']);
 
 /*

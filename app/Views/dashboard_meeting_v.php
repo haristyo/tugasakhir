@@ -22,7 +22,12 @@
               <td><?=date('d-F-Y H:i:s', strtotime($meetings['time_meeting']));?></td>
               <td><?=$meetings['link_meeting'];?></td>
               <td>
-                <a href="<?= base_url('dashboard/meeting/'.$meetings['id_project'])?>" class="btn btn-primary">Detail</a>
+              <td>
+                <form action="/admin/deleteMeeting/<?=$meetings['id_meeting'];?>" method="post">
+                    <?= csrf_field();?>
+                    <button type="submit" class="btn btn-danger ml-auto mr-0">Hapus Meeting</button>
+                </form>      
+              </td>
               </td>
             </tr>
             <?php }?>

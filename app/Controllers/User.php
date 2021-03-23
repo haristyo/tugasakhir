@@ -309,6 +309,7 @@ class User extends BaseController
 		$data = [
 			'validation' =>  \Config\Services::validation(),
 			'user' => esc($this->userModel->getDetailbyId($this->session->id_user)),
+			'link' => 	$this->request->uri->getSegment(2)
 		];
 		echo view('header1_v',$title);
 		echo view('sidebar_admin',$data);
