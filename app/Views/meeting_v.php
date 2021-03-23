@@ -239,7 +239,7 @@
                             <form class="" method="post" action="/proyek/editmeeting/<?=$meetings['id_project'].'/'.$meetings['id_meeting'];?>">
                                 <?= csrf_field(); ?>
                                 <div class="form-group">
-                                    <label for="agenda<?=$meetings['id_meeting'];?>" class="text-left" style="color:black;">Agenda  <?=$meetings['time_meeting'].'   ';?><?=date("d/m/Y", strtotime($meetings['time_meeting'])).'T'.date("h:i", strtotime($meetings['time_meeting']))?></label>
+                                    <label for="agenda<?=$meetings['id_meeting'];?>" class="text-left" style="float: left; color:black;">Agenda  </label>
                                     <select class="custom-select <?= ($validation->hasError('agenda'.$meetings['id_meeting'])) ? 'is-invalid' : '' ;?>" name="agenda<?=$meetings['id_meeting'];?>">
                                         <option selected>Pilih Agenda</option>
                                         <option value="Sprint Planning" <?php if ($meetings['agenda'] == 'Sprint Planning') {echo "selected='selected'";}?>>Sprint Planning</option>
@@ -253,25 +253,26 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="deskripsi_meeting">Deskripsi</label>
+                                    <label for="deskripsi_meeting" style="float: left; color:black;">Deskripsi</label>
                                     <textarea class="form-control" id="deskripsi_meeting" name="deskripsi_meeting<?=$meetings['id_meeting'];?>"> <?=$meetings['deskripsi_meeting'];?></textarea>
                                     <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="link_meeting">Tautan</label>
+                                    <label for="link_meeting" style="float: left; color:black;">Tautan</label>
                                     <input type="text" class="form-control <?php if ($validation->hasError('link_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} elseif(session()->getFlashData('link_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} ;?>" id="link_meeting<?=$meetings['id_meeting'];?>" name="link_meeting<?=$meetings['id_meeting'];?>"  value="<?=$meetings['link_meeting'];?>"
                                     placeholder="ex: https://zoom.com / https://meet.google.com">
-                                    <small  class="form-text text-muted">Masukkan tautan beserta protokolnya contoh:(http://,https://)</small>
-                                    <div class="invalid-feedback">
+                                    <small  class="form-text text-muted" style="float: left;">Masukkan tautan beserta protokolnya contoh:(http://,https://)</small>
+                                    <br/>
+                                    <div class="invalid-feedback" style="float: left;">
                                         <?=$validation->getError('link_meeting'.$meetings['id_meeting']);?>
-                                        <?=session()->getFlashData('link_meeting'.$meetings['id_meeting']);?>
+                                        
                                     </div>
                                 </div>
-                                
+                                <br/>
                                 <div class="form-group">
-                                    <label for="time_meeting<?=$meetings['id_meeting'];?>"> <?=$meetings['time_meeting'];?> Waktu</label>
-                                    <input  id="time_meeting<?=$meetings['id_meeting'];?>" type="datetime-local" class="form-control <?php if ($validation->hasError('time_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} elseif(session()->getFlashData('time_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} ;?>"  name="time_meeting<?=$meetings['id_meeting'];?>"  value="<?=date("Y-m-d", strtotime($meetings['time_meeting'])).'T'.date("h:i", strtotime($meetings['time_meeting']))?>">
+                                    <label for="time_meeting<?=$meetings['id_meeting'];?>" style="float: left; color:black;"> Waktu</label>
+                                    <input  id="time_meeting<?=$meetings['id_meeting'];?>" type="datetime-local" class="form-control <?php if ($validation->hasError('time_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} elseif(session()->getFlashData('time_meeting'.$meetings['id_meeting'])) {echo 'is-invalid';} ;?>"  name="time_meeting<?=$meetings['id_meeting'];?>"  value="<?=date("Y-m-d", strtotime($meetings['time_meeting'])).'T'.date("H:i", strtotime($meetings['time_meeting']))?>">
                                     <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                                     <div class="invalid-feedback">
                                         <?=$validation->getError('time_meeting'.$meetings['id_meeting']);?>
@@ -289,13 +290,14 @@
                 </div>
                 </div>
             <!-- end modal-->
-            <?php
-                if ($validation->hasError('time_meeting'.$meetings['id_meeting']) || $validation->hasError('agenda'.$meetings['id_meeting'])) 
-                {      
-                 echo       "Salah";}?>
+            
 
+    <?php 
+    if ($validation->hasError('link_meeting'.$meetings['id_meeting']) || $validation->hasError('time_meeting'.$meetings['id_meeting']) || $validation->hasError('agenda'.$meetings['id_meeting'])) { 
+        echo "<script> $('#edit".$meetings['id_meeting']."').modal('show'); </script>";
+         ;} ?>
         </td>
-
+       
         
     </tr>
     <?php }?>
@@ -307,5 +309,4 @@ if ($validation->hasError('link_meeting') || $validation->hasError('time_meeting
     echo "<script> $('#exampleModal').modal('show'); </script>";
 }
 ?>
-
 </div>

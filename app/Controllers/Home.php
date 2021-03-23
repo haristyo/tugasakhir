@@ -16,10 +16,10 @@ class Home extends BaseController
 
 		];
 		echo view('header1_v',$title);
-		echo ("ini tampilan home");
+		echo view('index_v');
 		echo view('footer1_v');
 	}
-	public function aboutus()
+	public function howto()
 	{
 		$title = [
 			'title' => 'About Us | Scrum Tool',
@@ -27,7 +27,7 @@ class Home extends BaseController
 		];
 	// dd($this->request->uri->getSegment(1));
 		echo view('header1_v',$title);
-		echo ("ini tampilan About US");
+		echo view('howto');
 		echo view('footer1_v');
 	}
 }

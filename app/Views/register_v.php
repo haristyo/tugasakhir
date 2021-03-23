@@ -1,7 +1,7 @@
 <div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px;padding:1%;">
     <div class="row  p-4">
         <div class="col-6 col-sm-12 col-md-6 h-100 p-2">
-            <img src="<?=base_url('/img/register.jpg')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
+            <img src="<?=base_url('/img/register-04.png')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
         </div>
         <div class="col-6 col-sm-12 col-md-6 h-100 w-100">
         <form class="" action="/user/addUser" method="post">
@@ -10,7 +10,7 @@
                 <div class="form-group">
                     <label for="username">Nama User</label>
                     <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ;?>" id="username" name="username" autofocus value="<?= old('username')?>">
-                    <small id="emailHelp" class="form-text text-muted">masukkan username</small>
+                    <!-- <small id="emailHelp" class="form-text text-muted">masukkan username</small> -->
                     <div class="invalid-feedback">
                         <?=$validation->getError('username');?>
                     </div>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Alamat Surel</label>
-                    <input type="text" class="form-control <?= ($validation->hasError('email')) ? 'is-invalid' : '' ;?>" id="email" name="email" value="<?= old('email')?>">
+                    <input type="email" class="form-control <?= ($validation->hasError('email')) ? 'is-invalid' : '' ;?>" id="email" name="email" value="<?= old('email')?>">
                     <div class="invalid-feedback">
                         <?=$validation->getError('email');?>
                     </div>
@@ -32,6 +32,7 @@
                 <div class="form-group">
                     <label for="password1">Kata Sandi</label>
                     <input type="password" class="form-control <?= ($validation->hasError('password1')) ? 'is-invalid' : '' ;?>" id="password1" name="password1" value="<?= old('password1')?>">
+                    <small id="passwordHelp" class="form-text text-muted">Kata sandi paling sedikit 8 karakter</small>
                     <div class="invalid-feedback">
                         <?=$validation->getError('password1');?>
                     </div>

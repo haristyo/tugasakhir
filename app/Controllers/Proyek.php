@@ -199,7 +199,6 @@ class Proyek extends BaseController
 
     public function meeting($id_project)
     {
-        
         $keyword =  $this->request->getVar('search');
         $agenda =  $this->request->getVar('agenda');
         if ($keyword) {

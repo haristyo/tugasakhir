@@ -12,14 +12,16 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.css')?>">
     <link rel="stylesheet" href="<?= base_url('css/style1.css')?>">
-		
+		<!-- font -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
 
     <title><?= $title?></title>
   </head>
   <!-- <body class="h-100 w-100" style="background-color:lightblue;" oncontextmenu="return false" onkeydown="return false" onmousedown="return false"> -->
-  <body class="h-100 w-100" style="background-color:lightblue;" oncontextmenu="return false">
+  <body class="h-100 w-100" style="background-color:lightblue;" >
   <nav class="navbar navbar-expand-lg navbar-dark d-flex px-4 py-2" style="background-color:#3445b4;">
   <a class="navbar-brand mx-2 " href="<?=base_url()?>">Scrum Tool</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,19 +29,19 @@
   </button>
   <div class=" collapse navbar-collapse" id="navbarNavDropdown">
     <ul class=" ml-auto navbar-nav">
-      <li class="nav-item mx-2 <?php if ($link == "") {echo 'active';}?>">
-        <a class="nav-link btn btn-warning" href="<?=base_url()?>" >Beranda</a>
+      <li class="nav-item mx-2">
+        <a class="nav-link btn btn-warning text-white" href="<?=base_url()?>" >Beranda</a>
       </li>
-      <li class="nav-item  mx-2 <?php if ($link == "about-us") {echo 'active';}?>">
-        <a class="nav-link btn btn-warning" href="<?=base_url('/about-us');?>" >Tentang Kami</a>
+      <li class="nav-item  mx-2">
+        <a class="nav-link btn btn-warning text-white" href="<?=base_url('/how-to');?>" >Cara Menggunakan</a>
       </li>
       <?php if(session()->get('logged_in')==FALSE) {?>
-      <li class="nav-item mx-2 <?php if ($link == "login") {echo 'active';}?>">
-        <a class="nav-link btn btn-success" href="<?=base_url('/login')?>" >Masuk</a>
+      <li class="nav-item mx-2">
+        <a class="nav-link btn btn-success text-white" href="<?=base_url('/login')?>" >Masuk</a>
       </li>
       <?php } else { ?>
       <li class="nav-item dropdown mx-2">
-        <a class="nav-link dropdown-toggle btn btn-success" style="border-radius:4px; mr-4" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle btn btn-success text-white" style="border-radius:4px; mr-4" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <img src="<?= base_url('/img/profil/'.session()->get('profil'))?>" class="img-fluid" style="object-fit: contain;border-radius:50%; max-height:20px;" alt=<?= session()->get('profil')?>">
           <?php echo session()->get('username')."&nbsp;"."&nbsp;";?>
         </a>   
