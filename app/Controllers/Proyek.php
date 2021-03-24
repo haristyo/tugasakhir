@@ -129,7 +129,7 @@ class Proyek extends BaseController
             if($data != null) {
                 // dd($data);
             // $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
-            $joined = $this->memberModel->getCountMemberbyUserProject($this->session->id_user,$data['id_project']);
+            $joined = $this->memberModel->getCountMemberbyUserProject($this->session->id_user,$data['id_project'])['id_member'];
             }
             else {
                 $joined = 0;
@@ -139,7 +139,8 @@ class Proyek extends BaseController
         else {
             $joined = 0;
         }
-        
+        // d($data);
+        // dd($joined);
         // $joined = $this->memberModel->getMemberbyUserProject($this->session->id_user ,$data['id_project'])['id_member'];
         // dd($joined);
         
@@ -397,4 +398,40 @@ class Proyek extends BaseController
         $this->meetingModel->delete($id_meeting);
         return redirect()->to(base_url('proyek/'.$id_project.'/meeting/'));
     }
+
+    public function board($id_project)
+	{ 
+            $title = [
+                'title' => 'Papan Proyek | Scrum Tool',
+                'link' => 	$this->request->uri->getSegment(1)
+            ];
+            $data = [
+                'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user),
+                'link' =>    $this->request->uri->getPath(),
+                'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
+                'members' => esc($this->memberModel->getMemberbyProject($id_project))
+                ];
+            echo view('header1_v',$title);
+            echo view('sidebar',$data);
+            echo view('board_v',$data);
+            echo view('footer1_v');
+    }
+    public function resource($id_project)
+	{ 
+            $title = [
+                'title' => 'Sumber Daya | Scrum Tool',
+                'link' => 	$this->request->uri->getSegment(1)
+            ];
+            $data = [
+                'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user),
+                'link' =>    $this->request->uri->getPath(),
+                'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
+                'members' => esc($this->memberModel->getMemberbyProject($id_project))
+                ];
+            echo view('header1_v',$title);
+            echo view('sidebar',$data);
+            echo "<div id='content' class='p-4 p-md-5 pt-5'><div><div>";
+            echo view('footer1_v');
+    }
+
 }

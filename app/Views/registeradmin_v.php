@@ -2,7 +2,7 @@
 <div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px;padding:1%;">
     <div class="row  p-4">
         <div class="col-6 col-sm-12 col-md-6 h-100 p-2">
-            <img src="<?=base_url('/img/register.jpg')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
+            <img src="<?=base_url('/img/register.png')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
         </div>
         <div class="col-6 col-sm-12 col-md-6 h-100 w-100">
         <form class="" action="/user/addAdmin" method="post">
@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <label for="username">Nama Admin</label>
                     <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ;?>" id="username" name="username" autofocus value="<?= old('username')?>">
-                    <small id="emailHelp" class="form-text text-muted">masukkan nama admin</small>
+                    <!-- <small id="emailHelp" class="form-text text-muted">masukkan nama admin</small> -->
                     <div class="invalid-feedback">
                         <?=$validation->getError('username');?>
                     </div>

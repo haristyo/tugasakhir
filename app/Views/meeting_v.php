@@ -107,6 +107,9 @@
             <th scope="col">Deskripsi</th>
             <th scope="col">Join</th>
             <th scope="col">Kehadiran</th>
+            <?php if($member['position'] == "Scrum Master") {?>
+            <th scope="col">Aksi</th>
+            <?php }?>
         </tr>
     </thead>
     <tbody>
@@ -217,6 +220,7 @@
               <!-- end modal -->
 
         </td>
+        <?php if($member['position'] == "Scrum Master") {?>
         <td>
             <!-- Button trigger modal -->
                 <div class=" d-flex w-100 mx-auto">
@@ -296,7 +300,8 @@
     if ($validation->hasError('link_meeting'.$meetings['id_meeting']) || $validation->hasError('time_meeting'.$meetings['id_meeting']) || $validation->hasError('agenda'.$meetings['id_meeting'])) { 
         echo "<script> $('#edit".$meetings['id_meeting']."').modal('show'); </script>";
          ;} ?>
-        </td>
+    </td>
+    <?php }?>
        
         
     </tr>

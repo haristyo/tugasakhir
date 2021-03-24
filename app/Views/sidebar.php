@@ -12,11 +12,11 @@
 	          <li class=" <?php if ($link == "proyek/".$member['id_project']) {echo"active";} ?>">
 	            <a href="<?=base_url('/proyek/'.$member['id_project'])?>"><span class="fa fa-info mr-4"></span>Detail</a>
 	          </li>
-	          <li class=" <?php if ($link == "proyek/".$member['id_project']."presensi") {echo "active";} ?>">
-	              <a href="#"><span class="fa fa-clipboard mr-3"></span>Project Board</a>
+	          <li class=" <?php if ($link == "proyek/".$member['id_project']."/board") {echo "active";} ?>">
+	              <a href="<?=base_url('/proyek/'.$member['id_project'].'/board')?>"><span class="fa fa-clipboard mr-3"></span>Project Board</a>
 	          </li>
 			  <li class=" <?php if ($link == "proyek/".$member['id_project']."/resource") {echo "active";} ?>">
-			  	<a href="#"><span class="fa fa-file mr-3"></span> Resource</a>
+			  	<a href="<?=base_url('/proyek/'.$member['id_project'].'/resource')?>"><span class="fa fa-file mr-3"></span> Resource</a>
 			  </li>
 	          <li class=" <?php if ($link == "proyek/".$member['id_project']."/meeting") {echo "active";} ?>">
               	<a href="<?=base_url('/proyek/'.$member['id_project'].'/meeting')?>"><span class="fa fa-video-camera mr-3"></span>Meeting</a>

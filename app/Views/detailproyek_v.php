@@ -13,7 +13,6 @@
               <th scope="col">Nama Lengkap</th>
               <th scope="col">Posisi</th>
               <th scope="col">Tanggal Bergabung</th>
-              <th scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -24,7 +23,6 @@
               <td><?=$members['nama_user'];?></td>
               <td><?=$members['position'];?></td>
               <td><?=$members['created_member'];?></td>
-              <td>Keluarkan</td>
             </tr>
             <?php }?>
           </tbody>
