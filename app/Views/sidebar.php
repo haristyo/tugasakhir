@@ -28,7 +28,7 @@
 			  <form action="/proyek/deletemember/<?=$member['id_project'];?>/<?=$member['id_member'];?>/" method="post">
 				<?= csrf_field();?>
 				<button type="submit" class="btn btn-danger text-left pl-0  m-0 w-100">
-					<span class="fa fa-paper-plane mr-3"></span> Keluar Proyek
+					<span class="fa fa-sign-out mr-3"></span> Keluar Proyek
 				</button>
 			  </form>
 	          </li>
