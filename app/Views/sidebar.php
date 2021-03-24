@@ -10,19 +10,19 @@
 			<h1><a href="<?=base_url('/proyek/'.$member['id_project'])?>" class="logo"><?=$member['nama_project'];?> <span><?=$member['position'];?></span></a></h1>
 	        <ul class="list-unstyled components mb-5">
 	          <li class=" <?php if ($link == "proyek/".$member['id_project']) {echo"active";} ?>">
-	            <a href="<?=base_url('/proyek/'.$member['id_project'])?>"><span class="fa fa-home mr-3"></span>Detail</a>
+	            <a href="<?=base_url('/proyek/'.$member['id_project'])?>"><span class="fa fa-info mr-4"></span>Detail</a>
 	          </li>
 	          <li class=" <?php if ($link == "proyek/".$member['id_project']."presensi") {echo "active";} ?>">
-	              <a href="#"><span class="fa fa-user mr-3"></span>Project Board</a>
+	              <a href="#"><span class="fa fa-clipboard mr-3"></span>Project Board</a>
 	          </li>
 			  <li class=" <?php if ($link == "proyek/".$member['id_project']."/resource") {echo "active";} ?>">
-			  	<a href="#"><span class="fa fa-suitcase mr-3"></span> Resource</a>
+			  	<a href="#"><span class="fa fa-file mr-3"></span> Resource</a>
 			  </li>
 	          <li class=" <?php if ($link == "proyek/".$member['id_project']."/meeting") {echo "active";} ?>">
-              	<a href="<?=base_url('/proyek/'.$member['id_project'].'/meeting')?>"><span class="fa fa-briefcase mr-3"></span>Meeting</a>
+              	<a href="<?=base_url('/proyek/'.$member['id_project'].'/meeting')?>"><span class="fa fa-video-camera mr-3"></span>Meeting</a>
 	          </li>
 	          <li class=" <?php if ($link == "proyek/".$member['id_project']."/presensi") {echo "active";} ?>">
-			  	<a href="<?=base_url('/proyek/'.$member['id_project'].'/presensi')?>"><span class="fa fa-sticky-note mr-3"></span>Presensi</a>
+			  	<a href="<?=base_url('/proyek/'.$member['id_project'].'/presensi')?>"><span class="fa fa-calendar-check-o mr-3"></span>Presensi</a>
 	          </li>
 	          <li class="p-0 m-0" >
 			  <form action="/proyek/deletemember/<?=$member['id_project'];?>/<?=$member['id_member'];?>/" method="post">

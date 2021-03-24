@@ -11,7 +11,7 @@ class Home extends BaseController
 	public function index()
 	{
 		$title = [
-			'title' => 'Home | Scrum Tool',
+			'title' => 'Beranda | Scrum Tool',
 			'link' => 	$this->request->uri->getSegment(1)
 
 		];
@@ -19,15 +19,15 @@ class Home extends BaseController
 		echo view('index_v');
 		echo view('footer1_v');
 	}
-	public function howto()
+	public function about()
 	{
 		$title = [
-			'title' => 'About Us | Scrum Tool',
+			'title' => 'Tentang | Scrum Tool',
 			'link' => 	$this->request->uri->getSegment(1)
 		];
 	// dd($this->request->uri->getSegment(1));
 		echo view('header1_v',$title);
-		echo view('howto');
+		echo view('About');
 		echo view('footer1_v');
 	}
 }

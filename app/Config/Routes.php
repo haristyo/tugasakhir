@@ -34,7 +34,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/indexold', 'Home::indexold');
 $routes->get('/', 'Home::index');
-$routes->get('/how-to', 'Home::howto');
+$routes->get('/about', 'Home::about');
 $routes->get('/login', 'User::login');
 $routes->get('/logout', 'User::logout',['filter' => 'LoginFilter']);
 $routes->get('/register', 'User::register');

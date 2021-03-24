@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.css')?>">
     <link rel="stylesheet" href="<?= base_url('css/style1.css')?>">
 		<!-- font -->
+
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -33,7 +34,7 @@
         <a class="nav-link btn btn-warning text-white" href="<?=base_url()?>" >Beranda</a>
       </li>
       <li class="nav-item  mx-2">
-        <a class="nav-link btn btn-warning text-white" href="<?=base_url('/how-to');?>" >Cara Menggunakan</a>
+        <a class="nav-link btn btn-warning text-white" href="<?=base_url('/about');?>" >Tentang</a>
       </li>
       <?php if(session()->get('logged_in')==FALSE) {?>
       <li class="nav-item mx-2">
