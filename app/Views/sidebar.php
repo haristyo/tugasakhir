@@ -1,12 +1,12 @@
 <div class="wrapper d-flex align-items-stretch">
-	<nav id="sidebar" >
+	<nav id="sidebar" class="active">
 		<div class="custom-menu">
 			<button type="button" id="sidebarCollapse" class="btn btn-primary">
 	          <i class="fa fa-bars"></i>
-	          <span class="sr-only">Toggle Menu</span>
+	          <span class="sr-only" >Toggle Menu</span>
 	        </button>
         </div>
-		<div class="p-4">
+		<div class="px-4 pt-4">
 			<h1><a href="<?=base_url('/proyek/'.$member['id_project'])?>" class="logo"><?=$member['nama_project'];?> <span><?=$member['position'];?></span></a></h1>
 	        <ul class="list-unstyled components mb-5">
 	          <li class=" <?php if ($link == "proyek/".$member['id_project']) {echo"active";} ?>">
@@ -40,8 +40,8 @@
 						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved</p>
 	        </div>
 
-	      </div>
-    	</nav>
+		</div>
+	</nav>
 
         <!-- Page Content  -->
 

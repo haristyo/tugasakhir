@@ -222,7 +222,7 @@
         </td>
         <?php if($member['position'] == "Scrum Master") {?>
         <td>
-            <!-- Button trigger modal -->
+                <!-- Button trigger modal -->
                 <div class=" d-flex w-100 mx-auto">
                     <button type="button" class="btn btn-warning mr-0 ml-auto mb-2" data-toggle="modal" data-target="#edit<?=$meetings['id_meeting'];?>" clicked="clicked">
                         Ubah Meeting

@@ -1,4 +1,4 @@
-    <div id="content" class="p-4 p-md-5 pt-5">
+    <div id="content" class="px-md-5 pt-5">
         
         
         <h1 class="text-center"> <?=$member['nama_project'];?></h1>
