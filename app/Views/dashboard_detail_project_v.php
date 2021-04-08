@@ -35,7 +35,7 @@
 
     
     <div class="row d-flex w-75 ml-auto mr-auto">
-        <div class="col-4 ml-0 mr-auto w-100 h-100 p-0" >
+        <div class="col-4 ml-auto mr-auto w-100 h-100 p-0" >
         <a href="<?= base_url('/dashboard/proyek/'.$project['id_project'].'/member');?>" class=" btn btn-success py-4" style="width:90%;">
             <h5 class=" text-white py-4  text-center">Member</h5>
         </a>
@@ -45,11 +45,12 @@
             <h5 class=" text-white py-4 text-center">Meeting</h5>
         </a>
         </div>
-        <div class="col-4 ml-auto mr-0 w-100 h-100 p-0 d-flex" >
-        <a href="<?= base_url('/dashboard/proyek/'.$project['id_project'].'/resource');?>" class=" btn btn-primary py-4 text-right ml-auto mr-0" style="width:90%;">
-        <h5 class=" text-white py-4 text-center">Resource</h5>
+        <div class="col-4 ml-auto mr-auto w-100 h-100 p-0 d-flex" >
+        <a href="<?= base_url('/dashboard/proyek/'.$project['id_project'].'/sprint');?>" class=" btn btn-warning py-4 ml-auto mr-auto " style="width:90%;">
+            <h5 class=" text-white py-4 text-center">Sprint</h5>
         </a>
         </div>
+        
         
     </div>
 

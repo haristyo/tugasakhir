@@ -7,7 +7,7 @@
 	        </button>
         </div>
 		<div class="p-4">
-			<h1><a href="<?=base_url('/dashboard/')?>" class="logo"><?=$user['username'];?> <span><?=$user['nama_user'];?></span></a></h1>
+		<h1><a href="<?=base_url('/dashboard/')?>" class="logo"><?=$user['username'];?> <span><?=$user['nama_user'];?></span></a></h1>
 	        <ul class="list-unstyled components mb-5">
 	          <li class=" <?php if ($link == "user") {echo "active";} ?>">
 	              <a href="<?=base_url('/dashboard/user')?>"><span class="fa fa-user mr-3"></span>User</a>

@@ -60,6 +60,7 @@ $routes->get('/dashboard/member','Admin::member',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/proyek/(:segment)/member','Admin::projectMember/$1',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/meeting','Admin::meeting',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/proyek/(:segment)/meeting','Admin::projectMeeting/$1',['filter' => 'AdminFilter']);
+$routes->get('/dashboard/proyek/(:segment)/sprint','Admin::projectSprint/$1',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/user','Admin::user',['filter' => 'AdminFilter']);
 $routes->get('/dashboard/user/(:segment)','Admin::user/$1',['filter' => 'AdminFilter']);
 $routes->get('/user/registerAdmin','User::registerAdmin',['filter' => 'AdminFilter']);

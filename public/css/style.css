@@ -2083,7 +2083,7 @@ fieldset:disabled a.btn {
   border-color: #007bff; }
   .btn-primary:hover {
     color: #fff;
-    background-color: #0069d9;
+    background-color: #0654ac;
     border-color: #0062cc; }
   .btn-primary:focus, .btn-primary.focus {
     -webkit-box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
@@ -8304,13 +8304,15 @@ a[data-toggle="collapse"] {
 
 @media (max-width: 991.98px) {
   #sidebarCollapse span {
+    display: none; } 
+  #sidebarCollapse2 span {
     display: none; } }
 
 #content {
   width: 100%;
   padding: 0 0 0 0;
   margin : 0 0 0 0;
-  min-height: 100vh;
+  min-height: 200px;
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s; }
@@ -8351,3 +8353,4 @@ a[data-toggle="collapse"] {
 
 .subscribe-form .form-control {
   background: #3b4ec6; }
+

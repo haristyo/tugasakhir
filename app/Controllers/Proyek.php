@@ -9,6 +9,9 @@ use App\Models\UserModel;
 use App\Models\BacklogModel;
 use App\Models\SprintModel;
 use App\Models\EpicModel;
+use App\Models\NotesModel;
+use App\Models\LogModel;
+use App\Models\FileModel;
 class Proyek extends BaseController
 {
     protected $session;   
@@ -20,6 +23,9 @@ class Proyek extends BaseController
     protected $backlogModel;
     protected $sprintModel;
     protected $epicModel;
+    protected $notesModel;
+    protected $logModel;
+    protected $fileModel;
     
 	public function __construct()
 	{
@@ -32,6 +38,9 @@ class Proyek extends BaseController
         $this->backlogModel = new BacklogModel();
         $this->sprintModel = new SprintModel();
         $this->epicModel = new EpicModel();
+        $this->logModel = new LogModel();
+        $this->notesModel = new NotesModel();
+        $this->fileModel = new FileModel();
         $this->session = \Config\Services::session();
 		// if (!isset($_SESSION['last'])) {
 		// 	$_SESSION['last'] = "";
@@ -69,6 +78,7 @@ class Proyek extends BaseController
         echo view('createproyek_v',$data);
         echo view('footer1_v');
     }
+
     public function add()
 	{
 		if(!$this->validate([
@@ -113,6 +123,67 @@ class Proyek extends BaseController
         // return redirect()->to(base_url('/proyek/'.$data['id_project']));
         
 		return redirect()->to(base_url('/proyek'));
+    }
+    public function editproyek($id_project)
+    {
+        if ($this->proyekModel->getProject($id_project)['kode_join'] != $this->request->getVar('kode_join')) {
+            
+            if(!$this->validate([
+
+                'nama_project' => ['rules'=>'required',
+                            'errors'=>[ 'required'=>  'Nama Proyek Harus diisi']
+                        ],
+                'kode_join' => ['rules'=>'required|is_unique[project.kode_join]|min_length[4]|max_length[32]',
+                            'errors'=>[ 'required'=> 'Kode Join Harus diisi',
+                                        'is_unique'=>'Kode Gabung Pernah digunakan',
+                                        'min_length'=>'Kode Gabung minimal 4 karakter',
+                                        'max_length'=>'Kode Gabung maksimal 32 karakter']
+                            ],
+
+                'password_project' => ['rules'=> 'required|min_length[4]|max_length[32]',
+                                        'errors'=>[ 'required'=>  'Kata Sandi harus diisi',
+                                        'min_length'=>'Kata Sandi minimal 4 karakter',
+                                        'max_length'=>'Kata Sandi maksimal 32 karakter']
+                            ],
+                                
+                                
+            ])) {
+                // $validation = \Config\Services::validation();
+                // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+                return redirect()->to(base_url('/proyek/'.$id_project))->withInput();
+            }
+        } else {
+            if(!$this->validate([
+
+                'nama_project' => ['rules'=>'required',
+                            'errors'=>[ 'required'=>  'Nama Proyek Harus diisi']
+                        ],
+                'password_project' => ['rules'=> 'required|min_length[4]|max_length[32]',
+                                        'errors'=>[ 'required'=>  'Kata Sandi harus diisi',
+                                        'min_length'=>'Kata Sandi minimal 4 karakter',
+                                        'max_length'=>'Kata Sandi maksimal 32 karakter']
+                            ],
+                                
+                                
+            ])) {
+                // $validation = \Config\Services::validation();
+                // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+                return redirect()->to(base_url('/proyek/'.$id_project))->withInput();
+            }
+        }
+
+		$this->proyekModel->save([
+            'id_project'        => $id_project,
+			'nama_project' 		=> $this->request->getVar('nama_project'),
+            'kode_join'  	    => $this->request->getVar('kode_join'),
+			'password_project'  => $this->request->getVar('password_project'),
+            'deskripsi'     	=> $this->request->getVar('deskripsi')
+		
+        ]);
+        
+        // return redirect()->to(base_url('/proyek/'.$data['id_project']));
+        
+		return redirect()->to(base_url('/proyek/'.$id_project));
     }
 
     public function join()
@@ -185,15 +256,17 @@ class Proyek extends BaseController
     public function detail($id_project)
     {
         $data = [
-			'project' => esc($this->proyekModel->getProject($id_project)),
+			'project' => esc($this->proyekModel->getProjectCreator($id_project)),
             'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
             'link' =>    $this->request->uri->getPath(),
-            'members' => esc($this->memberModel->getMemberbyProject($id_project))
+            'members' => esc($this->memberModel->getMemberbyProject($id_project)),
+            'validation' =>  \Config\Services::validation()
             
 		];
         $title = ['title' => 'Detail Project | Scrum Tool',
         'link' => 	$this->request->uri->getSegment(1)];
         // dd($data['members']);
+        // dd($data);
         if ($data['member'] == null)
         {
             return redirect()->to(base_url('/proyek/'));
@@ -421,18 +494,26 @@ class Proyek extends BaseController
                 'link' => 	$this->request->uri->getSegment(1)
             ];
             $data = [
-                'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user),
                 'link' =>    $this->request->uri->getPath(),
                 'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
-                'members' => esc($this->memberModel->getMemberbyProject($id_project)),
                 'backlog' => esc($this->backlogModel->getBacklogbyProject($id_project)),
                 'sprint' => esc($this->sprintModel->getSprintbyProject($id_project)),
                 'epic' => esc($this->epicModel->getEpicbyProject($id_project)),
+                'count' => esc($this->epicModel->getCount($id_project)),
+                'countdo' => esc($this->epicModel->getCountDo($id_project)),
+                'countbacklog' => esc($this->backlogModel->getCount($id_project)),
+                'note' => esc($this->notesModel->getNotesbyProject($id_project)),
+                'totalsprint' => $this->sprintModel->totalSprint($id_project),
+                'log' => $this->logModel->getLogbyProject($id_project),
                 'validation' =>  \Config\Services::validation()
 
             ];
+            // dd($data);
             //     d($this->epicModel->getEpicbyProject());
             // dd($data);
+            // d($data['log']);
+            // dd($data['countdo']);
+            // dd($data['totalsprint']);
             if ($data['member'] == null)
             {
                 return redirect()->to(base_url('/proyek/'));
@@ -455,12 +536,156 @@ class Proyek extends BaseController
                 'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user),
                 'link' =>    $this->request->uri->getPath(),
                 'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
-                'members' => esc($this->memberModel->getMemberbyProject($id_project))
+                'file' => esc($this->fileModel->getFilebyProject($id_project)->paginate(20,'file')),
+                'pager' => esc($this->fileModel->getFilebyProject($id_project)->pager),
+                'validation' =>  \Config\Services::validation()
                 ];
+            // d($data['validation']);
+            // dd($data['file']);
             echo view('header1_v',$title);
             echo view('sidebar',$data);
-            echo "<div id='content' class='p-4 p-md-5 pt-5'><div><div>";
+            echo view('resource_v',$data);
             echo view('footer1_v');
+    }
+    public function createimage()
+    {   
+        // d($filename);
+        // d($filerandomname);
+        $id_project = $this->request->getVar('id_project');
+        // dd($_POST);
+        $file = $this->request->getFile('file');
+        // $files = $this->request->getFile('files');
+        // d($files);
+        // d($file);
+        // d($id_project);
+        // d($this->session->id_user);
+        // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project));
+        if(!$this->validate([
+			
+			'file' =>['rules'=>'uploaded[file]|is_image[file]|mime_in[file,image/jpg,image/jpeg,image/png]|max_size[file,10240]',
+			          'errors'=>[  'uploaded'   => 'Pilih file anda',
+                                    'is_image'	=> 'File harus berupa gambar',
+                                    'mime_in'	=> 'File berformat jpg/jpeg/png',
+                                    'size'      => 'File lebih besar dari 10MB']
+			         ]
+		])) {
+			// $validation = \Config\Services::validation();
+			// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+			return redirect()->to(base_url('/proyek/'.$id_project.'/resource'))->withInput();
+        }
+        
+        $filename = $file->getName();
+		$filerandomname = $file->getRandomName();
+
+        $file->move('resource/'.$id_project, $filerandomname);
+        if ($this->sprintModel->getLastSprintbyProject($id_project) == null) {
+            $sprint = null;
+        }
+        else {
+            $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
+        }
+        $this->fileModel->save([
+            'id_project'    => $id_project,
+            'nama_asli'  	=> $filename,
+            'nama_file'     => $filerandomname,
+            'type' 	        => 'gambar',
+            'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
+            'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+            'sprint'        => $sprint
+            ]);
+            return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
+    }
+    public function createdocument()
+    {   
+        
+
+        // d($filename);
+        // d($filerandomname);
+        $id_project = $this->request->getVar('id_project');
+        // dd($_POST);
+        $file = $this->request->getFile('filedocument');
+        // $files = $this->request->getFile('files');
+        // d($files);
+        // d($file);
+        // d($id_project);
+        // d($this->session->id_user);
+        // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project));
+        if(!$this->validate([
+			
+			'filedocument' =>['rules'=>'uploaded[filedocument]|ext_in[filedocument,doc,docx,ppt,pptx,xls,xlsx,pdf,txt]|max_size[filedocument,10240]',
+			          'errors'=>[  'uploaded'   => 'Pilih file anda',
+                                    'ext_in'	=> 'Format File Salah',
+                                    'size'      => 'File lebih besar dari 10MB']
+			         ]
+		])) {
+			// $validation = \Config\Services::validation();
+			// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+			return redirect()->to(base_url('/proyek/'.$id_project.'/resource'))->withInput();
+        }
+        
+        $filename = $file->getName();
+		$filerandomname = $file->getRandomName();
+
+        $file->move('resource/'.$id_project, $filerandomname);
+        if ($this->sprintModel->getLastSprintbyProject($id_project) == null) {
+            $sprint = null;
+        }
+        else {
+            $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
+        }
+        $this->fileModel->save([
+            'id_project'    => $id_project,
+            'nama_asli'  	=> $filename,
+            'nama_file'     => $filerandomname,
+            'type' 	        => 'dokumen',
+            'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
+            'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+            'sprint'        => $sprint
+            ]);
+            return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
+    }
+    public function createlink()
+    {   
+        // d($filename);
+        // d($filerandomname);
+        // dd($_POST);
+        $id_project = $this->request->getVar('id_project');
+        // $files = $this->request->getFile('files');
+        // d($id_project);
+        // d($this->session->id_user);
+        // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project));
+        if(!$this->validate([
+			
+			'link' => ['rules'=>'required',
+            'errors'=>[ 'required'=> 'Tautan Harus diisi']
+                        ],
+		])) {
+			// $validation = \Config\Services::validation();
+			// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+			return redirect()->to(base_url('/proyek/'.$id_project.'/resource'))->withInput();
+        }
+        
+        if ($this->sprintModel->getLastSprintbyProject($id_project) == null) {
+            $sprint = null;
+        }
+        else {
+            $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
+        }
+        $this->fileModel->save([
+            'id_project'    => $id_project,
+            'nama_asli'  	=> $this->request->getVar('link'),
+            'type' 	        => 'tautan',
+            'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
+            'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+            'sprint'        => $sprint
+            ]);
+            return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
+    }
+    public function deletefile($id_file)
+    {
+        $this->fileModel->delete($id_backlog);
+        $id_project =  $this->fileModel->getProjectbyIdFile($id_file)['id_project'];
+        return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
     }
 
     public function editbacklog($id_backlog)
@@ -478,9 +703,9 @@ class Proyek extends BaseController
             }
 
             if(!$this->validate([
-                'isi'.$id_backlog => ['rules'=>'required',
+                'isibacklog'.$id_backlog => ['rules'=>'required',
                                             'errors'=>[ 'required'=> 'Isi Backlog Harus diisi']
-                                                        ]
+                                            ]
             ]) ) {
                
                 return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
@@ -488,7 +713,7 @@ class Proyek extends BaseController
             $this->backlogModel->save([
                 
                 'id_backlog'        => $id_backlog,
-                'isi'            => $this->request->getVar('isi'.$id_backlog),
+                'isi'            => $this->request->getVar('isibacklog'.$id_backlog),
                 'sprint'        => $sprint,
                 'point'      => $this->request->getVar('point')
                 ]);
@@ -502,7 +727,7 @@ class Proyek extends BaseController
     {
         $id_project = $this->request->getVar('id_project');
         if(!$this->validate([
-            'isi' => ['rules'=>'required',
+            'isibacklog' => ['rules'=>'required',
                                         'errors'=>[ 'required'=> 'Isi Backlog Harus diisi']
                                                     ]
 		]) ) {
@@ -511,7 +736,7 @@ class Proyek extends BaseController
         }
 
         $this->backlogModel->save([
-            'isi'            => $this->request->getVar('isi'),
+            'isi'            => $this->request->getVar('isibacklog'),
             'id_project'     => $id_project,
             'point'      => $this->request->getVar('point')
             ]);
@@ -531,32 +756,70 @@ class Proyek extends BaseController
     public function editepic($id_epic)
     {
         $id_project = $this->epicModel->getEpicbyId($id_epic)['id_project'];
-        // d($_POST);
+        // dd($_POST);
         // dd($id_project);
         
         if ($this->request->getVar('submit')=='edit') {
-            # code...
+
+            if ($this->request->getVar('status'.$id_epic)=="DONE") {
+                
+                $progress = $this->request->getVar('elapsed'.$id_epic) - $this->epicModel->getEpicbyId($id_epic)['elapsed'];
+                if ($progress!=0){
+                    $this->logModel->save([
+                
+                        'id_epic'       => $id_epic,
+                        'progress'      => $progress,
+                        'id_member'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                        
+                        ]);
+                }
+                else {
+                    $this->logModel->save([
+                
+                        'id_epic'       => $id_epic,
+                        'progress'      => $this->request->getVar('elapsed'.$id_epic),
+                        'id_member'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                        
+                        ]);
+                }
+            }
+            elseif (($this->epicModel->getEpicbyId($id_epic)['status'] == "DONE") && ($this->epicModel->getEpicbyId($id_epic)['status'] != ($this->request->getVar('status'.$id_epic)))) {
+                $this->logModel->save([
+                
+                    'id_epic'       => $id_epic,
+                    'progress'      => -($this->request->getVar('elapsed'.$id_epic)),
+                    'id_member'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member']
+                    
+                    ]);
+                
+            }
         
 
             if(!$this->validate([
-                'isi'.$id_epic => ['rules'=>'required',
+                'isiepic'.$id_epic => ['rules'=>'required',
                                             'errors'=>[ 'required'=> 'Isi Epic Harus diisi']
                                                         ]
             ]) ) {
                
                 return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
             }
+            if ($this->request->getVar('elapsed'.$id_epic) > $this->request->getVar('estimated'.$id_epic) ) {
+                $estimated = $this->request->getVar('elapsed'.$id_epic);
+            }
+            else {
+                $estimated =  $this->request->getVar('estimated'.$id_epic);
+            }
             $this->epicModel->save([
                 
                 'id_epic'       => $id_epic,
-                'isi'           => $this->request->getVar('isi'.$id_epic),
+                'isi'           => $this->request->getVar('isiepic'.$id_epic),
                 'status'        => $this->request->getVar('status'.$id_epic),
                 'elapsed'       => $this->request->getVar('elapsed'.$id_epic),
-                'estimated'     => $this->request->getVar('estimated'.$id_epic),
+                'estimated'     => $estimated,
                 ]);
         }
         else {
-            $this->backlogModel->delete($id_backlog);
+            $this->epicModel->delete($id_epic);
         }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
@@ -567,21 +830,133 @@ class Proyek extends BaseController
         $id_project = $this->sprintModel->getSprintbyId($id_sprint)['id_project'];
         
         if(!$this->validate([
-            'isi' => ['rules'=>'required',
-                                        'errors'=>[ 'required'=> 'Isi Epic Harus diisi']
-                                                    ]
+            'isiepic' => ['rules'=>'required',
+                      'errors'=>[ 'required'=> 'Isi Epic Harus diisi']
+                     ]
 		]) ) {
 			
 			return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
         }
 
         $this->epicModel->save([
-            'isi'            => $this->request->getVar('isi'),
-            'status'        => 'TO DO',
-            'id_sprint'     => $id_sprint,
-            'estimated'      => $this->request->getVar('estimated')
+            'isi'       => $this->request->getVar('isiepic'),
+            'status'    => 'TO DO',
+            'id_sprint' => $id_sprint,
+            'estimated' => $this->request->getVar('estimated')
             ]);
-        return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+        return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
+    public function createsprint($id_project)
+    {
+        if($this->sprintModel->getLastSprintbyProject($id_project) == null) {
+            $this->sprintModel->save([
+                'id_project'    => $id_project,
+                'start_sprint'  => date('Y-m-d H:i:s', time()),
+                ]); 
+            $this->epicModel->save([
+                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'status'    => 'REVIEW'
+            ]);
+            $this->epicModel->save([
+                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'status'    => 'ANALYSIS'
+            ]);
+            $this->epicModel->save([
+                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'status'    => 'ACTION'
+            ]);
+        }
+        elseif ($this->sprintModel->getLastSprintbyProject($id_project)['end_sprint'] !=null && $this->sprintModel->getLastSprintbyProject($id_project)['end_sprint'] < date('Y-m-d H:i:s', time()) ) {
+            $this->sprintModel->save([
+                'id_project'    => $id_project,
+                'start_sprint'  => date('Y-m-d H:i:s', time()),
+                ]); 
+            $this->epicModel->save([
+                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'status'    => 'REVIEW'
+            ]);
+            $this->epicModel->save([
+                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'status'    => 'ANALYSIS'
+            ]);
+            $this->epicModel->save([
+                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'status'    => 'ACTION'
+            ]);
+        }
+       
+        return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
+    }
+    public function endsprint($id_sprint)
+    {
+        $id_project = $this->sprintModel->getSprintbyId($id_sprint)['id_project'];
+        
+        $this->sprintModel->save([
+            'id_sprint'     => $id_sprint,
+            'id_project'    => $id_project,
+            'end_sprint'  => date('Y-m-d H:i:s', time()),
+            ]);
+        return redirect()->to(base_url('/proyek/'.$id_project.'/board')); 
+    }
+    public function editnotes($id_notes)
+    {
+        // dd($_POST);
+        $id_project = $this->notesModel->getNotesbyId($id_notes)['id_project'];
+        // dd($_POST);
+        if ($this->request->getVar('submit')=='edit') {
 
+            if(!$this->validate([
+                'isinotesedit'.$id_notes => ['rules'=>'required',
+                                    'errors'=>[ 'required'=> 'Isi Notes Harus diisi']
+                                   ]
+            ]) ) {
+               
+                return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+            }
+            $this->notesModel->save([
+                
+                'id_notes'        => $id_notes,
+                'isi'            => $this->request->getVar('isinotesedit'.$id_notes),
+                
+                ]);
+        }
+        else {
+            $this->notesModel->delete($id_notes);
+        }
+        return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
+    }
+    public function createNotes($sprint = false)
+    {
+        // dd($_POST);
+        $id_project = $this->request->getVar('id_project');
+        if ($sprint != false ){
+            if(!$this->validate([
+                'isinotes'.$sprint => ['rules'=>'required',
+                                    'errors'=>[ 'required'=> 'Isi Notes Harus diisi']
+                                ]
+            ]) ) {
+            
+                return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+            }
+            $this->notesModel->save([
+                'isi'            => $this->request->getVar('isinotes'.$sprint),
+                'id_project' => $id_project,
+                'sprint'        => $sprint
+                ]);
+        }
+        else {
+            if(!$this->validate([
+                'isinotes' => ['rules'=>'required',
+                          'errors'=>[ 'required'=> 'Isi Notes Harus diisi']
+                          ]
+            ]) ) {
+            return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+            }
+            $this->notesModel->save([
+                'isi'            => $this->request->getVar('isinotes'),
+                'id_project' => $id_project,
+                ]);
+        }
+        return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
+    }
 }

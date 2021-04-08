@@ -15,7 +15,7 @@
     </div>
 
     <table class="table table-dark">
-          <thead>
+          <thead style="text-align:center;">
             <tr>
               <th scope="col">No.</th>
               <th scope="col">Nama User</th>

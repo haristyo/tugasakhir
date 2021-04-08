@@ -1,13 +1,14 @@
 <!doctype html>
 <html lang="id">
   <head>
+  <link href="<?= base_url('logo.png');?>" rel="icon">
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
     <script src="<?= base_url('js/jquery-3.6.0.min.js');  ?>" type='text/javascript' ></script>
     <script src="<?= base_url('js/bootstrap.bundle.js');  ?>" type='text/javascript' ></script>
-    
+    <script src="<?php echo base_url('Chart.js');?>"></script>
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('css/bootstrap.css')?>">
@@ -24,7 +25,10 @@
   <!-- <body class="h-100 w-100" style="background-color:lightblue;" oncontextmenu="return false" onkeydown="return false" onmousedown="return false"> -->
   <body class="h-100 w-100" style="background-color:lightblue;" >
   <nav class="navbar navbar-expand-lg navbar-dark d-flex px-4 py-2" style="background-color:#3445b4;">
-  <a class="navbar-brand mx-2 " href="<?=base_url()?>">Scrum Tool</a>
+  <img src="<?=base_url('logo.png')?>" id="sidebarCollapse2"  width="32" height="32" class="p-1 mr-2" style="background-color:white;border-radius:10%;" alt="" >
+    
+  <a class="navbar-brand mr-2 ml-0 " href="<?=base_url()?>">Scrum Tool</a>
+
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

@@ -14,7 +14,7 @@
                     <label for="deskripsi">Deskripsi</label>
                     <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"><?= old('deskripsi')?></textarea>
                     <div class="invalid-feedback">
-                        <?=$validation->getError('nama_user');?>
+                        <?=$validation->getError('deskripsi');?>
                     </div>
                 </div>
                 <div class="form-group">

@@ -32,6 +32,10 @@ class BacklogModel extends Model
             return $this->join('project','project.id_project=backlog.id_project')->where('backlog.id_backlog',$id_backlog)->first();
         }
     }
+    public function getCount($id_project)
+    {
+        return $this->select('backlog.sprint')->selectSum('point')->join('project','project.id_project=backlog.id_project')->groupBy('backlog.sprint')->where('backlog.id_project',$id_project)->findAll();
+    }
 
     
 

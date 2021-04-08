@@ -30,6 +30,17 @@ class SprintModel extends Model
     {
         return $this->join('project','project.id_project=sprint.id_project')->where('sprint.id_project',$id_project)->orderBy('start_sprint', 'DESC')->first();
     }
+    public function totalSprint($id_project)
+    {
+        return $this->selectCount('sprint.id_sprint')->where('sprint.id_project',$id_project)->first();
+    }
+    public function pagination($id_project = FALSE)
+    {
+        if ($id_project != FALSE) {
+            return $this->where('sprint.id_project',$id_project)->orderBy('created_sprint','DESC');
+        }
+    }
+    
 
     
 

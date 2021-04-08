@@ -113,7 +113,7 @@
         </tr>
     </thead>
     <tbody>
-    <?php  $i=0; foreach ($meetings as $meetings) { $i++;?>
+    <?php  if($page) {$i = (10*($page - 1) );} else {$i=0;}; foreach ($meetings as $meetings) { $i++;?>
         <tr>
         <th scope="row"><?=$i;?></th>
         <td><?=date("d F Y", strtotime($meetings['time_meeting']));?></td>

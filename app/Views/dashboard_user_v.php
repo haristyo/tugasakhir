@@ -1,10 +1,29 @@
-    <div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
+  <div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
     <!-- <div class="table-responsive-sm" style="width:100%"> -->
     <h1 class="text-center"> Dashboard User</h1>
-<hr width="75%" color="black" style="height:5px;">
+    <hr width="75%" color="black" style="height:5px;">
+      <div class="d-flex row">
+        <form action="" method="get">
+            <div class="input-group ml-3">
+                <input type="text" class="form-control"  name="search" value="<?= $keyword?>">
+                <select class="custom-select mx-2" name="status">
+                    <option selected value="">Semua Status</option>
+                    <option value="admin" <?php if ($status=="admin") {echo "selected='selected'";}?>>Admin</option>
+                    <option value="bukanadmin" <?php if ($status=="bukanadmin") {echo "selected='selected'";}?>>Bukan Admin</option>
+
+                </select>
+                
+                <button class="btn btn-secondary" type="submit">Cari</button>
+                
+            </div>
+        </form>    
+        <div class="ml-auto mr-3 right"><?= $pager->links('user','pagers') ;?></div>
+      </div>
+
+
     <table class="table table-dark">
           <thead>
-            <tr>
+            <tr style="text-align:center">
               <th scope="col">No.</th>
               <th scope="col">Username</th>
               <th scope="col">nama_user</th>
@@ -15,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-          <?php  $i=0; foreach ($users as $userss) { $i++;?>
+          <?php  if($page) {$i = (25*($page - 1) );} else {$i=0;} foreach ($users as $userss) { $i++;?>
             <tr>
               <th scope="row"><?=$i;?></th>
               <td><?=$userss['username'];?></td>

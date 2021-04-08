@@ -25,7 +25,14 @@ class EpicModel extends Model
     {
         return $this->join('sprint','sprint.id_sprint=epic.id_sprint')->join('project','project.id_project=sprint.id_project')->where('epic.id_epic',$id_epic)->first();
     }
-
+    public function getCount($id_project)
+    {
+        return $this->select('epic.id_sprint,epic.status')->selectSum('estimated')->selectSum('elapsed')->join('sprint','sprint.id_sprint=epic.id_sprint')->join('project','project.id_project=sprint.id_project')->groupBy(['epic.id_sprint','epic.status'])->where('sprint.id_project',$id_project)->findAll();
+    }
+    public function getCountDo($id_project)
+    {
+        return $this->select("epic.id_sprint,sprint.start_sprint , DATE_FORMAT(sprint.start_sprint,'%Y-%m-%d') as tanggal_mulai")->selectSum('estimated')->join('sprint','sprint.id_sprint=epic.id_sprint')->join('project','project.id_project=sprint.id_project')->groupBy(['epic.id_sprint'])->where('sprint.id_project',$id_project)->whereIn('epic.status',['TO DO','ON PROGRESS','VERIFY','DONE'])->findAll();
+    }
     
 
 }

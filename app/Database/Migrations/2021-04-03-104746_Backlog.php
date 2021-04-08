@@ -40,7 +40,8 @@ class Backlog extends Migration
 			],
 			'point' => [
 				'type'			=> 'INT',
-				'null'			=> false
+				'null'			=> false,
+				'default'        => '0'
 			]
 		]);
 		$this->forge->addKey('id_backlog', true);

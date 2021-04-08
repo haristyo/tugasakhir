@@ -4,19 +4,19 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Epic extends Migration
+class Notes extends Migration
 {
-	private $table = 'epic';
+	private $table = 'notes';
 	public function up()
 	{
 		$this->forge->addField([
-			'id_epic'          => [
+			'id_notes'          => [
 				'type'           => 'INT',
 				'unsigned'		 => true,
 				'null'           => false,
                 'auto_increment' => true
 			],
-			'id_sprint' => [
+			'id_project' => [
 				'type'           => 'INT',
 				'unsigned'		 => true,
 				'null'           => false,
@@ -25,33 +25,23 @@ class Epic extends Migration
 				'type'           => 'text',
 				'null'           => true,
 			],
-			'updated_epic' => [
+			'updated_notes' => [
 				'type'           => 'DATETIME',
 				'null'           => true,
 			],
-			'created_epic' => [
+			'created_notes' => [
 				'type'           => 'DATETIME',
 				'null'           => true,
 			],
-			'status' => [
-				'type'           => 'VARCHAR',
-				'constraint'     => '255',
-				'null'			=> true
-			],
-			'estimated' => [
-				'type'			=> 'INT',
-				'null'			=> false,
-				'default'        => '0'
-			],
-			'elapsed' => [
+			'sprint' => [
 				'type'			=> 'INT',
 				'null'			=> true,
-				'default'        => '0'
+				'unsigned'		 => true
 			]
 		]);
-		$this->forge->addKey('id_epic', true);
+		$this->forge->addKey('id_notes', true);
 		$this->forge->addForeignKey('id_project','project','id_project','CASCADE','CASCADE');
-		$this->forge->addForeignKey('id_sprint','sprint','id_sprint','CASCADE','CASCADE');
+		$this->forge->addForeignKey('sprint','sprint','id_sprint','CASCADE','CASCADE');
 		$this->forge->createTable($this->table);
 	}
 

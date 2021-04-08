@@ -14,7 +14,7 @@ class MeetingModel extends Model
         $agenda = ['Daily Scrum','Sprint Retrospective'];
         if($id_project == false && $type == false )
         {return $this->join('member','member.id_member=meeting.creator_meeting')
-                ->join('project','project.id_project=meeting.id_project')->orderBy('time_meeting', 'ASC')->findAll();
+                ->join('project','project.id_project=meeting.id_project')->orderBy('meeting.time_meeting', 'ASC')->findAll();
         }
         else {
                 if ($type == false) {
@@ -47,7 +47,14 @@ class MeetingModel extends Model
             return $this->selectCount('meeting.id_meeting')->where('meeting.id_project', $id_project)->whereNotIn('meeting.agenda', $agenda)->first();
         }
     }
-
+    public function pagination($id_project = FALSE)
+    {   if($id_project == FALSE) {
+            return $this->join('member','member.id_member=meeting.creator_meeting')->join('project','project.id_project=meeting.id_project')->orderBy('time_meeting', 'ASC');
+        }
+        else {
+            return $this->join('member','member.id_member=meeting.creator_meeting')->join('project','project.id_project=meeting.id_project')->orderBy('time_meeting', 'ASC')->where('meeting.id_project',$id_project);
+        }
+    }
     
 
 }
