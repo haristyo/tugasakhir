@@ -13,10 +13,11 @@ class FileModel extends Model
     {
         return $this->select('id_file,file.id_project,uploader_file,type,nama_file,nama_asli,user.username,deskripsi_file,created_file,user.id_user')->join('project','project.id_project=file.id_project')->join('sprint','sprint.id_sprint=file.sprint')->join('member','member.id_member=file.uploader_file')->join('user','user.id_user=member.id_user')->where('file.id_project',$id_project)->orderBy('created_file', 'DESC');
     }
-    public function getProjectbyIdFile($id_file)
+    public function getFilebyId($id_file)
     {
-        return $this->select('id_file,file.id_project')->where('file.id_file',$id_file);
+        return $this->select('id_file,file.id_project,type,nama_file')->where('file.id_file',$id_file)->first();
     }
+   
     
     
 

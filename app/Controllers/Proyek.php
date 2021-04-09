@@ -12,6 +12,7 @@ use App\Models\EpicModel;
 use App\Models\NotesModel;
 use App\Models\LogModel;
 use App\Models\FileModel;
+use App\Models\CheckboxModel;
 class Proyek extends BaseController
 {
     protected $session;   
@@ -26,6 +27,7 @@ class Proyek extends BaseController
     protected $notesModel;
     protected $logModel;
     protected $fileModel;
+    protected $checkboxModel;
     
 	public function __construct()
 	{
@@ -41,7 +43,9 @@ class Proyek extends BaseController
         $this->logModel = new LogModel();
         $this->notesModel = new NotesModel();
         $this->fileModel = new FileModel();
+        $this->checkboxModel = new CheckboxModel();
         $this->session = \Config\Services::session();
+        
 		// if (!isset($_SESSION['last'])) {
 		// 	$_SESSION['last'] = "";
 		// };
@@ -105,21 +109,22 @@ class Proyek extends BaseController
 			// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
 			return redirect()->to(base_url('/proyek/create'))->withInput();
 		}
-
-		$this->proyekModel->save([
-			'nama_project' 		=> $this->request->getVar('nama_project'),
-            'kode_join'  	    => $this->request->getVar('kode_join'),
-            'creator_project'   => $this->session->id_user,
-			'password_project'  => $this->request->getVar('password_project'),
-            'deskripsi'     	=> $this->request->getVar('deskripsi')
-		
-        ]);
-        $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
-        $this->memberModel->save([
-            'id_project'    => $data['id_project'],
-            'id_user'       => $this->session->id_user,
-			'position'      => 'Scrum Master'
-        ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->proyekModel->save([
+                'nama_project' 		=> $this->request->getVar('nama_project'),
+                'kode_join'  	    => $this->request->getVar('kode_join'),
+                'creator_project'   => $this->session->id_user,
+                'password_project'  => $this->request->getVar('password_project'),
+                'deskripsi'     	=> $this->request->getVar('deskripsi')
+            
+            ]);
+            $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
+            $this->memberModel->save([
+                'id_project'    => $data['id_project'],
+                'id_user'       => $this->session->id_user,
+                'position'      => 'Scrum Master'
+            ]);
+        }
         // return redirect()->to(base_url('/proyek/'.$data['id_project']));
         
 		return redirect()->to(base_url('/proyek'));
@@ -171,16 +176,16 @@ class Proyek extends BaseController
                 return redirect()->to(base_url('/proyek/'.$id_project))->withInput();
             }
         }
-
-		$this->proyekModel->save([
-            'id_project'        => $id_project,
-			'nama_project' 		=> $this->request->getVar('nama_project'),
-            'kode_join'  	    => $this->request->getVar('kode_join'),
-			'password_project'  => $this->request->getVar('password_project'),
-            'deskripsi'     	=> $this->request->getVar('deskripsi')
-		
-        ]);
-        
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->proyekModel->save([
+                'id_project'        => $id_project,
+                'nama_project' 		=> $this->request->getVar('nama_project'),
+                'kode_join'  	    => $this->request->getVar('kode_join'),
+                'password_project'  => $this->request->getVar('password_project'),
+                'deskripsi'     	=> $this->request->getVar('deskripsi')
+            
+            ]);
+        }
         // return redirect()->to(base_url('/proyek/'.$data['id_project']));
         
 		return redirect()->to(base_url('/proyek/'.$id_project));
@@ -246,11 +251,13 @@ class Proyek extends BaseController
             if ($joined>0) { $this->session->setFlashdata('kode_join', 'Anda sudah pernah bergabung dengan Proyek ini');}
 			return redirect()->to(base_url('/proyek/join'))->withInput();
         }
-        $this->memberModel->save([
-            'id_project'    => $data['id_project'],
-            'id_user'       => $this->session->id_user,
-			'position'      => $this->request->getVar('position')
-        ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->memberModel->save([
+                'id_project'    => $data['id_project'],
+                'id_user'       => $this->session->id_user,
+                'position'      => $this->request->getVar('position')
+            ]);
+            }
         return redirect()->to(base_url('/proyek/'));
     }
     public function detail($id_project)
@@ -369,14 +376,16 @@ class Proyek extends BaseController
         // $creator=$this->memberModel->getIdbyUserProject($this->session->id_user, $id_project);
         // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'] );
         // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project),);
-        $this->meetingModel->save([
-            'id_project'        => $id_project,
-            'creator_meeting'   => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
-            'agenda'            => $this->request->getVar('agenda'),
-            'deskripsi_meeting' => $this->request->getVar('deskripsi_meeting'),
-            'link_meeting'      => $this->request->getVar('link_meeting'),
-            'time_meeting'      => $this->request->getVar('time_meeting')
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->meetingModel->save([
+                'id_project'        => $id_project,
+                'creator_meeting'   => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                'agenda'            => $this->request->getVar('agenda'),
+                'deskripsi_meeting' => $this->request->getVar('deskripsi_meeting'),
+                'link_meeting'      => $this->request->getVar('link_meeting'),
+                'time_meeting'      => $this->request->getVar('time_meeting')
+                ]);
+        }
         return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'));
     }
     public function editmeeting($id_project,$id_meeting)
@@ -400,14 +409,15 @@ class Proyek extends BaseController
         // $creator=$this->memberModel->getIdbyUserProject($this->session->id_user, $id_project);
         // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'] );
         // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project),);
-        $this->meetingModel->save([
-            
-            'id_meeting'        => $id_meeting,
-            'agenda'            => $this->request->getVar('agenda'.$id_meeting),
-            'deskripsi_meeting' => $this->request->getVar('deskripsi_meeting'.$id_meeting),
-            'link_meeting'      => $this->request->getVar('link_meeting'.$id_meeting),
-            'time_meeting'      => $this->request->getVar('time_meeting'.$id_meeting)
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+                $this->meetingModel->save([
+                'id_meeting'        => $id_meeting,
+                'agenda'            => $this->request->getVar('agenda'.$id_meeting),
+                'deskripsi_meeting' => $this->request->getVar('deskripsi_meeting'.$id_meeting),
+                'link_meeting'      => $this->request->getVar('link_meeting'.$id_meeting),
+                'time_meeting'      => $this->request->getVar('time_meeting'.$id_meeting)
+                ]);
+        }
         return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'));
     }
     public function meetingjoin($id_meeting)
@@ -420,16 +430,18 @@ class Proyek extends BaseController
         // d($data);
         // dd($id_project);
         // dd($this->memberModel->getIdbyUserProject($this->session->id_user,$this->meetingModel->getMeetingbyId($id_meeting)['id_project']));
-        if ($countpresensi['id_presensi']>0){
-            $this->presensiModel->save([
-                'id_presensi' 		=> esc($present['id_presensi'])
-            ]);
-        ;}
-        else {
-            $this->presensiModel->save([
-                'id_meeting' 		=> $id_meeting,
-                'id_member'  	    => $this->memberModel->getIdbyUserProject($this->session->id_user,$this->meetingModel->getMeetingbyId($id_meeting)['id_project'])['id_member']
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            if ($countpresensi['id_presensi']>0){
+                $this->presensiModel->save([
+                    'id_presensi' 		=> esc($present['id_presensi'])
+                ]);
+            ;}
+            else {
+                $this->presensiModel->save([
+                    'id_meeting' 		=> $id_meeting,
+                    'id_member'  	    => $this->memberModel->getIdbyUserProject($this->session->id_user,$this->meetingModel->getMeetingbyId($id_meeting)['id_project'])['id_member']
+                ]);
+            }
         }
         return redirect()->to($data['link_meeting']);
     }
@@ -473,22 +485,27 @@ class Proyek extends BaseController
         // d(date('Y-m-d H:i:s', time()) );
         // d(date('Y-m-d h-i-s'));
         // dd($id_member);
-        $this->memberModel->save([
-            'id_member'    => $id_member,
-            'left_at'      => date('Y-m-d H:i:s', time())
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->memberModel->save([
+                'id_member'    => $id_member,
+                'left_at'      => date('Y-m-d H:i:s', time())
+                ]);
+        }
         return redirect()->to(base_url('/proyek/'.$id_project.'/presensi/'));
         
     }
     
     public function deleteMeeting($id_project,$id_meeting)
     {
-        $this->meetingModel->delete($id_meeting);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->meetingModel->delete($id_meeting);
+        }
         return redirect()->to(base_url('proyek/'.$id_project.'/meeting/'));
     }
     
     public function board($id_project)
-	{ 
+	{ ;
+        // dd($_SESSION);
             $title = [
                 'title' => 'Papan Proyek | Scrum Tool',
                 'link' => 	$this->request->uri->getSegment(1)
@@ -505,10 +522,15 @@ class Proyek extends BaseController
                 'note' => esc($this->notesModel->getNotesbyProject($id_project)),
                 'totalsprint' => $this->sprintModel->totalSprint($id_project),
                 'log' => $this->logModel->getLogbyProject($id_project),
+                'checkbox' => $this->checkboxModel->getCheckboxbyProject($id_project),
+                'checkboxall' => $this->checkboxModel->countAllByProject($id_project),
+                'checkboxchecked' => $this->checkboxModel->countCheckedByProject($id_project),
+                
                 'validation' =>  \Config\Services::validation()
 
             ];
-            // dd($data);
+            // d($data['checkboxall']);
+            // dd($data['checkboxchecked']);
             //     d($this->epicModel->getEpicbyProject());
             // dd($data);
             // d($data['log']);
@@ -584,16 +606,18 @@ class Proyek extends BaseController
         else {
             $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
         }
-        $this->fileModel->save([
-            'id_project'    => $id_project,
-            'nama_asli'  	=> $filename,
-            'nama_file'     => $filerandomname,
-            'type' 	        => 'gambar',
-            'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
-            'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
-            'sprint'        => $sprint
-            ]);
-            return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->fileModel->save([
+                'id_project'    => $id_project,
+                'nama_asli'  	=> $filename,
+                'nama_file'     => $filerandomname,
+                'type' 	        => 'gambar',
+                'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
+                'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                'sprint'        => $sprint
+                ]);
+        }
+        return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
     }
     public function createdocument()
     {   
@@ -633,22 +657,25 @@ class Proyek extends BaseController
         else {
             $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
         }
-        $this->fileModel->save([
-            'id_project'    => $id_project,
-            'nama_asli'  	=> $filename,
-            'nama_file'     => $filerandomname,
-            'type' 	        => 'dokumen',
-            'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
-            'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
-            'sprint'        => $sprint
-            ]);
-            return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->fileModel->save([
+                'id_project'    => $id_project,
+                'nama_asli'  	=> $filename,
+                'nama_file'     => $filerandomname,
+                'type' 	        => 'dokumen',
+                'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
+                'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                'sprint'        => $sprint
+                ]);
+        }
+        return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
     }
     public function createlink()
     {   
         // d($filename);
         // d($filerandomname);
-        // dd($_POST);
+        // d($this->request->getVar('csrf_test_name'));
+        
         $id_project = $this->request->getVar('id_project');
         // $files = $this->request->getFile('files');
         // d($id_project);
@@ -671,20 +698,34 @@ class Proyek extends BaseController
         else {
             $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
         }
-        $this->fileModel->save([
-            'id_project'    => $id_project,
-            'nama_asli'  	=> $this->request->getVar('link'),
-            'type' 	        => 'tautan',
-            'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
-            'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
-            'sprint'        => $sprint
-            ]);
-            return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->fileModel->save([
+                'id_project'    => $id_project,
+                'nama_asli'  	=> $this->request->getVar('link'),
+                'type' 	        => 'tautan',
+                'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
+                'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                'sprint'        => $sprint
+                ]);
+        }
+        return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
     }
     public function deletefile($id_file)
-    {
-        $this->fileModel->delete($id_backlog);
-        $id_project =  $this->fileModel->getProjectbyIdFile($id_file)['id_project'];
+    {   
+        if ($this->request->getVar('csrf_test_name')) {
+            # code...
+        
+            // dd($_POST);
+            // dd($this->fileModel->getFilebyId($id_file));
+            $id_project =  $this->fileModel->getFilebyId($id_file)['id_project'];
+            $type =  $this->fileModel->getFilebyId($id_file)['type'];
+            $file =  $this->fileModel->getFilebyId($id_file)['nama_file'];
+            if ($type != 'link') {
+                unlink('resource/'.$id_project.'/'.$file);
+            }
+
+            $this->fileModel->delete($id_file);
+        }
         return redirect()->to(base_url('/proyek/'.$id_project.'/resource'));
     }
 
@@ -692,34 +733,37 @@ class Proyek extends BaseController
     {
         $id_project = $this->backlogModel->getBacklogbyId($id_backlog)['id_project'];
         // dd($_POST);
-        if ($this->request->getVar('submit')=='edit') {
-            # code...
-        
-            if ( $this->request->getVar('posisi') == 'Product Backlog') {
-                $sprint = null ;
+        if ($this->request->getVar('csrf_test_name')) {
+            if ($this->request->getVar('submit')=='edit') {
+                # code...
+            
+                if ( $this->request->getVar('posisi') == 'Product Backlog') {
+                    $sprint = null ;
+                }
+                else {
+                    $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
+                }
+
+                if(!$this->validate([
+                    'isibacklog'.$id_backlog => ['rules'=>'required',
+                                                'errors'=>[ 'required'=> 'Isi Backlog Harus diisi']
+                                                ]
+                ]) ) {
+                
+                    return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+                }
+                $this->backlogModel->save([
+                    
+                    'id_backlog'        => $id_backlog,
+                    'isi'            => $this->request->getVar('isibacklog'.$id_backlog),
+                    'sprint'        => $sprint,
+                    'point'      => $this->request->getVar('point')
+                    ]);
             }
             else {
-                $sprint = $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'];
-            }
-
-            if(!$this->validate([
-                'isibacklog'.$id_backlog => ['rules'=>'required',
-                                            'errors'=>[ 'required'=> 'Isi Backlog Harus diisi']
-                                            ]
-            ]) ) {
-               
-                return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
-            }
-            $this->backlogModel->save([
                 
-                'id_backlog'        => $id_backlog,
-                'isi'            => $this->request->getVar('isibacklog'.$id_backlog),
-                'sprint'        => $sprint,
-                'point'      => $this->request->getVar('point')
-                ]);
-        }
-        else {
-            $this->backlogModel->delete($id_backlog);
+                $this->backlogModel->delete($id_backlog);
+            }
         }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
@@ -734,12 +778,13 @@ class Proyek extends BaseController
 			
 			return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
         }
-
-        $this->backlogModel->save([
-            'isi'            => $this->request->getVar('isibacklog'),
-            'id_project'     => $id_project,
-            'point'      => $this->request->getVar('point')
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->backlogModel->save([
+                'isi'            => $this->request->getVar('isibacklog'),
+                'id_project'     => $id_project,
+                'point'      => $this->request->getVar('point')
+                ]);
+        }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
     }
     public function editgoal($id_sprint)
@@ -747,18 +792,26 @@ class Proyek extends BaseController
         $id_project = $this->sprintModel->getSprintbyId($id_sprint)['id_project'];
         // d($id_project);
         // dd($_POST);
-        $this->sprintModel->save([
-            'id_sprint'     => $id_sprint,
-            'goal'      => $this->request->getVar('goal'.$id_sprint)
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->sprintModel->save([
+                'id_sprint'     => $id_sprint,
+                'goal'      => $this->request->getVar('goal'.$id_sprint)
+                ]);
+        }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
     }
     public function editepic($id_epic)
     {
         $id_project = $this->epicModel->getEpicbyId($id_epic)['id_project'];
-        // dd($_POST);
+
+        // foreach ($this->request->getVar('checkbox') as $checkboxes) {
+        //         d($checkboxes);
+        // }
+        // d($_POST);
+        // dd($this->request->getVar('checkbox'));
+        // dd($this->checkboxModel->getCheckboxbyEpic($id_epic));
         // dd($id_project);
-        
+    if ($this->request->getVar('csrf_test_name')) {
         if ($this->request->getVar('submit')=='edit') {
 
             if ($this->request->getVar('status'.$id_epic)=="DONE") {
@@ -793,7 +846,7 @@ class Proyek extends BaseController
                     ]);
                 
             }
-        
+    
 
             if(!$this->validate([
                 'isiepic'.$id_epic => ['rules'=>'required',
@@ -809,6 +862,7 @@ class Proyek extends BaseController
             else {
                 $estimated =  $this->request->getVar('estimated'.$id_epic);
             }
+            
             $this->epicModel->save([
                 
                 'id_epic'       => $id_epic,
@@ -817,10 +871,41 @@ class Proyek extends BaseController
                 'elapsed'       => $this->request->getVar('elapsed'.$id_epic),
                 'estimated'     => $estimated,
                 ]);
+            $selected = $this->request->getVar('checkbox');
+            // d($selected)    ;
+            $checkboxes = [];
+            foreach ($this->checkboxModel->getCheckboxbyEpic($id_epic) as $checkbox) {
+                array_push($checkboxes, $checkbox['id_checkbox']);
+            } ;
+            // d($checkboxes);
+            $nilai1 = (array_intersect($checkboxes, $selected));
+            $nilai0 = (array_diff($checkboxes, $selected));
+            // d($nilai1);
+            // dd($nilai0);
+            foreach ($nilai1 as $terpilih) {
+                $this->checkboxModel->save([
+                
+                    'id_checkbox'       => $terpilih,
+                    'value' => '1'
+                    ]);
+            }
+            foreach ($nilai0 as $kosong) {
+                $this->checkboxModel->save([
+                
+                    'id_checkbox'       => $kosong,
+                    'value' => '0'
+                    ]);
+            }
+            
+            // dd($_POST);
+        
         }
-        else {
-            $this->epicModel->delete($id_epic);
-        }
+            else {
+                
+                $this->epicModel->delete($id_epic);
+                
+            }
+    }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
     public function createepic()
@@ -837,17 +922,19 @@ class Proyek extends BaseController
 			
 			return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
         }
-
-        $this->epicModel->save([
-            'isi'       => $this->request->getVar('isiepic'),
-            'status'    => 'TO DO',
-            'id_sprint' => $id_sprint,
-            'estimated' => $this->request->getVar('estimated')
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->epicModel->save([
+                'isi'       => $this->request->getVar('isiepic'),
+                'status'    => 'TO DO',
+                'id_sprint' => $id_sprint,
+                'estimated' => $this->request->getVar('estimated')
+                ]);
+            }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
     public function createsprint($id_project)
     {
+    if ($this->request->getVar('csrf_test_name')) {
         if($this->sprintModel->getLastSprintbyProject($id_project) == null) {
             $this->sprintModel->save([
                 'id_project'    => $id_project,
@@ -884,18 +971,20 @@ class Proyek extends BaseController
                 'status'    => 'ACTION'
             ]);
         }
+    }
        
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
     public function endsprint($id_sprint)
     {
         $id_project = $this->sprintModel->getSprintbyId($id_sprint)['id_project'];
-        
-        $this->sprintModel->save([
-            'id_sprint'     => $id_sprint,
-            'id_project'    => $id_project,
-            'end_sprint'  => date('Y-m-d H:i:s', time()),
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->sprintModel->save([
+                'id_sprint'     => $id_sprint,
+                'id_project'    => $id_project,
+                'end_sprint'  => date('Y-m-d H:i:s', time()),
+                ]);
+            }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board')); 
     }
     public function editnotes($id_notes)
@@ -903,6 +992,7 @@ class Proyek extends BaseController
         // dd($_POST);
         $id_project = $this->notesModel->getNotesbyId($id_notes)['id_project'];
         // dd($_POST);
+    if ($this->request->getVar('csrf_test_name')) {
         if ($this->request->getVar('submit')=='edit') {
 
             if(!$this->validate([
@@ -923,12 +1013,14 @@ class Proyek extends BaseController
         else {
             $this->notesModel->delete($id_notes);
         }
+    }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
     public function createNotes($sprint = false)
     {
         // dd($_POST);
         $id_project = $this->request->getVar('id_project');
+        if ($this->request->getVar('csrf_test_name')) {
         if ($sprint != false ){
             if(!$this->validate([
                 'isinotes'.$sprint => ['rules'=>'required',
@@ -957,6 +1049,35 @@ class Proyek extends BaseController
                 'id_project' => $id_project,
                 ]);
         }
+    }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
+    }
+    public function createCheckbox($id_epic)
+    {
+        // dd($_POST);
+        $id_project = $this->epicModel->getEpicbyId($id_epic)['id_project'];
+        if ($this->request->getVar('csrf_test_name')) {
+            if(!$this->validate([
+                'isicheckbox'.$id_epic => ['rules'=>'required',
+                                             'errors'=>[ 'required'=> 'Isi Checkbox Harus diisi']
+                          ]
+            ]) ) {
+                return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+            }
+            $this->checkboxModel->save([
+                'id_epic'    => $id_epic,
+                'isi' =>  $this->request->getVar('isicheckbox'.$id_epic)
+                ]);
+            }
+        $this->session->setFlashData('epic', $id_epic);
+        return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+    }
+    public function deleteCheckbox($id_checkbox)
+    {   $id_project = $this->checkboxModel->getCheckboxbyId($id_checkbox)['id_project'];
+        $id_epic = $this->checkboxModel->getCheckboxbyId($id_checkbox)['id_epic'];
+        $this->session->setFlashData('epic', $id_epic);
+        $this->checkboxModel->delete($id_checkbox);
+        return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
+
     }
 }

@@ -8,6 +8,7 @@ use App\Models\PresensiModel;
 use App\Models\UserModel;
 use App\Models\UsersModel;
 use App\Models\SprintModel;
+
 class Admin extends BaseController
 {
     protected $session;   
@@ -169,10 +170,12 @@ class Admin extends BaseController
     public function toScrumMaster($id_member, $id_project = false)
     {
         // dd($this->request->uri->getPath());
-        $this->memberModel->save([
-            'id_member' 	=> $id_member,
-            'position'      => 'Scrum Master'
-        ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->memberModel->save([
+                'id_member' 	=> $id_member,
+                'position'      => 'Scrum Master'
+            ]);
+        }
         if ($id_project != false) {
             return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/member'));
         }
@@ -182,10 +185,12 @@ class Admin extends BaseController
     }
     public function toDevelopmentTeam($id_member,$id_project = false)
     {
-        $this->memberModel->save([
-            'id_member' 	=> $id_member,
-            'position'      => 'Development Team'
-        ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->memberModel->save([
+                'id_member' 	=> $id_member,
+                'position'      => 'Development Team'
+            ]);
+        }
         if ($id_project != false) {
             return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/member'));
         }
@@ -195,11 +200,13 @@ class Admin extends BaseController
     }
     public function reactivation($id_member,$id_project = false)
     {
-        $this->memberModel->save([
-            'id_member' 	=> $id_member,
-            'left_at'      => null
-        ]);
-        return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/member'));
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->memberModel->save([
+                'id_member' 	=> $id_member,
+                'left_at'      => null
+            ]);
+        }
+        // return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/member'));
 
         if ($id_project != false) {
             return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/member'));
@@ -333,17 +340,21 @@ class Admin extends BaseController
     }
     public function deleteMeeting($id_meeting,$id_project = false)
     {
-        $this->meetingModel->delete($id_meeting);
-        if ($id_project == false) {
-            return redirect()->to(base_url('dashboard/meeting/'));
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->meetingModel->delete($id_meeting);
         }
-        else {
-            return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/meeting'));
-        }
+            if ($id_project == false) {
+                return redirect()->to(base_url('dashboard/meeting/'));
+            }
+            else {
+                return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/meeting'));
+            }
     }
     public function deleteUser($id_user)
     {
+        if ($this->request->getVar('csrf_test_name')) {
         $this->userModel->delete($id_user);
+        }
         return redirect()->to(base_url('dashboard/user/'));
     }
     public function user()
@@ -444,24 +455,30 @@ class Admin extends BaseController
     }
     public function reactivationSprint($id_sprint,$id_project)
     {
-        $this->sprintModel->save([
-            'id_sprint' 	=> $id_sprint,
-            'end_sprint'      => null
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->sprintModel->save([
+                'id_sprint' 	=> $id_sprint,
+                'end_sprint'      => null
+                ]);
+        }
         return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/sprint'));
 
     }
     public function deletesprint($id_sprint,$id_project)
     {
-        $this->sprintModel->delete($id_sprint);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->sprintModel->delete($id_sprint);
+        }
         return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/sprint'));
     }
     public function endSprint($id_sprint,$id_project)
     {
-        $this->sprintModel->save([
-            'id_sprint' 	=> $id_sprint,
-            'end_sprint'  => date('Y-m-d H:i:s', time())
-            ]);
+        if ($this->request->getVar('csrf_test_name')) {
+            $this->sprintModel->save([
+                'id_sprint' 	=> $id_sprint,
+                'end_sprint'  => date('Y-m-d H:i:s', time())
+                ]);
+        }
         return redirect()->to(base_url('dashboard/proyek/'.$id_project.'/sprint'));
     }
 }

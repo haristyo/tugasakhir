@@ -168,8 +168,12 @@
                                 <h6 style="color:black;" class="mt-2"><?=$files['deskripsi_file']; ?> </h6>
                                 </div>
                                 <div class="modal-footer">
-
-                                    <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?><button type="submit" class="btn btn-danger">Hapus Gambar</button><?php }?>
+                                    <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?>
+                                    <form action="<?= base_url('proyek/deletefile/'.$files['id_file'])?>" method="post">
+                                        <?= csrf_field();?>
+                                       <button type="submit" class="btn btn-danger">Hapus Gambar</button>
+                                    </form>
+                                    <?php }?>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                 </div>
                             </div>
@@ -205,7 +209,12 @@
                                 </div>
                                 <div class="modal-footer d-flex">
                                     <a class="btn btn-primary ml-0 mr-auto" href="<?=base_url("resource/".$files['id_project']."/".$files['nama_file']); ?>" >Unduh Dokumen</a>
-                                    <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?><button type="submit" class="btn btn-danger">Hapus Dokumen</button><?php }?>
+                                    <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?>
+                                    <form action="proyek/deletefile/<?=$files['id_file']?>" method="post">
+                                        <?= csrf_field();?>
+                                        <button type="submit" class="btn btn-danger">Hapus Dokumen</button>
+                                    </form>
+                                    <?php }?>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                 </div>
                             </div>
@@ -242,7 +251,12 @@
                                 </div>
                                 <div class="modal-footer d-flex">
                                     <a class="btn btn-primary ml-0 mr-auto" href="<?=$files['nama_asli']?>" target="_blank">Buka tautan</a>
-                                    <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?><button type="submit" class="btn btn-danger">Hapus Tautan</button><?php }?>
+                                    <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?>
+                                        <form action="proyek/deletefile/<?=$files['id_file']?>" method="post">
+                                            <?= csrf_field();?>
+                                            <button type="submit" class="btn btn-danger">Hapus Tautan</button>
+                                        </form>
+                                    <?php }?>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                 </div>
                             </div>

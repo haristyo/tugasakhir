@@ -619,19 +619,38 @@
                                         <!-- Button trigger modal -->
                                         <div class=" d-flex w-100 mx-auto">
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
+                                            <?php 
+                                                $semua = 0; $checked = 0;
+                                                foreach ($checkboxall as $checkboxalls) {
+                                                    if ($checkboxalls['id_epic']==$epics['id_epic']) {
+                                                        $semua = $checkboxalls['id_checkbox'];
+                                                    }
+                                                }
+                                                
+                                                foreach ($checkboxchecked as $checkboxcheckeds) {
+                                                    if ($checkboxcheckeds['id_epic']==$epics['id_epic']) {
+                                                        $checked = $checkboxcheckeds['id_checkbox'];
+                                                    }
+                                                }
+                                                // d($checked);
+                                                // dd($semua);
 
-                                                <div class='pl-1 text-left text-white my-0'  style='background-color:grey;'><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                ?>
+                                                <div class="d-flex" style='background-color:grey;'>
+                                                    <div class=' mr-auto ml-0 text-white my-0'  ><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                    <div class=' ml-auto mr-0 text-white my-0' ><?php echo (number_format($checked/$semua*100).'%');?></div>
+                                                </div>
                                                 <div class='mx-auto text-white'  style='background-color:grey;'><?=$epics['isi'] ;?></div>
                                             </button>
                                             </div>
                                             <!-- end Button trigger modal -->
                                             <!-- Modal -->
-                                            <div class="modal fade" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal fade " data-backdrop="static" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" overflow-y:auto;">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg ">
                                             <div class="modal-content" style="background-color:#8be0cc;">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">Epic</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-target="#epic<?=$epics['id_epic'] ;?>">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
@@ -669,26 +688,79 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <?php foreach ($checkbox as $checkboxes) {
+                                                                if ($checkboxes['id_epic']==$epics['id_epic']) {?>
+                                                                     <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">
+                                                                            <input type="checkbox" name="checkbox[]" value="<?=$checkboxes['id_checkbox'];?>" <?php if($checkboxes['value']=='1') {echo "checked";}?> >
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
+                                                                        
+                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        
+
+                                                                    </div>
+                                                            <?php    }
+                                                            }?>
+                                                           
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
                                             <?php }?>
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
                                                         </form>
                                                     </div>
                                                 </div>
 
                                             </div>
                                             </div>
+                                            <div class="modal fade" id="createcheckbox<?=$epics['id_epic']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-dialog-centered modal-lg" >
+                                                                            <div class="modal-content" style="background-color:#fbeeac;">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Checkbox</h5>
+                                                                                        <button type="button" class="close" data-dismiss="modal" data-target="#createcheckbox<?=$epics['id_epic']?>" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <form class="" method="post" action="/proyek/createCheckbox/<?=$epics['id_epic']?>">
+                                                                                    <div class="modal-body">
+                                                                                            <?= csrf_field(); ?>
+                                                                                            <div class="form-group">
+                                                                                                <label for="#isicheckbox<?=$epics['id_epic']?>" style="float: left; color:black;">Isi</label>
+                                                                                                <input type="text" class="form-control <?php if ($validation->hasError('isicheckbox'.$epics['id_epic'])) {echo 'is-invalid';} ?>" name="isicheckbox<?=$epics['id_epic']?>" value="">
+                                                                                                <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                                                <div class="invalid-feedback">
+                                                                                                    <?=$validation->getError('isicheckbox'.$epics['id_epic']);?>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="submit" class="btn btn-success">Tambah Checkbox</button>
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
+                                                                                    </div>
+                                                                                    </form>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            </div>
                                         <!-- end modal-->
 
 
                                         <?php 
-                                        if ($validation->hasError('isiepic'.$epics['id_epic'])) { 
+                                        if ($validation->hasError('isiepic'.$epics['id_epic'])||session()->getFlashdata('epic')==$epics['id_epic'] ) { 
                                             echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
-                                            ;} ?>
+                                           
+                                            ;} 
+                                        elseif ($validation->hasError('isicheckbox'.$epics['id_epic'])) {
+                                            echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                            echo "<script> $('#createcheckbox".$epics['id_epic']."').modal('show'); </script>";
+                                        }?>
                                         <?php
                                         }
                                     }
@@ -720,15 +792,34 @@
                                         <!-- Button trigger modal -->
                                         <div class=" d-flex w-100 mx-auto">
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
+                                            <?php 
+                                                $semua = 0; $checked = 0;
+                                                foreach ($checkboxall as $checkboxalls) {
+                                                    if ($checkboxalls['id_epic']==$epics['id_epic']) {
+                                                        $semua = $checkboxalls['id_checkbox'];
+                                                    }
+                                                }
+                                                
+                                                foreach ($checkboxchecked as $checkboxcheckeds) {
+                                                    if ($checkboxcheckeds['id_epic']==$epics['id_epic']) {
+                                                        $checked = $checkboxcheckeds['id_checkbox'];
+                                                    }
+                                                }
+                                                // d($checked);
+                                                // dd($semua);
 
-                                                <div class='pl-1 text-left text-white my-0'  style='background-color:grey;'><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                ?>
+                                                <div class="d-flex" style='background-color:grey;'>
+                                                    <div class=' mr-auto ml-0 text-white my-0'  ><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                    <div class=' ml-auto mr-0 text-white my-0' ><?php echo (number_format($checked/$semua*100).'%');?></div>
+                                                </div>
                                                 <div class='mx-auto text-white'  style='background-color:grey;'><?=$epics['isi'] ;?></div>
                                             </button>
                                             </div>
                                             <!-- end Button trigger modal -->
                                             <!-- Modal -->
-                                            <div class="modal fade" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal fade" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" overflow-y:auto;">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg ">
                                             <div class="modal-content" style="background-color:#51d0b2;">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">Epic</h5>
@@ -770,6 +861,23 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <?php foreach ($checkbox as $checkboxes) {
+                                                                if ($checkboxes['id_epic']==$epics['id_epic']) {?>
+                                                                     <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">
+                                                                            <input type="checkbox" name="checkbox[]" value="<?=$checkboxes['id_checkbox'];?>" <?php if($checkboxes['value']=='1') {echo "checked";}?> >
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
+                                                                        
+                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        
+
+                                                                    </div>
+                                                            <?php    }
+                                                            }?>
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
@@ -783,13 +891,48 @@
 
                                             </div>
                                             </div>
+                                            <div class="modal fade" id="createcheckbox<?=$epics['id_epic']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-dialog-centered modal-lg" >
+                                                                            <div class="modal-content" style="background-color:#fbeeac;">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Checkbox</h5>
+                                                                                        <button type="button" class="close" data-dismiss="modal" data-target="#createcheckbox<?=$epics['id_epic']?>" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <form class="" method="post" action="/proyek/createCheckbox/<?=$epics['id_epic']?>">
+                                                                                    <div class="modal-body">
+                                                                                            <?= csrf_field(); ?>
+                                                                                            <div class="form-group">
+                                                                                                <label for="#isicheckbox<?=$epics['id_epic']?>" style="float: left; color:black;">Isi</label>
+                                                                                                <input type="text" class="form-control <?php if ($validation->hasError('isicheckbox'.$epics['id_epic'])) {echo 'is-invalid';} ?>" name="isicheckbox<?=$epics['id_epic']?>" value="">
+                                                                                                <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                                                <div class="invalid-feedback">
+                                                                                                    <?=$validation->getError('isicheckbox'.$epics['id_epic']);?>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="submit" class="btn btn-success">Tambah Checkbox</button>
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
+                                                                                    </div>
+                                                                                    </form>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            </div>
                                         <!-- end modal-->
 
 
                                         <?php 
-                                        if ($validation->hasError('isiepic'.$epics['id_epic'])) { 
+                                        if ($validation->hasError('isiepic'.$epics['id_epic'])||session()->getFlashdata('epic')==$epics['id_epic'] ) { 
                                             echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
-                                            ;} ?>
+                                           
+                                            ;} 
+                                        elseif ($validation->hasError('isicheckbox'.$epics['id_epic'])) {
+                                            echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                            echo "<script> $('#createcheckbox".$epics['id_epic']."').modal('show'); </script>";
+                                        }?>
                                         <?php
                                         }
                                     }
@@ -820,8 +963,27 @@
                                         <!-- Button trigger modal -->
                                         <div class=" d-flex w-100 mx-auto">
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
+                                                <?php 
+                                                $semua = 0; $checked = 0;
+                                                foreach ($checkboxall as $checkboxalls) {
+                                                    if ($checkboxalls['id_epic']==$epics['id_epic']) {
+                                                        $semua = $checkboxalls['id_checkbox'];
+                                                    }
+                                                }
+                                                
+                                                foreach ($checkboxchecked as $checkboxcheckeds) {
+                                                    if ($checkboxcheckeds['id_epic']==$epics['id_epic']) {
+                                                        $checked = $checkboxcheckeds['id_checkbox'];
+                                                    }
+                                                }
+                                                // d($checked);
+                                                // dd($semua);
 
-                                                <div class='pl-1 text-left text-white my-0'  style='background-color:grey;'><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                ?>
+                                                <div class="d-flex" style='background-color:grey;'>
+                                                    <div class=' mr-auto ml-0 text-white my-0'  ><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                    <div class=' ml-auto mr-0 text-white my-0' ><?php echo (number_format($checked/$semua*100).'%');?></div>
+                                                </div>
                                                 <div class='mx-auto text-white'  style='background-color:grey;'><?=$epics['isi'] ;?></div>
                                             </button>
                                             </div>
@@ -870,6 +1032,23 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <?php foreach ($checkbox as $checkboxes) {
+                                                                if ($checkboxes['id_epic']==$epics['id_epic']) {?>
+                                                                     <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">
+                                                                            <input type="checkbox" name="checkbox[]" value="<?=$checkboxes['id_checkbox'];?>" <?php if($checkboxes['value']=='1') {echo "checked";}?> >
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
+                                                                        
+                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        
+
+                                                                    </div>
+                                                            <?php    }
+                                                            }?>
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
@@ -883,13 +1062,48 @@
 
                                             </div>
                                             </div>
+                                            <div class="modal fade" id="createcheckbox<?=$epics['id_epic']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-dialog-centered modal-lg" >
+                                                                            <div class="modal-content" style="background-color:#fbeeac;">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Checkbox</h5>
+                                                                                        <button type="button" class="close" data-dismiss="modal" data-target="#createcheckbox<?=$epics['id_epic']?>" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <form class="" method="post" action="/proyek/createCheckbox/<?=$epics['id_epic']?>">
+                                                                                    <div class="modal-body">
+                                                                                            <?= csrf_field(); ?>
+                                                                                            <div class="form-group">
+                                                                                                <label for="#isicheckbox<?=$epics['id_epic']?>" style="float: left; color:black;">Isi</label>
+                                                                                                <input type="text" class="form-control <?php if ($validation->hasError('isicheckbox'.$epics['id_epic'])) {echo 'is-invalid';} ?>" name="isicheckbox<?=$epics['id_epic']?>" value="">
+                                                                                                <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                                                <div class="invalid-feedback">
+                                                                                                    <?=$validation->getError('isicheckbox'.$epics['id_epic']);?>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="submit" class="btn btn-success">Tambah Checkbox</button>
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
+                                                                                    </div>
+                                                                                    </form>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            </div>
                                         <!-- end modal-->
 
 
                                         <?php 
-                                        if ($validation->hasError('isiepic'.$epics['id_epic'])) { 
+                                        if ($validation->hasError('isiepic'.$epics['id_epic'])||session()->getFlashdata('epic')==$epics['id_epic'] ) { 
                                             echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
-                                            ;} ?>
+                                           
+                                            ;} 
+                                        elseif ($validation->hasError('isicheckbox'.$epics['id_epic'])) {
+                                            echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                            echo "<script> $('#createcheckbox".$epics['id_epic']."').modal('show'); </script>";
+                                        }?>
                                         <?php
                                         }
                                     }
@@ -920,14 +1134,33 @@
                                         <!-- Button trigger modal -->
                                         <div class=" d-flex w-100 mx-auto">
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
+                                            <?php 
+                                                $semua = 0; $checked = 0;
+                                                foreach ($checkboxall as $checkboxalls) {
+                                                    if ($checkboxalls['id_epic']==$epics['id_epic']) {
+                                                        $semua = $checkboxalls['id_checkbox'];
+                                                    }
+                                                }
+                                                
+                                                foreach ($checkboxchecked as $checkboxcheckeds) {
+                                                    if ($checkboxcheckeds['id_epic']==$epics['id_epic']) {
+                                                        $checked = $checkboxcheckeds['id_checkbox'];
+                                                    }
+                                                }
+                                                // d($checked);
+                                                // dd($semua);
 
-                                                <div class='pl-1 text-left text-white my-0'  style='background-color:grey;'><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                ?>
+                                                <div class="d-flex" style='background-color:grey;'>
+                                                    <div class=' mr-auto ml-0 text-white my-0'  ><?php if($epics['elapsed']==null) {echo 0;} else{ echo $epics['elapsed'];} echo ('/'.$epics['estimated']) ;?></div>
+                                                    <div class=' ml-auto mr-0 text-white my-0' ><?php echo (number_format($checked/$semua*100).'%');?></div>
+                                                </div>
                                                 <div class='mx-auto text-white'  style='background-color:grey;'><?=$epics['isi'] ;?></div>
                                             </button>
                                             </div>
                                             <!-- end Button trigger modal -->
                                             <!-- Modal -->
-                                            <div class="modal fade" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" overflow-y:auto;">
                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content" style="background-color:#1e6f5c;">
                                                     <div class="modal-header">
@@ -970,6 +1203,23 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <?php foreach ($checkbox as $checkboxes) {
+                                                                if ($checkboxes['id_epic']==$epics['id_epic']) {?>
+                                                                     <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">
+                                                                            <input type="checkbox" name="checkbox[]" value="<?=$checkboxes['id_checkbox'];?>" <?php if($checkboxes['value']=='1') {echo "checked";}?> >
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
+                                                                        
+                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        
+
+                                                                    </div>
+                                                            <?php    }
+                                                            }?>
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
@@ -983,13 +1233,48 @@
 
                                             </div>
                                             </div>
+                                            <div class="modal fade" id="createcheckbox<?=$epics['id_epic']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-dialog-centered modal-lg" >
+                                                                            <div class="modal-content" style="background-color:#fbeeac;">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Checkbox</h5>
+                                                                                        <button type="button" class="close" data-dismiss="modal" data-target="#createcheckbox<?=$epics['id_epic']?>" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <form class="" method="post" action="/proyek/createCheckbox/<?=$epics['id_epic']?>">
+                                                                                    <div class="modal-body">
+                                                                                            <?= csrf_field(); ?>
+                                                                                            <div class="form-group">
+                                                                                                <label for="#isicheckbox<?=$epics['id_epic']?>" style="float: left; color:black;">Isi</label>
+                                                                                                <input type="text" class="form-control <?php if ($validation->hasError('isicheckbox'.$epics['id_epic'])) {echo 'is-invalid';} ?>" name="isicheckbox<?=$epics['id_epic']?>" value="">
+                                                                                                <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                                                <div class="invalid-feedback">
+                                                                                                    <?=$validation->getError('isicheckbox'.$epics['id_epic']);?>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="submit" class="btn btn-success">Tambah Checkbox</button>
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
+                                                                                    </div>
+                                                                                    </form>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            </div>
                                         <!-- end modal-->
 
 
                                         <?php 
-                                        if ($validation->hasError('isiepic'.$epics['id_epic'])) { 
+                                        if ($validation->hasError('isiepic'.$epics['id_epic'])||session()->getFlashdata('epic')==$epics['id_epic'] ) { 
                                             echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
-                                            ;} ?>
+                                           
+                                            ;} 
+                                        elseif ($validation->hasError('isicheckbox'.$epics['id_epic'])) {
+                                            echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                            echo "<script> $('#createcheckbox".$epics['id_epic']."').modal('show'); </script>";
+                                        }?>
                                         <?php
                                         }
                                     }
@@ -1011,7 +1296,7 @@
                                                 </div>
                                                 <!-- end Button trigger modal -->
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="epic<?=$epics['id_epic'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" overflow-y:auto;">
                                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                                 <div class="modal-content" style="background-color:#8be0cc;">
                                                         <div class="modal-header">
@@ -1032,6 +1317,23 @@
                                                                     <?php if ($validation->hasError('isiepic'.$epics['id_epic'])) {echo "Sprint Review Harus Diisi";}?>
                                                                     </div>
                                                                 </div>
+                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                                <?php foreach ($checkbox as $checkboxes) {
+                                                                if ($checkboxes['id_epic']==$epics['id_epic']) {?>
+                                                                     <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">
+                                                                            <input type="checkbox" name="checkbox[]" value="<?=$checkboxes['id_checkbox'];?>" <?php if($checkboxes['value']=='1') {echo "checked";}?> >
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
+                                                                        
+                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        
+
+                                                                    </div>
+                                                            <?php    }
+                                                            }?>
                                                             </div>
                                                             <div class="modal-footer">
                                                             <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
@@ -1039,18 +1341,53 @@
                                                             <?php }?>
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                                             </form>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                </div>
-                                                </div>
+                                                        </div>
+                                                        </div>
+                                                        <div class="modal fade" id="createcheckbox<?=$epics['id_epic']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                    <div class="modal-dialog modal-dialog-centered modal-lg" >
+                                                                                    <div class="modal-content" style="background-color:#fbeeac;">
+                                                                                            <div class="modal-header">
+                                                                                                <h5 class="modal-title" id="exampleModalLabel">Tambah Checkbox</h5>
+                                                                                                <button type="button" class="close" data-dismiss="modal" data-target="#createcheckbox<?=$epics['id_epic']?>" aria-label="Close">
+                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                            <form class="" method="post" action="/proyek/createCheckbox/<?=$epics['id_epic']?>">
+                                                                                            <div class="modal-body">
+                                                                                                    <?= csrf_field(); ?>
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="#isicheckbox<?=$epics['id_epic']?>" style="float: left; color:black;">Isi</label>
+                                                                                                        <input type="text" class="form-control <?php if ($validation->hasError('isicheckbox'.$epics['id_epic'])) {echo 'is-invalid';} ?>" name="isicheckbox<?=$epics['id_epic']?>" value="">
+                                                                                                        <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                                                        <div class="invalid-feedback">
+                                                                                                            <?=$validation->getError('isicheckbox'.$epics['id_epic']);?>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                            </div>
+                                                                                            <div class="modal-footer">
+                                                                                                <button type="submit" class="btn btn-success">Tambah Checkbox</button>
+                                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
+                                                                                            </div>
+                                                                                            </form>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                    </div>
                                             <!-- end modal-->
 
 
-                                            <?php 
-                                            if ($validation->hasError('isiepic'.$epics['id_epic'])) { 
-                                                echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
-                                                ;} ?>
+                                                <?php 
+                                                if ($validation->hasError('isiepic'.$epics['id_epic'])||session()->getFlashdata('epic')==$epics['id_epic'] ) { 
+                                                    echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                                
+                                                    ;} 
+                                                elseif ($validation->hasError('isicheckbox'.$epics['id_epic'])) {
+                                                    echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                                    echo "<script> $('#createcheckbox".$epics['id_epic']."').modal('show'); </script>";
+                                                }?>
                                             <?php
                                             }
                                         }
@@ -1162,6 +1499,23 @@
                                                                         <?php if ($validation->hasError('isiepic'.$epics['id_epic'])) {echo "Retrospective Analysis Harus Diisi";}?>
                                                                     </div>
                                                                 </div>
+                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                                <?php foreach ($checkbox as $checkboxes) {
+                                                                if ($checkboxes['id_epic']==$epics['id_epic']) {?>
+                                                                     <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">
+                                                                            <input type="checkbox" name="checkbox[]" value="<?=$checkboxes['id_checkbox'];?>" <?php if($checkboxes['value']=='1') {echo "checked";}?> >
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
+                                                                        
+                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        
+
+                                                                    </div>
+                                                            <?php    }
+                                                            }?>
                                                             </div>
                                                             <div class="modal-footer">
                                                             <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
@@ -1172,15 +1526,49 @@
                                                         </div>
                                                     </div>
 
-                                                </div>
-                                                </div>
+                                                    </div>
+                                                    </div><div class="modal fade" id="createcheckbox<?=$epics['id_epic']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                <div class="modal-dialog modal-dialog-centered modal-lg" >
+                                                                                <div class="modal-content" style="background-color:#fbeeac;">
+                                                                                        <div class="modal-header">
+                                                                                            <h5 class="modal-title" id="exampleModalLabel">Tambah Checkbox</h5>
+                                                                                            <button type="button" class="close" data-dismiss="modal" data-target="#createcheckbox<?=$epics['id_epic']?>" aria-label="Close">
+                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <form class="" method="post" action="/proyek/createCheckbox/<?=$epics['id_epic']?>">
+                                                                                        <div class="modal-body">
+                                                                                                <?= csrf_field(); ?>
+                                                                                                <div class="form-group">
+                                                                                                    <label for="#isicheckbox<?=$epics['id_epic']?>" style="float: left; color:black;">Isi</label>
+                                                                                                    <input type="text" class="form-control <?php if ($validation->hasError('isicheckbox'.$epics['id_epic'])) {echo 'is-invalid';} ?>" name="isicheckbox<?=$epics['id_epic']?>" value="">
+                                                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                                                    <div class="invalid-feedback">
+                                                                                                        <?=$validation->getError('isicheckbox'.$epics['id_epic']);?>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="submit" class="btn btn-success">Tambah Checkbox</button>
+                                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
+                                                                                        </div>
+                                                                                        </form>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                </div>
                                             <!-- end modal-->
 
 
                                             <?php 
-                                            if ($validation->hasError('isiepic'.$epics['id_epic'])) { 
+                                            if ($validation->hasError('isiepic'.$epics['id_epic'])||session()->getFlashdata('epic')==$epics['id_epic'] ) { 
                                                 echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
-                                                ;} ?>
+                                            
+                                                ;} 
+                                            elseif ($validation->hasError('isicheckbox'.$epics['id_epic'])) {
+                                                echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                                echo "<script> $('#createcheckbox".$epics['id_epic']."').modal('show'); </script>";
+                                            }?>
                                             <?php
                                             }
                                         }
@@ -1217,6 +1605,23 @@
                                                                         <?php if ($validation->hasError('isiepic'.$epics['id_epic'])) {echo "Retrospective Action Harus Diisi";}?>
                                                                     </div>
                                                                 </div>
+                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                                <?php foreach ($checkbox as $checkboxes) {
+                                                                if ($checkboxes['id_epic']==$epics['id_epic']) {?>
+                                                                     <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">
+                                                                            <input type="checkbox" name="checkbox[]" value="<?=$checkboxes['id_checkbox'];?>" <?php if($checkboxes['value']=='1') {echo "checked";}?> >
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
+                                                                        
+                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        
+
+                                                                    </div>
+                                                            <?php    }
+                                                            }?>
                                                             </div>
                                                             <div class="modal-footer">
                                                             <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
@@ -1228,14 +1633,48 @@
                                                     </div>
 
                                                 </div>
-                                                </div>
-                                            <!-- end modal-->
+                                                </div><div class="modal fade" id="createcheckbox<?=$epics['id_epic']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-dialog-centered modal-lg" >
+                                                                            <div class="modal-content" style="background-color:#fbeeac;">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Checkbox</h5>
+                                                                                        <button type="button" class="close" data-dismiss="modal" data-target="#createcheckbox<?=$epics['id_epic']?>" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <form class="" method="post" action="/proyek/createCheckbox/<?=$epics['id_epic']?>">
+                                                                                    <div class="modal-body">
+                                                                                            <?= csrf_field(); ?>
+                                                                                            <div class="form-group">
+                                                                                                <label for="#isicheckbox<?=$epics['id_epic']?>" style="float: left; color:black;">Isi</label>
+                                                                                                <input type="text" class="form-control <?php if ($validation->hasError('isicheckbox'.$epics['id_epic'])) {echo 'is-invalid';} ?>" name="isicheckbox<?=$epics['id_epic']?>" value="">
+                                                                                                <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                                                <div class="invalid-feedback">
+                                                                                                    <?=$validation->getError('isicheckbox'.$epics['id_epic']);?>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="submit" class="btn btn-success">Tambah Checkbox</button>
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
+                                                                                    </div>
+                                                                                    </form>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            </div>
+                                        <!-- end modal-->
 
 
-                                            <?php 
-                                            if ($validation->hasError('isiepic'.$epics['id_epic'])) { 
-                                                echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
-                                                ;} ?>
+                                        <?php 
+                                        if ($validation->hasError('isiepic'.$epics['id_epic'])||session()->getFlashdata('epic')==$epics['id_epic'] ) { 
+                                            echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                           
+                                            ;} 
+                                        elseif ($validation->hasError('isicheckbox'.$epics['id_epic'])) {
+                                            echo "<script> $('#epic".$epics['id_epic']."').modal('show'); </script>";
+                                            echo "<script> $('#createcheckbox".$epics['id_epic']."').modal('show'); </script>";
+                                        }?>
 
                                                 
                                             <?php
