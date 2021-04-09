@@ -2,13 +2,17 @@
 
 namespace App\Controllers;
 use App\Models\UserModel;
+use App\Models\ResetModel;
 class User extends BaseController
 {
 	protected $userModel;
+	protected $resetModel;
 	protected $session;
 	public function __construct()
 	{
+		helper('text');
 		$this->userModel = new UserModel();
+		$this->resetModel = new ResetModel();
 		$this->session = \Config\Services::session();
 		// if (!isset($_SESSION['last'])) {
 		// 	$_SESSION['last'] = "";
@@ -138,7 +142,24 @@ class User extends BaseController
             'is_admin'     	=> 'N'
 				
 		]);
-		session()->setFlashdata('pesan', 'User Berhasil Ditambahkan.');
+		$recepient = $this->request->getVar('email');
+		$email = \Config\Services::email();
+		$message = "<p>Anda Berhasil melakukan pendaftaran akun</p>";
+		$message .= "<a href='".base_url('login')."'>klik untuk login</a>";
+		$email->setFrom('scrum.tool55@gmail.com');
+		$email->setTo($recepient);
+		$email->setSubject("Anda berhasil mendaftarkan akun");
+		$email->setMessage($message);
+		
+		$email->send();
+			if ($email->send()) {
+				# code...
+				session()->setFlashdata('pesan', 'User Berhasil Ditambahkan');
+			}
+			else {
+				# code...
+				session()->setFlashdata('pesan', 'Email gagal dikirim');
+			}
 		return redirect()->to(base_url('/login'));
 	}
 	public function logout()
@@ -360,7 +381,120 @@ class User extends BaseController
             'is_admin'     	=> 'Y'
 				
 		]);
-		session()->setFlashdata('pesan', 'User Berhasil Ditambahkan.');
+		session()->setFlashdata('pesan', 'User Berhasil Ditambahkan');
 		return redirect()->to(base_url('/login'));
 	}
+	public function lupa_password()
+	{
+		$title = [
+			'title' => 'Lupa Password | Scrum Tool',
+			'link' => 	$this->request->uri->getSegment(1)
+		];
+		$data = [
+			'validation' =>  \Config\Services::validation()
+		];
+		echo view('header1_v',$title);
+        echo view('forgot_v',$data);
+		echo view('footer1_v');
+	}
+	public function proses_lupa()
+	{
+		if ($this->request->getVar('csrf_test_name')) {
+		// d($_POST);
+		$username = $this->request->getVar('useremail');
+		$password = $this->request->getVar('password');
+		$data = esc($this->userModel->where('username',$username)->first());
+		if ($data == null) {
+			$data = esc($this->userModel->where('email',$username)->first());
+		}
+		if ($data == null) {
+			session()->setFlashdata('pesan', 'Username/Email tidak terdaftar');
+			return redirect()->to(base_url('/forgot_password'));
+		}
+		$this->resetModel->save([
+			'id_user' => $data['id_user'],
+			'token'=> random_string('alnum',50)
+		]);
+		$token = ($this->resetModel->getResetbyEmailUser($data['email'])['token']);
+		$message = "<p>Anda melakukan permintaan atur ulang password</p>";
+		$message .= "<a href='".base_url('resetpassword/'.$token)."'>klik untuk atur ulang password</a>";
+
+		$email = \Config\Services::email();
+
+		$email->setFrom('scrum.tool55@gmail.com');
+		$email->setTo($data['email']);
+		$email->setSubject("Atur Ulang Password");
+		$email->setMessage($message);
+		
+		$email->send();
+		if($email->send())
+		{
+			session()->setFlashdata('pesan', "Silahkan cek email anda");
+			return redirect()->to(base_url('/login'));
+		}
+		else {
+			session()->setFlashdata('pesan', 'Gagal atur ulang password, masukan email yang benar');
+			return redirect()->to(base_url('/forgot_password'));
+		}
+		// 
+		// $token = ($this->resetModel->getResetbyEmailUser($data['email'])['token']);
+		// // dd($token);
+		// return redirect()->to(base_url('/resetpassword/'.$token));
+		// return
+
+		// dd($data['email']);
+
+//langsung config email		
+		}
+	
+	}
+
+	public function resetpassword($token)
+	{
+		$title = [
+			'title' => 'Lupa Password | Scrum Tool',
+			'link' => 	$this->request->uri->getSegment(1)
+		];
+		$data = [
+			'reset' => esc($this->resetModel->getResetbyToken($token)),
+			'validation' =>  \Config\Services::validation()
+		];
+		echo view('header1_v',$title);
+        echo view('reset_v',$data);
+		echo view('footer1_v');
+	}
+	public function prosesresetpassword($id_user)
+	{
+		if ($this->request->getVar('csrf_test_name')) {
+			if(!$this->validate([
+				
+				'password1' => ['rules'=>'required|min_length[8]',
+								 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
+											 'min_length'=> 'Kata Sandi minimal 8 karakter']
+	
+								  ],
+				'password2' => ['rules'=> 'required|matches[password1]',
+								 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
+											 'matches'=> 'Kata Sandi Harus sama']
+								  ],
+
+			])) {
+				// $validation = \Config\Services::validation();
+				// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+				return redirect()->to(base_url('/register/'))->withInput();
+			}
+			
+			$this->userModel->save([
+				'id_user'		=> $id_user,
+				'password' 		=>  password_hash($this->request->getVar('password2'),PASSWORD_DEFAULT)
+					
+			]);	
+
+
+
+		}
+		session()->setFlashdata('pesan', "Password Berhasil di reset");
+		return redirect()->to(base_url('/login'));
+	}
+
 }

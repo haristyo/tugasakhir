@@ -5,11 +5,16 @@
         </div>
         <div class="col-12 col-xs-12 col-sm-12 col-md-6 h-100 w-100 my-auto">
         <div class="section-title text-center">
-            <?php if(session()->getFlashData('pesan')) :?>
-              <div class="alert alert-danger" role="alert">
+            <?php if (session()->getFlashData('pesan')==""){} elseif(session()->getFlashData('pesan') == 'User Berhasil Ditambahkan' || session()->getFlashData('pesan') == "Silahkan cek email anda" || session()->getFlashData('pesan') == "Password Berhasil di reset") {?>
+              <div class="alert alert-success" role="alert">
                 <?= session()->getFlashData('pesan') ?>
               </div>
-            <?php endif;?>
+            <?php } elseif(! (session()->getFlashData('pesan') == 'User Berhasil Ditambahkan' || session()->getFlashData('pesan') == "Silahkan cek email anda" || session()->getFlashData('pesan') == "Password Berhasil di reset")) {
+                ?>
+                <div class="alert alert-danger" role="alert">
+                <?= session()->getFlashData('pesan') ?>
+              </div>
+                <?php }?>
         </div>
             <form class="" method="post" action="/user/auth">
             <?= csrf_field(); ?>
@@ -24,11 +29,16 @@
                     <input type="password" class="form-control" id="password" name="password"  value="<?=old('password')?>">
                 </div>
                 <div class="form-group">
-                    <label class="form-check-label" for="exampleCheck1">Belum Punya Akun ? 
+                    <label class="form-check-label mb-0 pb-0" for="exampleCheck1">Lupa Password ?
+                    <a class="" href="<?= base_url('/forgot_password');?>">Setel Ulang password</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-success my-0">Masuk</button>
+                <div class="form-group">
+                    <label class="form-check-label mt-3" for="exampleCheck1">Belum Punya Akun ? 
                     <a class="" href="<?= base_url('/register');?>">Daftar</a>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-success">Masuk</button>
             </form>
         </div>
 

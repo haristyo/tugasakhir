@@ -36,6 +36,8 @@ $routes->get('/indexold', 'Home::indexold');
 $routes->get('/', 'Home::index');
 $routes->get('/about', 'Home::about');
 $routes->get('/login', 'User::login');
+$routes->get('/forgot_password', 'User::lupa_password');
+$routes->get('/resetpassword/(:segment)', 'User::resetpassword/$1');
 $routes->get('/logout', 'User::logout',['filter' => 'LoginFilter']);
 $routes->get('/register', 'User::register');
 $routes->get('/registeradmin', 'User::registeradmin');

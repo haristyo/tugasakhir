@@ -5,9 +5,9 @@
         </div>
         <div class="col-12 col-xs-12 col-sm-12 col-md-6 h-100 w-100">
         <div class="section-title text-center">
-            <?php if(session()->getFlashData('pesan')) :?>
+            <?php if(session()->getFlashData('password')) :?>
               <div class="alert alert-success" role="alert">
-                <?= session()->getFlashData('pesan') ?>
+                <?= session()->getFlashData('password') ?>
               </div>
             <?php endif;?>
         </div>
