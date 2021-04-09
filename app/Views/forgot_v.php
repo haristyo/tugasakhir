@@ -1,7 +1,7 @@
 <div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px; margin-top:7%; padding:1%;">
     <div class="row p-4">
         <div class="col-12 col-sm-12 col-md-6 h-100 mb-2">
-            <img src="<?=base_url('/img/login.png')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
+            <img src="<?=base_url('/img/forgot.png')?>" class="w-100" style="border-radius:10px;" alt="Login" >  
         </div>
         <div class="col-12 col-xs-12 col-sm-12 col-md-6 h-100 w-100 my-auto">
         <div class="section-title text-center">
