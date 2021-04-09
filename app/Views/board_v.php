@@ -236,10 +236,10 @@
             </div>
             <div style="overflow-y:auto;  height:605px ">
             <?php $ke=$totalsprint['id_sprint']+1; foreach ($sprint as $sprints) {?>
-                <div class=" p-0 mx-0" style="background-color:blue;  width : 100%;"> 
+                <div class=" p-0 mx-0" style="background-color:#3445b4;  width : 100%;"> 
                 <div class="d-flex">  
                     <h7 class="px-2 mr-auto text-white btn-success"> <?= $sprints['start_sprint'];?> </h7>
-                    <h6 class="mx-auto text-white">Sprint <?=--$ke?> </h6>
+                    <h6 class="mx-auto text-white" >Sprint <?=--$ke?> </h6>
                     <?php if($sprints['end_sprint']!=null) {?>
                         <h7 class="px-2 ml-auto" style="color: #fff;background-color: #dc3545;border-color: #dc3545;">  <?=$sprints['end_sprint']?> </h7>
                         <?php } else { ?>
