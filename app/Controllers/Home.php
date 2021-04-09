@@ -27,7 +27,7 @@ class Home extends BaseController
 		];
 	// dd($this->request->uri->getSegment(1));
 		echo view('header1_v',$title);
-		echo view('About');
+		echo view('about');
 		echo view('footer1_v');
 	}
 }

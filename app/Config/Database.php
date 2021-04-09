@@ -40,6 +40,7 @@ class Database extends Config
 		// 'username' => 'epiz_28346170',
 		// 'password' => '2WaiPeFHT5iY',
 		// 'database' => 'epiz_28346170_tugasakhir',
+		// 'database' => 'epiz_28346170_scrumtool',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
