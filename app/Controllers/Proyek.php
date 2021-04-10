@@ -505,7 +505,7 @@ class Proyek extends BaseController
     
     public function board($id_project)
 	{ ;
-        // dd($_SESSION);
+        // dd(1*0);
             $title = [
                 'title' => 'Papan Proyek | Scrum Tool',
                 'link' => 	$this->request->uri->getSegment(1)
@@ -523,7 +523,7 @@ class Proyek extends BaseController
                 'totalsprint' => $this->sprintModel->totalSprint($id_project),
                 'log' => $this->logModel->getLogbyProject($id_project),
                 'checkbox' => $this->checkboxModel->getCheckboxbyProject($id_project),
-                'checkboxall' => $this->checkboxModel->countAllByProject($id_project),
+                'checkboxall' => esc($this->checkboxModel->countAllByProject($id_project)),
                 'checkboxchecked' => $this->checkboxModel->countCheckedByProject($id_project),
                 
                 'validation' =>  \Config\Services::validation()
@@ -543,7 +543,8 @@ class Proyek extends BaseController
             else {
                 echo view('header1_v',$title);
                 echo view('sidebar',$data);
-                echo view('board_v',$data);
+                echo view('boarddrag_v',$data);
+                // echo view('board_v',$data);
                 echo view('footer1_v');
             }
     }
@@ -874,33 +875,36 @@ class Proyek extends BaseController
             $selected = $this->request->getVar('checkbox');
             // d($selected)    ;
             $checkboxes = [];
-            foreach ($this->checkboxModel->getCheckboxbyEpic($id_epic) as $checkbox) {
-                array_push($checkboxes, $checkbox['id_checkbox']);
-            } ;
-            // d($checkboxes);
-            $nilai1 = (array_intersect($checkboxes, $selected));
-            $nilai0 = (array_diff($checkboxes, $selected));
-            // d($nilai1);
-            // dd($nilai0);
-            foreach ($nilai1 as $terpilih) {
-                $this->checkboxModel->save([
-                
-                    'id_checkbox'       => $terpilih,
-                    'value' => '1'
-                    ]);
-            }
-            foreach ($nilai0 as $kosong) {
-                $this->checkboxModel->save([
-                
-                    'id_checkbox'       => $kosong,
-                    'value' => '0'
-                    ]);
-            }
-            
-            // dd($_POST);
-        
-        }
-            else {
+            if ($this->checkboxModel->getCheckboxbyEpic($id_epic)!=null && $selected != null ) {
+                # code...
+                foreach ($this->checkboxModel->getCheckboxbyEpic($id_epic) as $checkbox) {
+                    array_push($checkboxes, $checkbox['id_checkbox']);
+                } ;
+                // d($checkboxes);
+                $nilai1 = (array_intersect($checkboxes, $selected));
+                $nilai0 = (array_diff($checkboxes, $selected));
+                // d($nilai1);
+                // dd($nilai0);
+                foreach ($nilai1 as $terpilih) {
+                    $this->checkboxModel->save([
+                        
+                        'id_checkbox'       => $terpilih,
+                        'value' => '1'
+                        ]);
+                    }
+                    foreach ($nilai0 as $kosong) {
+                        $this->checkboxModel->save([
+                            
+                            'id_checkbox'       => $kosong,
+                            'value' => '0'
+                            ]);
+                        }
+                        
+                    }
+                        // dd($_POST);
+                        
+                    }
+                    else {
                 
                 $this->epicModel->delete($id_epic);
                 
@@ -934,7 +938,9 @@ class Proyek extends BaseController
     }
     public function createsprint($id_project)
     {
-    if ($this->request->getVar('csrf_test_name')) {
+        // dd($_POST);
+        // dd($this->sprintModel->getLastSprintbyProject($id_project));
+    
         if($this->sprintModel->getLastSprintbyProject($id_project) == null) {
             $this->sprintModel->save([
                 'id_project'    => $id_project,
@@ -971,7 +977,7 @@ class Proyek extends BaseController
                 'status'    => 'ACTION'
             ]);
         }
-    }
+    
        
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
     }
@@ -1079,5 +1085,24 @@ class Proyek extends BaseController
         $this->checkboxModel->delete($id_checkbox);
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
 
+    }
+    public function editdragepic(Type $var = null)
+    {
+        $this->epicModel->save([
+            'id_epic'    => $this->request->getVar('id_epic'),
+            'status'     => $this->request->getVar('status')
+            ]);
+            dd($_POST);
+    }
+    public function editdragbacklog(Type $var = null)
+    {
+        if($this->request->getVar('sprint')=='product') { $sprint = null;} else {
+            $sprint = $this->request->getVar('sprint');
+        }
+        $this->backlogModel->save([
+            'id_backlog'    => $this->request->getVar('id_backlog'),
+            'sprint'     => $sprint
+            ]);
+            dd($_POST);
     }
 }
