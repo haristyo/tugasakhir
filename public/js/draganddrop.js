@@ -50,6 +50,7 @@ function onDropBacklog(event) {
 			event.target.appendChild(document.getElementById(itemover));
 			$.ajax({
 				url: 'http://localhost:8080/proyek/editdragbacklog',
+				// url: 'http://scrumtool.epizy.com/proyek/editdragbacklog',
 				type: 'POST',
 				data: {'id_backlog':id_backlog,'sprint':id_sprint},
 				success: function(response){
@@ -100,6 +101,7 @@ function onDropEpic(event) {
 
 			$.ajax({
 				url: 'http://localhost:8080/proyek/editdragepic',
+				// url: 'http://scrumtool.epizy.com/proyek/editdragepic',
 				type: 'POST',
 				data: {'id_epic':id_epic,'status':statuses[0]},
 				success: function(response){
