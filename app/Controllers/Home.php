@@ -11,12 +11,13 @@ class Home extends BaseController
 	public function index()
 	{
 		$title = [
-			'title' => 'Beranda | Scrum Tool',
-			'link' => 	$this->request->uri->getSegment(1)
-
-		];
+		'title' => 'Beranda | Scrum Tool',
+		'link' => 	$this->request->uri->getSegment(1)
+		
+	];
+	// dd($title);
 		echo view('header1_v',$title);
-		echo view('index_v');
+		echo view('index_v',$title);
 		echo view('footer1_v');
 	}
 	public function about()
@@ -25,9 +26,10 @@ class Home extends BaseController
 			'title' => 'Tentang | Scrum Tool',
 			'link' => 	$this->request->uri->getSegment(1)
 		];
+		// dd($title);
 	// dd($this->request->uri->getSegment(1));
 		echo view('header1_v',$title);
-		echo view('about');
+		echo view('about',$title);
 		echo view('footer1_v');
 	}
 }

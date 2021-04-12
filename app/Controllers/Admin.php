@@ -43,7 +43,7 @@ class Admin extends BaseController
         ];
         $data = [
             'link' => 	$this->request->uri->getSegment(2),
-            'user' => $this->userModel->getDetailbyId($this->session->id_user)
+            'user' => esc($this->userModel->getDetailbyId($this->session->id_user))
         ];
         // dd($data);
         // echo ($this->memberModel->getMemberbyUserProject(1,1)['id_member']);
@@ -73,9 +73,9 @@ class Admin extends BaseController
         $data = [
             'link' => 	$this->request->uri->getSegment(2),
             'user' => esc($this->userModel->getDetailbyId($this->session->id_user)),
-            'project'=>$project->paginate(25,'project'),
-            'pager'=>$this->proyekModel->join('user','user.id_user=project.creator_project')->pager,
-            'page'=>$this->request->getVar('page_project'),
+            'project'=>esc($project->paginate(25,'project')),
+            'pager'=>esc($this->proyekModel->join('user','user.id_user=project.creator_project')->pager),
+            'page'=>esc($this->request->getVar('page_project')),
             'keyword'=>esc($keyword)
         ];
         echo view('header1_v',$title);
@@ -132,9 +132,9 @@ class Admin extends BaseController
             
             // 'meeting' =>esc($this->meetingModel->getMeetingbyProject($id_project)),
             // 'resource' =>esc(),
-            'member'=>$member->paginate(25,'member'),
-            'pager'=>$this->memberModel->join('user','user.id_user=member.id_user')->join('project','project.id_project=member.id_project')->pager,
-            'page'=>$this->request->getVar('page_member'),
+            'member'=>esc($member->paginate(25,'member')),
+            'pager'=>esc($this->memberModel->join('user','user.id_user=member.id_user')->join('project','project.id_project=member.id_project')->pager),
+            'page'=>esc($this->request->getVar('page_member')),
             'keyword'=>esc($keyword)
         ];
         

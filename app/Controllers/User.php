@@ -102,12 +102,14 @@ class User extends BaseController
     public function addUser()
 	{
 		if(!$this->validate([
-			'username' => ['rules'=>'required|is_unique[user.username]',
+			'username' => ['rules'=>'required|is_unique[user.username]|max_length[32]',
 						'errors'=>[ 'required'=>  'Nama User Harus diisi',
-									'is_unique'=> 'Nama User telah digunakan']
+									'is_unique'=> 'Nama User telah digunakan',
+									'max_length'=> 'Maksimal 32 karakter']
 					   ],
-			'nama_user' => ['rules'=>'required',
-						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi']
+			'nama_user' => ['rules'=>'required|max_length[32]',
+						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
+									'max_length'=> 'Maksimal 50 karakter']
 					   ],
             'email' => ['rules'=>'required|is_unique[user.email]',
                         'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
@@ -116,7 +118,6 @@ class User extends BaseController
 			'password1' => ['rules'=>'required|min_length[8]',
 							 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
 							 			'min_length'=> 'Kata Sandi minimal 8 karakter']
-
                               ],
 			'password2' => ['rules'=> 'required|matches[password1]',
 							 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
@@ -208,12 +209,14 @@ class User extends BaseController
 	public function update()
 	{
 		if(!$this->validate([
-			'username' => ['rules'=>'required|is_unique[user.username,id_user,{id_user}]',
+			'username' => ['rules'=>'required|is_unique[user.username,id_user,{id_user}]|max_length[32]',
 						'errors'=>[ 'required'=>  'Nama User Harus diisi',
-									'is_unique'=> 'Nama User telah digunakan']
+									'is_unique'=> 'Nama User telah digunakan',
+									'max_length'=> 'Maksimal 32 karakter']
 								],
-			'nama_user' => ['rules'=>'required',
-						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi']
+			'nama_user' => ['rules'=>'required|max_length[50]',
+						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
+						'max_length'=> 'Maksimal 50 karakter']
 					   ],
             'email' => ['rules'=>'required|is_unique[user.email,id_user,{id_user}]',
                         'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
@@ -342,12 +345,14 @@ class User extends BaseController
 	public function addAdmin()
 	{
 		if(!$this->validate([
-			'username' => ['rules'=>'required|is_unique[user.username]',
+			'username' => ['rules'=>'required|is_unique[user.username]|max_length[32]',
 						'errors'=>[ 'required'=>  'Nama User Harus diisi',
-									'is_unique'=> 'Nama User telah digunakan']
+									'is_unique'=> 'Nama User telah digunakan',
+									'max_length'=> 'Maksimal 32 karakter' ]
 					],
-			'nama_user' => ['rules'=>'required',
-						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi']
+			'nama_user' => ['rules'=>'required|max_length[50]',
+						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
+						'max_length'=> 'Maksimal 50 karakter']
 					],
 			'email' => ['rules'=>'required|is_unique[user.email]',
 						'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',

@@ -59,7 +59,7 @@ class Proyek extends BaseController
                 'link' => 	$this->request->uri->getSegment(1)
             ];
             $data = [
-                'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user),
+                'proyek' =>  esc($this->memberModel->getMemberbyUser($this->session->id_user)),
                 'link' =>    $this->request->uri->getPath(),
             ];
             // dd($data);
@@ -73,9 +73,10 @@ class Proyek extends BaseController
 	{
         $title = [
             'title' => 'Proyek Saya | Scrum Tool',
-            'link' => 	$this->request->uri->getSegment(1)
+            'link' => 	$this->request->uri->getSegment(1),
         ];
         $data = [
+            'link' => 	$this->request->uri->getSegment(1),
             'validation' =>  \Config\Services::validation()
         ];
         echo view('header1_v',$title);
@@ -87,8 +88,9 @@ class Proyek extends BaseController
 	{
 		if(!$this->validate([
 
-			'nama_project' => ['rules'=>'required',
-						'errors'=>[ 'required'=>  'Nama Proyek Harus diisi']
+			'nama_project' => ['rules'=>'required|max_length[50]',
+						'errors'=>[ 'required'=>  'Nama Proyek Harus diisi',
+                                    'max_length'=>'Nama Proyek maksimal 50 karakter']
 					   ],
             'kode_join' => ['rules'=>'required|is_unique[project.kode_join]|min_length[4]|max_length[32]',
                         'errors'=>[ 'required'=> 'Kode Join Harus diisi',
@@ -198,7 +200,8 @@ class Proyek extends BaseController
             'link' => 	$this->request->uri->getSegment(1)
         ];
         $data = [
-            'validation' =>  \Config\Services::validation()
+            'validation' =>  \Config\Services::validation(),
+            'link' => 	$this->request->uri->getSegment(1)
         ];
         echo view('header1_v',$title);
         echo view('join_v',$data);
@@ -321,8 +324,8 @@ class Proyek extends BaseController
             'link' =>    $this->request->uri->getPath(),
 
             'meetings'=>esc($meeting->paginate(10,'meeting')),
-            'pager'=>$this->meetingModel->join('member','member.id_member=meeting.creator_meeting')->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC')->pager,
-            'page'=>$this->request->getVar('page_meeting'),
+            'pager'=>esc($this->meetingModel->join('member','member.id_member=meeting.creator_meeting')->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC')->pager),
+            'page'=>esc($this->request->getVar('page_meeting')),
             'keyword'=>esc($keyword),
             'agenda'=>esc($agenda),
 
@@ -520,8 +523,8 @@ class Proyek extends BaseController
                 'countdo' => esc($this->epicModel->getCountDo($id_project)),
                 'countbacklog' => esc($this->backlogModel->getCount($id_project)),
                 'note' => esc($this->notesModel->getNotesbyProject($id_project)),
-                'totalsprint' => $this->sprintModel->totalSprint($id_project),
-                'log' => $this->logModel->getLogbyProject($id_project),
+                'totalsprint' => esc($this->sprintModel->totalSprint($id_project)),
+                'log' => esc($this->logModel->getLogbyProject($id_project)),
                 'checkbox' => $this->checkboxModel->getCheckboxbyProject($id_project),
                 'checkboxall' => esc($this->checkboxModel->countAllByProject($id_project)),
                 'checkboxchecked' => $this->checkboxModel->countCheckedByProject($id_project),
@@ -556,7 +559,7 @@ class Proyek extends BaseController
                 'link' => 	$this->request->uri->getSegment(1)
             ];
             $data = [
-                'proyek' => $this->memberModel->getMemberbyUser($this->session->id_user),
+                'proyek' => esc($this->memberModel->getMemberbyUser($this->session->id_user)),
                 'link' =>    $this->request->uri->getPath(),
                 'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
                 'file' => esc($this->fileModel->getFilebyProject($id_project)->paginate(20,'file')),
