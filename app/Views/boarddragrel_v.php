@@ -1,8 +1,8 @@
 <div id="content" class="mr-0 pr-0 ml-2 pl-2 pt-4" style="width:99%; height:99%">
     
 
-    <div class="ml-auto mr-auto pt-4" style="overflow-y:auto; display: flex; height : 100%; width:95%; background-color:#fbeeac">
-        <div class="p-0 mt-0" style="background-color:#dcf5ef; width : 25%; height:100%; max-height:90%; ">
+    <div class="ml-auto mr-auto pt-4" style="overflow-y:auto; display: flex; height : 100vh; width:95%; background-color:#fbeeac">
+        <div class="p-0 mt-0" style="background-color:#dcf5ef; width : 25%; height:96vh; ">
             <!-- Button trigger modal -->
                 <div class="d-flex" style="background-color:#fbeeac;">
                     <h6 class="text-center pb-2 pl-4 mr-0 ml-auto" >Product Notes</h6>
@@ -47,7 +47,7 @@
                         
                      
 
-                <div style=" overflow-y:auto; height:100px; max-height:40%; min-height:40%; background-color:" class="mb-1 mt-2 mx-1">
+                <div style=" overflow-y:auto; height:65vh; max-height:40%; min-height:40%; background-color:" class="mb-1 mt-2 mx-1">
                     <?php foreach ($note as $notes) {
                         
                         if ($notes['sprint'] == null) {?>
@@ -139,7 +139,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="#point" style="float: left; color:black;">Storypoint</label>
-                                    <input type="number" class="form-control" name="point" value="<?=old('point')?>">
+                                    <input type="number" class="form-control" name="point" <?php if ($validation->hasError('isibacklog')) {?> value="<?=old('point')?>" <?php ;}?>>
                                     <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                                 </div>
                         </div>
@@ -228,7 +228,7 @@
 
 
 <!-- sprint -->
-        <div class="p-0 m-0" style="background-color:#fbeeac;  height:100%;max-height:90%; width : 75%;  ">
+        <div class="p-0 m-0" style="background-color:#fbeeac;  height:100vh; max-height:90%; width : 75%;  ">
             <div class="d-flex">
                 <h6 class="ml-auto">Sprint</h6>
                 <a class="fa fa-plus py-1 mr-2 ml-auto" <?php if($lastsprint!=null) {?> href="/proyek/createsprint/<?=$member['id_project']?>"<?php ;} else { ?> data-target="#ongoing" data-toggle="modal" <?php ;}?> style="color:grey"></a>
@@ -255,10 +255,10 @@
                 <!-- End Modal -->
 
             </div>
-            <div style="overflow-y:auto;  height:605px ">
+            <div style="overflow-y:auto;  height:92vh">
             <?php $ke=$totalsprint['id_sprint']+1; foreach ($sprint as $sprints) {?>
-                <div class=" p-0 mx-0" style="background-color:#3445b4;  width : 100%;"> 
-                <div class="d-flex">  
+                <div class=" p-0 mx-0" style="  width : 100%;"> 
+                <div class="d-flex" style="background-color:#3445b4;">  
                     <h7 class="px-2 mr-auto text-white btn-success"> <?= $sprints['start_sprint'];?> </h7>
                     <h6 class="mx-auto text-white" >Sprint <?=--$ke?> </h6>
                     <?php if($sprints['end_sprint']!=null) {?>
@@ -299,11 +299,11 @@
                             </div>
                         <?php }?>
                 </div>
-                    <div class="m-0 p-0" style="background-color:white; overflow-x:scroll; height : 100%;  ">
-                        <div style="width : 2700px; display: flex;">
-                            <div class=" p-0 text-white text-center " style="background-color:#c5efe5; width: 450px; height:100%">
+                    <div class="m-0 p-0" style="background-color:#ffffff; overflow-x:scroll; height : 88vh;  ">
+                        <div style="width : 2700px; display: flex;background-color:#c5efe5;">
+                            <div class=" p-0 text-white text-center " style=" width: 450px; height:20vh">
 
-                                <div style="background-color:#111111; height: 100%; width:97%;" class="mx-auto mt-1" >
+                                <div style=" height: 100%; width:97%;" class="mx-auto mt-1" >
                                     
                                     <div class="d-flex pb-0" style="background-color:#111111;">
                                     <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
@@ -354,7 +354,7 @@
         
                                 <?php }?>
 
-                                    <div style="background-color:#c5efe5; height: 75px; overflow:auto;" class="mb-1 py-1">
+                                    <div style="background-color:#c5efe5; height: 16vh; overflow:auto;" class="mb-1 py-1">
 
                                     <?php foreach ($note as $notes){
                                         if ($notes['sprint']==$sprints['id_sprint']) {?>
@@ -411,9 +411,9 @@
                                     </div>
 
                                 </div>
-                                <div style="background-color:#111111; height: 100%; width:97%;" class="mx-auto mt-1" >
+                                <div style="background-color:#111111; width:97%;" class="mx-auto mt-1" >
                                     Sprint Goal
-                                    <div style="background-color:#c5efe5; height: 70px; overflow:auto;" class="mb-1 py-1">
+                                    <div style="background-color:#c5efe5; height: 10vh; overflow:auto;" class="mb-1 py-1">
 
                                     <!-- Button trigger modal -->
                                         <div class=" d-flex w-100 mx-auto">
@@ -468,7 +468,7 @@
 
                                 </div>
 
-                                <div style="background-color:#111111;  height: 40%; width:97%;" class="mx-auto mb-1">
+                                <div style="background-color:#111111; width:97%;" class="mx-auto mb-1">
                                     <div class="d-flex">
                                         <?php $total = 0; foreach ($countbacklog as $countbacklogs) {
                                                 if ($countbacklogs['sprint'] == $sprints['id_sprint'] ) {
@@ -480,7 +480,7 @@
                                         ?>
                                         <div class="my-auto mx-auto text-center">Sprint Backlog</div>
                                     </div>
-                                    <div style="background-color:#c5efe5; overflow-y:auto; height: 325px; flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1"  <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="backlog-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverBacklog(event);" ondrop="onDropBacklog(event);"<?php } ?>>
+                                    <div style="background-color:#c5efe5; overflow-y:auto; height: 45vh; flex-grow: 1; flex-basis: 100%;" class="mb-auto py-1"  <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="backlog-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverBacklog(event);" ondrop="onDropBacklog(event);"<?php } ?>>
                                     <?php foreach ($backlog as $backlogs){
                                         if ($backlogs['sprint']==$sprints['id_sprint']) {?>
                                         <!-- Button trigger modal -->
@@ -636,7 +636,7 @@
                                             ;} ?>
                             <?php }?>
 
-                                <div style="background-color:; overflow-y:auto; height:525px;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="TO DO-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
+                                <div style="background-color:; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="TO DO-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
                                     <?php foreach ($epic as $epics){
                                         if ($epics['status']=="TO DO" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
@@ -809,7 +809,7 @@
                                 <div class="pr-4 ml-0 mr-auto">On Progress</div>
                                 
                             </div>
-                                <div style="background-color:#51d0b2; overflow-y:auto; height:525px;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="ON PROGRESS-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
+                                <div style="background-color:#51d0b2; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="ON PROGRESS-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
                                 <?php foreach ($epic as $epics){
                                         if ($epics['status']=="ON PROGRESS" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
@@ -980,7 +980,7 @@
                                 <div class="pr-4 ml-0 mr-auto">VERIFY</div>
                                 
                             </div>
-                                <div style="background-color:#2ea98c; overflow-y:auto; height:525px;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="VERIFY-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);">
+                                <div style="background-color:#2ea98c; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="VERIFY-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);">
                                 <?php foreach ($epic as $epics){
                                         if ($epics['status']=="VERIFY" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
@@ -1151,7 +1151,7 @@
                                 <div class="pr-4 ml-0 mr-auto">DONE</div>
                                 
                             </div>
-                                <div style="background-color:#1e6f5c; overflow-y:auto; height:525px;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="DONE-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);">
+                                <div style="background-color:#1e6f5c; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="DONE-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);">
                                 <?php foreach ($epic as $epics){
                                         if ($epics['status']=="DONE" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
@@ -1308,7 +1308,7 @@
                             </div>
                             <div class="px-1 pt-1 pb-1 text-white text-center m-0" style=" width: 450px; height:100%; background-color:#18594a;">
                             <div style="background-color:#111111;">Retrospective</div>
-                                <div style="background-color:#18594a; overflow-y:auto; height:525px" class="mb-1 py-1">
+                                <div style="background-color:#18594a; overflow-y:auto; height:79vh" class="mb-1 py-1">
                                     <?php foreach ($epic as $epics){
                                             if ($epics['status']=="REVIEW" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                             

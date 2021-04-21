@@ -528,10 +528,12 @@ class Proyek extends BaseController
                 'checkbox' => $this->checkboxModel->getCheckboxbyProject($id_project),
                 'checkboxall' => esc($this->checkboxModel->countAllByProject($id_project)),
                 'checkboxchecked' => $this->checkboxModel->countCheckedByProject($id_project),
+                'lastsprint' => $this->sprintModel->getLastSprintbyProject($id_project)['end_sprint'],
                 
                 'validation' =>  \Config\Services::validation()
 
             ];
+            // dd($data['lastsprint']);
             // d($data['checkboxall']);
             // dd($data['checkboxchecked']);
             //     d($this->epicModel->getEpicbyProject());
@@ -546,7 +548,8 @@ class Proyek extends BaseController
             else {
                 echo view('header1_v',$title);
                 echo view('sidebar',$data);
-                echo view('boarddrag_v',$data);
+                echo view('boarddragrel_v',$data);
+                // echo view('boarddrag_v',$data);
                 // echo view('board_v',$data);
                 echo view('footer1_v');
             }

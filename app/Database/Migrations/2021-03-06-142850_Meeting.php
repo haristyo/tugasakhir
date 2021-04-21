@@ -22,7 +22,7 @@ class Meeting extends Migration
 				'null'           => false,
 			],
 			'agenda' => [
-				'type'           => 'text',
+				'type'           => 'varchar',
 				'constraint'     => '25',
 				'null'           => false,
 			],

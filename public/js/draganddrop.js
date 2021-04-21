@@ -33,6 +33,7 @@ function onDragOverBacklog(event) {
 	// alert($event);
 }
 function onDropBacklog(event) {
+	
 	event.preventDefault();
 	const itemover = event.dataTransfer.getData('text/plain');
 		// console.log(itemover);
@@ -44,9 +45,11 @@ function onDropBacklog(event) {
 		// console.log(event.target.id);
 		const sprints = sprint.split("-");
 		var id_sprint = sprints[1];
-		// console.log(id_sprint);
+		var tipe = sprints[0];
+		// console.log(sprints);
 		
-		if(itemovers[0]=='item'){
+		if(itemovers[0]=='item' ){
+			if(sprints!='' ) {
 			event.target.appendChild(document.getElementById(itemover));
 			$.ajax({
 				url: 'http://localhost:8080/proyek/editdragbacklog',
@@ -57,6 +60,7 @@ function onDropBacklog(event) {
 					window.location.reload()
 				}
 			});
+			}
 		}
 		else{
 			
@@ -89,16 +93,17 @@ function onDropEpic(event) {
 	const itemover = event.dataTransfer.getData('text/plain');
 		// console.log(itemover);
 		const itemovers = itemover.split("-");
-		console.log(event.target.id);
+		// console.log(event.target.id);
 		// console.log(itemovers[0]);
 		const id_epic = itemovers[1];
 		const status = event.target.id;
 		const statuses = status.split("-");
-
+		// console.log(statuses);
+		
 		if(itemovers[0]=='epic'){
-			event.target.appendChild(document.getElementById(itemover));
 			
-
+			if (statuses!='' && statuses[0]!='epic') {
+				event.target.appendChild(document.getElementById(itemover));
 			$.ajax({
 				url: 'http://localhost:8080/proyek/editdragepic',
 				// url: 'http://scrumtool.epizy.com/proyek/editdragepic',
@@ -109,10 +114,15 @@ function onDropEpic(event) {
 					window.location.reload()
 				}
 			});
+				
+			}
+			else {
+				alert("Letakan epic tidak ke epic lainnya");
+			}
 			
 		}
 		else{
-			alert("Hanya Product Backlog Item ke dalam sprint Backlog, dan sebaliknya")
+			alert("Hanya Product Backlog Item ke dalam sprint Backlog, dan sebaliknya");
 		}
 	
 }
