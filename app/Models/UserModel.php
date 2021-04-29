@@ -21,6 +21,9 @@ class UserModel extends Model
             return $this->findAll();
         }
     }
-    
+    public function getSuperAdmin()
+    {
+        return $this->where('is_admin','S')->first();
+    }
 
 }

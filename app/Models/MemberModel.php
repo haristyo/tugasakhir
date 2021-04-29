@@ -73,6 +73,10 @@ class MemberModel extends Model
             return $this->selectCount('member.id_member')->where(['member.id_project'=> $id_project,'member.left_at'=>null])->whereNotIn('member.position', $position)->first();
         }
     }
+    public function isHaveScrumMaster($id_project)
+    {
+        return $this->where(['position'=>'Scrum Master', 'id_project'=>$id_project])->first();
+    }
 
     
 

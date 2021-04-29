@@ -39,7 +39,6 @@
               <td><?=$members['email'];?></td>
               <td><?= date('d-F-Y H:i:s', strtotime($members['created_member']));?></td>
               <td><?php if ($members['left_at'] != null) {
-                # code...
                echo "Keluar pada <br>".date('d-F-Y H:i:s', strtotime($members['left_at']));
               } else {
                 echo 'Aktif';
@@ -59,7 +58,7 @@
             <td>
                   <form action="/admin/reactivation/<?=$members['id_member'];?>" method="post">
                       <?= csrf_field();?>
-                      <button type="submit" class="btn btn-secondary ml-auto mr-0">Aktivasi kembali</button>
+                      <button type="submit" class="btn btn-secondary ml-auto mr-0" <?php if ($members['left_at'] == null) { echo"disabled";} ?>>Aktivasi kembali</button>
                   </form>      
               </td>
             </tr>

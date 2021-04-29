@@ -1,4 +1,4 @@
-<div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px;padding:1%;">
+<div class="container-fluid w-75 h-100 mt-2"  style="background-color:#fbeeac; border-radius:10px;padding:1%; min-height:88vh;">
 <h1 class="text-center"> Buat Proyek Baru</h1>
 <hr width="100%" color="black" style="height:5px;">
     <form class="" action="/proyek/add" method="post">

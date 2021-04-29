@@ -48,7 +48,7 @@
             <td>
                   <form action="/admin/reactivation/<?=$members['id_member'].'/'.$members['id_project'];?>" method="post">
                       <?= csrf_field();?>
-                      <button type="submit" class="btn btn-secondary ml-auto mr-0">Aktivasi kembali</button>
+                      <button type="submit" class="btn btn-secondary ml-auto mr-0" <?php if ($members['left_at'] == null) { echo"disabled";} ?>>Aktivasi kembali</button>
                   </form>      
               </td>
             </tr>

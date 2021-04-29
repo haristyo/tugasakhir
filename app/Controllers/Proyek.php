@@ -52,22 +52,28 @@ class Proyek extends BaseController
     }
     public function index()
 	{ 
-        
         // dd($this->memberModel->getProjectbyUser());
-            $title = [
-                'title' => 'Proyek Saya | Scrum Tool',
-                'link' => 	$this->request->uri->getSegment(1)
-            ];
-            $data = [
-                'proyek' =>  esc($this->memberModel->getMemberbyUser($this->session->id_user)),
-                'link' =>    $this->request->uri->getPath(),
-            ];
+        $title = [
+            'title' => 'Proyek Saya | Scrum Tool',
+            'link' => 	$this->request->uri->getSegment(1)
+        ];
+        $data = [
+            'proyek' =>  esc($this->memberModel->getMemberbyUser($this->session->id_user)),
+            'link' =>    $this->request->uri->getPath(),
+            'user' => esc($this->userModel->getDetailbyId($this->session->id_user))
+        ];
+        // dd($data['user']['is_admin']);
             // dd($data);
             // echo ($this->memberModel->getMemberbyUserProject(1,1)['id_member']);
             // echo $data['memberuserproject']['id_member'];
+            if ($data['user']['is_admin'] == "Y") {
+                return redirect()->to(base_url('/dashboard'));
+            }
+            else {
             echo view('header1_v',$title);
             echo view('proyek_v',$data);
             echo view('footer1_v');
+            }
     }
     public function create()
 	{
@@ -270,13 +276,17 @@ class Proyek extends BaseController
             'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
             'link' =>    $this->request->uri->getPath(),
             'members' => esc($this->memberModel->getMemberbyProject($id_project)),
-            'validation' =>  \Config\Services::validation()
+            'validation' =>  \Config\Services::validation(),
+            'ishavescrummaster' => $this->memberModel->isHaveScrumMaster($id_project),
+            'incomingmeeting' => $this->meetingModel->incomingmeeting($id_project),
             
 		];
         $title = ['title' => 'Detail Project | Scrum Tool',
         'link' => 	$this->request->uri->getSegment(1)];
         // dd($data['members']);
         // dd($data);
+        // d(date('Y-m-d H:i:s', time()));
+        // dd($data['incomingmeeting']);
         if ($data['member'] == null)
         {
             return redirect()->to(base_url('/proyek/'));
@@ -296,12 +306,12 @@ class Proyek extends BaseController
         $agenda =  $this->request->getVar('agenda');
         if ($keyword) {
             if($agenda) {
-            $meeting = $project = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
+                $meeting = $project = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
                 ->join('project','project.id_project=meeting.id_project')->where(['meeting.id_project'=>$id_project,'meeting.agenda'=>$agenda])->orderBy('time_meeting', 'DESC')
                 ->like('agenda',$keyword)->orLike('deskripsi_meeting',$keyword);
             }
             else {
-            $meeting = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
+                $meeting = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
                 ->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC')
                 ->like('agenda',$keyword)->orLike('deskripsi_meeting',$keyword);
             }
@@ -316,19 +326,20 @@ class Proyek extends BaseController
                 ->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC');
             }
         }
-
+        
         $data = [
-			'project' => esc($this->proyekModel->getProject($id_project)),
+            'project' => esc($this->proyekModel->getProject($id_project)),
             'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
             'members' => esc($this->memberModel->getMemberbyProject($id_project)),
             'link' =>    $this->request->uri->getPath(),
-
+            'ishavescrummaster' => $this->memberModel->isHaveScrumMaster($id_project),
+            
             'meetings'=>esc($meeting->paginate(10,'meeting')),
             'pager'=>esc($this->meetingModel->join('member','member.id_member=meeting.creator_meeting')->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC')->pager),
             'page'=>esc($this->request->getVar('page_meeting')),
             'keyword'=>esc($keyword),
             'agenda'=>esc($agenda),
-
+            
             'presensiall' => esc($this->presensiModel->getPresensibyProject($id_project)),
             //'meetings' => esc($this->meetingModel->getMeetingbyProject($id_project)),
             'countall' => esc($this->memberModel->getCountMemberbyPosition($id_project,"all")),
@@ -364,23 +375,23 @@ class Proyek extends BaseController
         if(!$this->validate([
             'link_meeting' => ['rules'=>'required',
             'errors'=>[ 'required'=> 'Tautan Meeting Harus diisi']
-                        ],
-                        'time_meeting' => ['rules'=>'required',
-                        'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi']
-                        ],
-                        'agenda' => ['rules'=> 'in_list[Sprint Planning,Sprint Retrospective,Daily Scrum,Sprint Review]',
-                            'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
-                            ]
-		]) ) {
-			// $validation = \Config\Services::validation();
-            // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
-			return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'))->withInput();
-        }
-        // $creator=$this->memberModel->getIdbyUserProject($this->session->id_user, $id_project);
-        // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'] );
-        // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project),);
-        if ($this->request->getVar('csrf_test_name')) {
-            $this->meetingModel->save([
+        ],
+        'time_meeting' => ['rules'=>'required',
+        'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi']
+    ],
+    'agenda' => ['rules'=> 'in_list[Sprint Planning,Sprint Retrospective,Daily Scrum,Sprint Review]',
+    'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
+    ]
+    ]) ) {
+        // $validation = \Config\Services::validation();
+        // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+        return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'))->withInput();
+    }
+    // $creator=$this->memberModel->getIdbyUserProject($this->session->id_user, $id_project);
+    // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'] );
+    // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project),);
+    if ($this->request->getVar('csrf_test_name')) {
+        $this->meetingModel->save([
                 'id_project'        => $id_project,
                 'creator_meeting'   => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 'agenda'            => $this->request->getVar('agenda'),
@@ -398,14 +409,14 @@ class Proyek extends BaseController
             'link_meeting'.$id_meeting => ['rules'=>'required',
                                         'errors'=>[ 'required'=> 'Tautan Meeting Harus diisi']
                                                     ],
-            'time_meeting'.$id_meeting => ['rules'=>'required',
+                                                    'time_meeting'.$id_meeting => ['rules'=>'required',
                                             'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi']
-            ],
+                                        ],
             'agenda'.$id_meeting => ['rules'=> 'in_list[Sprint Planning,Sprint Retrospective,Daily Scrum,Sprint Review]',
-                                    'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
-                                                ]
+            'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
+            ]
 		]) ) {
-			// $validation = \Config\Services::validation();
+            // $validation = \Config\Services::validation();
             // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
 			return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'))->withInput();
         }
@@ -413,7 +424,7 @@ class Proyek extends BaseController
         // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'] );
         // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project),);
         if ($this->request->getVar('csrf_test_name')) {
-                $this->meetingModel->save([
+            $this->meetingModel->save([
                 'id_meeting'        => $id_meeting,
                 'agenda'            => $this->request->getVar('agenda'.$id_meeting),
                 'deskripsi_meeting' => $this->request->getVar('deskripsi_meeting'.$id_meeting),
@@ -438,12 +449,12 @@ class Proyek extends BaseController
                 $this->presensiModel->save([
                     'id_presensi' 		=> esc($present['id_presensi'])
                 ]);
-            ;}
+                ;}
             else {
                 $this->presensiModel->save([
                     'id_meeting' 		=> $id_meeting,
                     'id_member'  	    => $this->memberModel->getIdbyUserProject($this->session->id_user,$this->meetingModel->getMeetingbyId($id_meeting)['id_project'])['id_member']
-                ]);
+                    ]);
             }
         }
         return redirect()->to($data['link_meeting']);
@@ -455,7 +466,8 @@ class Proyek extends BaseController
             'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
             'members' => esc($this->memberModel->getMemberbyProject($id_project)),
             'link' =>    $this->request->uri->getPath(),
-
+            'ishavescrummaster' => $this->memberModel->isHaveScrumMaster($id_project),
+            'incomingmeeting' => $this->meetingModel->incomingmeeting($id_project),
             'presensi' => esc($this->presensiModel->getCountPresensiMemberbyProject($id_project)),
             'meetingall' => esc($this->meetingModel->getCountMeetingbyAgenda($id_project,'all')),
             'meetingex' => esc($this->meetingModel->getCountMeetingbyAgenda($id_project,'')),
@@ -465,7 +477,7 @@ class Proyek extends BaseController
         ];
         $title = ['title' =>    'Presensi | Scrum Tool',
                 'link' =>    $this->request->uri->getSegment(1)];
-        // dd($data);
+                // dd($data);
         if ($data['member'] == null)
         {
             return redirect()->to(base_url('/proyek/'));
@@ -509,11 +521,12 @@ class Proyek extends BaseController
     public function board($id_project)
 	{ ;
         // dd(1*0);
-            $title = [
+        $title = [
                 'title' => 'Papan Proyek | Scrum Tool',
                 'link' => 	$this->request->uri->getSegment(1)
             ];
             $data = [
+                'ishavescrummaster' => $this->memberModel->isHaveScrumMaster($id_project),
                 'link' =>    $this->request->uri->getPath(),
                 'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
                 'backlog' => esc($this->backlogModel->getBacklogbyProject($id_project)),
@@ -528,16 +541,17 @@ class Proyek extends BaseController
                 'checkbox' => $this->checkboxModel->getCheckboxbyProject($id_project),
                 'checkboxall' => esc($this->checkboxModel->countAllByProject($id_project)),
                 'checkboxchecked' => $this->checkboxModel->countCheckedByProject($id_project),
-                'lastsprint' => $this->sprintModel->getLastSprintbyProject($id_project)['end_sprint'],
-                
+                'lastsprint' => $this->sprintModel->getLastSprintbyProject($id_project),
+                'incomingmeeting' => $this->meetingModel->incomingmeeting($id_project),
                 'validation' =>  \Config\Services::validation()
 
             ];
+            // dd($data);
             // dd($data['lastsprint']);
             // d($data['checkboxall']);
             // dd($data['checkboxchecked']);
             //     d($this->epicModel->getEpicbyProject());
-            // dd($data);
+            
             // d($data['log']);
             // dd($data['countdo']);
             // dd($data['totalsprint']);
@@ -553,20 +567,22 @@ class Proyek extends BaseController
                 // echo view('board_v',$data);
                 echo view('footer1_v');
             }
-    }
+        }
 
-    public function resource($id_project)
-	{ 
+        public function resource($id_project)
+        { 
             $title = [
                 'title' => 'Sumber Daya | Scrum Tool',
                 'link' => 	$this->request->uri->getSegment(1)
             ];
             $data = [
+                'ishavescrummaster' => $this->memberModel->isHaveScrumMaster($id_project),
                 'proyek' => esc($this->memberModel->getMemberbyUser($this->session->id_user)),
                 'link' =>    $this->request->uri->getPath(),
                 'member' => esc($this->memberModel->getMemberDetailbyUserProject($this->session->id_user,$id_project)),
                 'file' => esc($this->fileModel->getFilebyProject($id_project)->paginate(20,'file')),
                 'pager' => esc($this->fileModel->getFilebyProject($id_project)->pager),
+                'incomingmeeting' => $this->meetingModel->incomingmeeting($id_project),
                 'validation' =>  \Config\Services::validation()
                 ];
             // d($data['validation']);

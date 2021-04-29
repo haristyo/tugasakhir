@@ -1,4 +1,19 @@
-    <div id="content" class="p-4 p-md-5 pt-5">
+    <div id="content" class="px-md-5 ">
+    <?php if ($ishavescrummaster == null) { ?>
+        <div class="mx-auto w-75 section-title text-center">
+            <div class="mt-2 alert alert-danger" role="alert">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Anda tidak memiliki Scrum master, hubungi <a href="mailto:scrum.tool55@gmail.com">scrum.tool55@gmail.com</a> untuk mengganti Scrum master baru
+            </div>  
+        </div>
+    <?php }?>
+    <?php if ($incomingmeeting != null) {?>
+        <div class="section-title text-center">
+            <div class=" w-75 mt-2 mx-auto alert alert-warning" role="alert">
+            <i class="fa fa-clock-o" aria-hidden="true"></i> Anda memiliki meeting hari ini pada <?php echo date('H:i:s',strtotime($incomingmeeting['time_meeting'])); ?>
+            </div>  
+        </div>
+    <?php }?>
+
       <h1 class="text-center"> Presensi <?=$project['nama_project'];?></h1>
       <hr width="75%" color="black" style="height:3px;">
         <table class="table text-center table-dark">
@@ -67,7 +82,7 @@
                                     <th scope="col">Tanggal Meeting</th>
                                     <th scope="col">Jam Meeting</th>
                                     <th scope="col">Agenda</th>
-                                    <th scope="col">Join</th>
+                                    <th scope="col">Status Kehadiran</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -88,7 +103,7 @@
                                 <?php
                                 foreach ($presensiall as $presensialls) {
                                   if ($presensialls['id_user']==$members['id_user'] && $presensialls['id_meeting']==$meetings['id_meeting'] ) {
-                                    echo "hadir";
+                                    echo "Hadir";
                                   }
                                 }
                                 

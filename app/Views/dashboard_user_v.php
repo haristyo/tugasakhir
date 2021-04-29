@@ -1,4 +1,4 @@
-  <div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
+<div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
     <!-- <div class="table-responsive-sm" style="width:100%"> -->
     <h1 class="text-center"> Dashboard User</h1>
     <hr width="75%" color="black" style="height:5px;">
@@ -26,8 +26,8 @@
             <tr style="text-align:center">
               <th scope="col">No.</th>
               <th scope="col">Username</th>
-              <th scope="col">nama_user</th>
-              <th scope="col">foto_profile</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Foto Profil</th>
               <th scope="col">Email</th>
               <th scope="col">Status Admin</th>
               <th scope="col">Aksi</th>
@@ -45,18 +45,18 @@
                 
               </td>
               <td><?=$userss['email'];?></td>
-              <td>
+              <td style="text-align:center">
                 <?php if ($userss['is_admin']=="N") {
                   echo "Tidak";
                 }else {
                   echo "Ya";
                 } ?>
               </td>
-              <td>
-                <?php if ($userss['is_admin']=="N") {?>
+              <td style="text-align:center">
+                <?php if($user['is_admin']=="S"  && $userss['is_admin']!="S" || ( $user['is_admin']=="Y" && $userss['is_admin']=="N") ) {?>
                 <form action="/admin/deleteUser/<?=$userss['id_user'];?>" method="post">
                     <?= csrf_field();?>
-                    <button type="submit" class="btn btn-danger ml-auto mr-0">Hapus User</button>
+                    <button type="submit" class="btn btn-danger ml-auto mr-0">Hapus</button>
                 </form>
                 <?php }?>      
               </td>

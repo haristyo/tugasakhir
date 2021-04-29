@@ -1,12 +1,31 @@
 <div id="content" class="mr-0 pr-0 ml-2 pl-2 pt-4" style="width:99%; height:99%">
-    
+<?php //dd($member['position']); ?>
+                        <?php if ($ishavescrummaster == null) { ?>
+                            <div class="mx-auto w-75 section-title text-center">
+                                <div class=" alert alert-danger" role="alert">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Anda tidak memiliki Scrum master, hubungi <a href="mailto:scrum.tool55@gmail.com">scrum.tool55@gmail.com</a> untuk mengganti Scrum master baru
+                                </div>  
+                            </div>
+                        <?php }?>
+                        <?php if ($incomingmeeting != null) {?>
+                            <div class="section-title text-center">
+                                <div class=" w-75 mt-2 mx-auto alert alert-warning" role="alert">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i> Anda memiliki meeting hari ini pada <?php echo date('H:i:s',strtotime($incomingmeeting['time_meeting'])); ?>
+                                </div>  
+                            </div>
+                        <?php }?>
 
     <div class="ml-auto mr-auto pt-4" style="overflow-y:auto; display: flex; height : 100vh; width:95%; background-color:#fbeeac">
         <div class="p-0 mt-0" style="background-color:#dcf5ef; width : 25%; height:96vh; ">
             <!-- Button trigger modal -->
                 <div class="d-flex" style="background-color:#fbeeac;">
+                <?php if ($member['position'] !="Development Team") {?>
                     <h6 class="text-center pb-2 pl-4 mr-0 ml-auto" >Product Notes</h6>
+                    
                     <span class="fa fa-plus py-1 mr-2 ml-auto" data-toggle="modal" data-target="#createnotes" style="z-index:2;"></span>
+                <?php ;} else { ?>
+                    <h6 class="text-center pb-2 mx-auto" >Product Notes</h6>
+                <?php ;} ?>
                 </div>
                 <!-- end Button trigger modal -->
                 <!-- Modal -->
@@ -47,7 +66,7 @@
                         
                      
 
-                <div style=" overflow-y:auto; height:65vh; max-height:40%; min-height:40%; background-color:" class="mb-1 mt-2 mx-1">
+                <div style=" overflow-y:auto; height:25%; max-height:40%; min-height:25%; background-color:" class="mb-1 mt-2 mx-1">
                     <?php foreach ($note as $notes) {
                         
                         if ($notes['sprint'] == null) {?>
@@ -110,8 +129,14 @@
                     }
                     echo ("<h6 class='pl-2 mt-2'>".$total.'</h6>');
                 ?>
+                <?php if ($member['position'] !="Development Team") {?>
                     <h6 class="text-center pb-2 pl-4 mt-2 mr-0 ml-auto" >Product Backlog</h6>
                     <span class="fa fa-plus mt-2 py-1 mr-2 ml-auto" data-toggle="modal" data-target="#createbacklog" style="z-index:2;"></span>
+    
+                <?php ;} else { ?>
+                    
+                    <h6 class="text-center pb-2 mt-2 mx-auto" >Product Backlog</h6>
+                <?php ;} ?>
                 </div>
                 <!-- end Button trigger modal -->
                 <!-- Modal -->
@@ -140,6 +165,7 @@
                                 <div class="form-group">
                                     <label for="#point" style="float: left; color:black;">Storypoint</label>
                                     <input type="number" class="form-control" name="point" <?php if ($validation->hasError('isibacklog')) {?> value="<?=old('point')?>" <?php ;}?>>
+                                    <small class="form-text text-muted"> Tingkat Kesulitan </small>
                                     <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                                 </div>
                         </div>
@@ -157,11 +183,11 @@
                         
                      
 
-                <div style="flex-grow: 1; flex-basis: 100%;overflow-y:auto; height:430px; max-height:40%; min-height:40%; background-color:" id="backlog-product" class="mb-1 mt-2 mx-1" ondrop="onDropBacklog(event);"  ondragover="onDragOverBacklog(event);" >
+                <div style="flex-grow: 1; flex-basis: 100%; overflow-y:auto; min-height:50%; height:58%; background-color:" id="backlog-product" class="mb-1 mt-2 mx-1" <?php if ($member['position'] !="Product Owner") {?> ondrop="onDropBacklog(event);"  ondragover="onDragOverBacklog(event);" <?php ;}?> >
                     <?php foreach ($backlog as $backlogs) {
                         if ($backlogs['sprint'] == null) {?>
                             <!-- Button trigger modal -->
-                            <div class=" d-flex w-100 mx-auto" draggable="true" id="item-<?=$backlogs['id_backlog']?>" ondragstart="onDragStart(event);">
+                            <div class=" d-flex w-100 mx-auto" <?php if ($member['position'] !="Product Owner") {?> draggable="true" id="item-<?=$backlogs['id_backlog']?>" ondragstart="onDragStart(event);" <?php ;}?>>
                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#backlog<?=$backlogs['id_backlog'];?>">
                                 <div class='pl-1 mr-auto text-white text-left my-0'  style='background-color:grey;'><?=$backlogs['point'] ;?></div>
                                 <div class='mx-auto text-white'  style='background-color:grey;'><?=$backlogs['isi'] ;?></div>
@@ -201,6 +227,7 @@
                                             <div class="form-group">
                                                 <label for="point" style="float: left; color:black;">Storypoint</label>
                                                 <input type="number" class="form-control" name="point" value="<?=$backlogs['point'];?>">
+                                                <small class="form-text text-muted"> Tingkat Kesulitan </small>
                                                 <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                                             </div>
                                     </div>
@@ -230,8 +257,17 @@
 <!-- sprint -->
         <div class="p-0 m-0" style="background-color:#fbeeac;  height:100vh; max-height:90%; width : 75%;  ">
             <div class="d-flex">
+            <?php if ($member['position'] =="Scrum Master") {?>
                 <h6 class="ml-auto">Sprint</h6>
-                <a class="fa fa-plus py-1 mr-2 ml-auto" <?php if($lastsprint!=null) {?> href="/proyek/createsprint/<?=$member['id_project']?>"<?php ;} else { ?> data-target="#ongoing" data-toggle="modal" <?php ;}?> style="color:grey"></a>
+                <a class="fa fa-plus py-1 mr-2 ml-auto" <?php if($lastsprint==null) {?> href="/proyek/createsprint/<?=$member['id_project']?>"<?php ;}elseif ($lastsprint['end_sprint']!=null ) {
+                    ?> href="/proyek/createsprint/<?=$member['id_project']?>"<?php ;
+                } else { ?> data-target="#ongoing" data-toggle="modal" <?php ;}?> style="color:grey"></a>
+    
+                <?php ;} else { ?>
+                    
+                    <h6 class="mx-auto">Sprint</h6>
+                <?php ;} ?>
+                
                 
                 <!-- Modal -->
                 <div class="modal fade" id="ongoing" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -290,7 +326,9 @@
                                     <div class="modal-footer">
                                         <form action="/proyek/endsprint/<?=$sprints['id_sprint'];?>">
                                         <?= csrf_field(); ?>
+                                        <?php if($member['position'] =="Scrum Master") {?>
                                             <button type="submit" class="btn btn-danger">Stop Sprint</button>
+                                        <?php }?>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                         </form>
                                     </div>
@@ -306,7 +344,7 @@
                                 <div style=" height: 100%; width:97%;" class="mx-auto mt-1" >
                                     
                                     <div class="d-flex pb-0" style="background-color:#111111;">
-                                    <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                    <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                     <div class="text-center  pl-4 mr-0 ml-auto" >Sprint Notes</div>
                                     <span class="fa fa-plus py-1 mr-2 ml-auto" data-toggle="modal" data-target="#createnotes<?=$sprints['id_sprint'];?>"></span>
                                     <?php } else {?>
@@ -388,7 +426,7 @@
                                                             </div>
                                                     </div>
                                                         <div class="modal-footer">
-                                                        <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Notes</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Notes</button>
                                                         <?php }?>
@@ -453,7 +491,7 @@
                                                         </div>
                                                 </div>
                                                     <div class="modal-footer">
-                                                    <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                    <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time()))&&($member['position'] =="Scrum Master")) {?>
                                                         <button type="submit" class="btn btn-success">Ubah Sprint Goal</button>
                                             <?php }?>
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -484,7 +522,7 @@
                                     <?php foreach ($backlog as $backlogs){
                                         if ($backlogs['sprint']==$sprints['id_sprint']) {?>
                                         <!-- Button trigger modal -->
-                                            <div class=" d-flex w-100 mx-auto" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> draggable="true" id="item-<?=$backlogs['id_backlog']?>"  ondragstart="onDragStart(event);" <?php } ?>> 
+                                            <div class=" d-flex w-100 mx-auto" <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master"))  {?> draggable="true" id="item-<?=$backlogs['id_backlog']?>"  ondragstart="onDragStart(event);" <?php } ?>> 
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#backlog<?=$backlogs['id_backlog'];?>">
 
                                                 <div class='pl-2 mr-auto text-white text-left my-0'  style='background-color:grey;'><?=$backlogs['point'] ;?></div>
@@ -525,11 +563,12 @@
                                                             <div class="form-group">
                                                                 <label for="point" style="float: left; color:black;">Storypoint</label>
                                                                 <input type="number" class="form-control" name="point" value="<?=$backlogs['point'];?>">
+                                                                <small class=" ml-0 form-text text-muted" style="float:left;"> Tingkat Kesulitan </small>
                                                                 <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                                                             </div>
                                                     </div>
                                                         <div class="modal-footer">
-                                                        <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Backlog</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Backlog</button>
                                             <?php }?>
@@ -558,22 +597,29 @@
                             <!-- Button trigger modal -->
                                 <div class="d-flex pb-0" style="background-color:#111111;">
                                     
-                                        <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
-                                    <div class="text-center  ml-2 mr-auto" >
-                                        <?php $elapsed = 0; $estimated = 0;
-                                        foreach ($count as $counts) {
-                                                if ($counts['id_sprint'] == $sprints['id_sprint'] && $counts['status'] == "TO DO" ) {
-                                                
-                                                    $elapsed = $counts['elapsed'];
-                                                    $estimated = $counts['estimated'];
-                                                    // echo ($counts['id_sprint']);
-                                                }
-                                            }
-                                            echo ($elapsed.'/'.$estimated );
-                                        ?>
-                                    </div>
-                                    <div class="text-center mx-auto" >To Do</div>
-                                    <span class="fa fa-plus py-1 mr-2 ml-auto" data-toggle="modal" data-target="#createepic" style="z-index:2;"></span>
+                                    <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                            <div class="text-center  ml-2 mr-auto" >
+                                                <?php $elapsed = 0; $estimated = 0;
+                                                foreach ($count as $counts) {
+                                                        if ($counts['id_sprint'] == $sprints['id_sprint'] && $counts['status'] == "TO DO" ) {
+                                                        
+                                                            $elapsed = $counts['elapsed'];
+                                                            $estimated = $counts['estimated'];
+                                                            // echo ($counts['id_sprint']);
+                                                        }
+                                                    }
+                                                    echo ($elapsed.'/'.$estimated );
+                                                ?>
+                                            </div>
+                                                <?php if ($member['position'] !="Product Owner") {?>
+                                                    <div class="text-center mx-auto" >To Do</div>
+                                                                    <span class="fa fa-plus py-1 mr-2 ml-auto" data-toggle="modal" data-target="#createepic" style="z-index:2;"></span>
+                                    
+                                                <?php ;} else { ?>
+                                                    
+                                                    <div class="text-center mx-auto" >To Do</div>
+                                                <?php ;} ?>
+                                    
                                     <?php } else {?>
                                         <div class="text-center ml-2 mr-auto" >
                                             <?php $elapsed = 0; $estimated = 0;
@@ -592,7 +638,7 @@
                                     
                                 </div>
                                 <!-- end Button trigger modal -->
-                                <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                 <!-- Modal -->
                                 <div class="modal fade" id="createepic" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-lg" >
@@ -610,6 +656,7 @@
                                             <div class="form-group form-row">
                                                 <label for="estimated" class="col-2 text-left" style="float: left; color:black;">Estimated</label>
                                                 <input type="number" class="form-control col-10" name="estimated" value="<?= old('estimated')?>">
+                                                <small class="form-text text-muted">Estimasi waktu pengerjaan dalam satuan jam</small>
                                             </div>
                                             <div class="form-row" >
                                                 <label for="isiepic" class="col-2 text-left" style="float: left; color:black;">Isi</label>
@@ -636,12 +683,12 @@
                                             ;} ?>
                             <?php }?>
 
-                                <div style="background-color:; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="TO DO-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
+                                <div style="background-color:; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> id="TO DO-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
                                     <?php foreach ($epic as $epics){
                                         if ($epics['status']=="TO DO" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
                                         <!-- Button trigger modal -->
-                                        <div class=" d-flex w-100 mx-auto" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php }?>>
+                                        <div class=" d-flex w-100 mx-auto" <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php }?>>
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
                                             <?php 
                                                 $semua = 1; $checked = 0;
@@ -695,12 +742,12 @@
                                                                 <div class="form-group col">
                                                                     <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Elapsed</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text text-muted text-left"  style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
                                                                 <div class="form-group col">
                                                                     <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimated</label>
                                                                     <input type="number" class="form-control" name="estimated<?=$epics['id_epic'];?>" value="<?=$epics['estimated'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text text-muted"  style="float: left;">Estimasi waktu pengerjaan dalam satuan jam</small>
                                                                 </div>
                                                             </div>
                                                     
@@ -712,7 +759,7 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
-                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                             <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -732,7 +779,7 @@
                                                            
                                                         </div>
                                                         <div class="modal-footer">
-                                                        <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
                                             <?php }?>
@@ -809,12 +856,12 @@
                                 <div class="pr-4 ml-0 mr-auto">On Progress</div>
                                 
                             </div>
-                                <div style="background-color:#51d0b2; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="ON PROGRESS-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
+                                <div style="background-color:#51d0b2; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> id="ON PROGRESS-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php }?>>
                                 <?php foreach ($epic as $epics){
                                         if ($epics['status']=="ON PROGRESS" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
                                         <!-- Button trigger modal -->
-                                        <div class=" d-flex w-100 mx-auto"  <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php }?>>
+                                        <div class=" d-flex w-100 mx-auto"  <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php }?>>
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
                                             <?php 
                                                  $semua = 1; $checked = 0;
@@ -868,12 +915,12 @@
                                                                 <div class="form-group col">
                                                                     <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Elapsed</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text text-muted" style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
                                                                 <div class="form-group col">
                                                                     <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimated</label>
                                                                     <input type="number" class="form-control" name="estimated<?=$epics['id_epic'];?>" value="<?=$epics['estimated'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text text-muted" style="float: left;">Estimasi waktu pengerjaan dalam satuan jam</small>
                                                                 </div>
                                                             </div>
                                                     
@@ -885,7 +932,7 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
-                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                             <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -904,7 +951,7 @@
                                                             }?>
                                                         </div>
                                                         <div class="modal-footer">
-                                                        <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
                                             <?php }?>
@@ -980,12 +1027,12 @@
                                 <div class="pr-4 ml-0 mr-auto">VERIFY</div>
                                 
                             </div>
-                                <div style="background-color:#2ea98c; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="VERIFY-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);">
+                                <div style="background-color:#2ea98c; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="VERIFY-<?=$sprints['id_sprint'];?>"  <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php ;}?>>
                                 <?php foreach ($epic as $epics){
                                         if ($epics['status']=="VERIFY" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
                                         <!-- Button trigger modal -->
-                                        <div class=" d-flex w-100 mx-auto" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php }?>>
+                                        <div class=" d-flex w-100 mx-auto" <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php }?>>
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
                                                 <?php 
                                                  $semua = 1; $checked = 0;
@@ -1039,12 +1086,12 @@
                                                                 <div class="form-group col">
                                                                     <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Elapsed</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text" style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
                                                                 <div class="form-group col">
                                                                     <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimated</label>
                                                                     <input type="number" class="form-control" name="estimated<?=$epics['id_epic'];?>" value="<?=$epics['estimated'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text" style="float: left;">Estimasi waktu pengerjaan dalam satuan jam</small>
                                                                 </div>
                                                             </div>
                                                     
@@ -1056,7 +1103,7 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
-                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                             <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -1075,7 +1122,7 @@
                                                             }?>
                                                         </div>
                                                         <div class="modal-footer">
-                                                        <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
                                             <?php }?>
@@ -1151,12 +1198,12 @@
                                 <div class="pr-4 ml-0 mr-auto">DONE</div>
                                 
                             </div>
-                                <div style="background-color:#1e6f5c; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="DONE-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);">
+                                <div style="background-color:#1e6f5c; overflow-y:auto; height:79vh;flex-grow: 1; flex-basis: 100%;" class="mb-1 py-1" id="DONE-<?=$sprints['id_sprint'];?>" <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> ondragover="onDragOverEpic(event);" ondrop="onDropEpic(event);" <?php ;} ?>>
                                 <?php foreach ($epic as $epics){
                                         if ($epics['status']=="DONE" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                         
                                         <!-- Button trigger modal -->
-                                        <div class=" d-flex w-100 mx-auto" <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php } ?>>
+                                        <div class=" d-flex w-100 mx-auto" <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> ondragstart="onDragStart(event);" id="epic-<?=$epics['id_epic']?>" draggable="true" <?php } ?>>
                                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#epic<?=$epics['id_epic'] ;?>">
                                             <?php 
                                                  $semua = 1; $checked = 0;
@@ -1210,12 +1257,12 @@
                                                                 <div class="form-group col">
                                                                     <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:white;">Elapsed</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text" style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
                                                                 <div class="form-group col">
                                                                     <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:white;">Estimated</label>
                                                                     <input type="number" class="form-control" name="estimated<?=$epics['id_epic'];?>" value="<?=$epics['estimated'];?>">
-                                                                    <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
+                                                                    <small class="form-text" style="float: left;">Estimasi waktu pengerjaan dalam satuan jam</small>
                                                                 </div>
                                                             </div>
                                                     
@@ -1227,7 +1274,7 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
-                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                             <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -1246,7 +1293,7 @@
                                                             }?>
                                                         </div>
                                                         <div class="modal-footer">
-                                                        <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
                                                             <?php }?>
@@ -1341,7 +1388,7 @@
                                                                     <?php if ($validation->hasError('isiepic'.$epics['id_epic'])) {echo "Sprint Review Harus Diisi";}?>
                                                                     </div>
                                                                 </div>
-                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                                 <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -1360,7 +1407,7 @@
                                                             }?>
                                                             </div>
                                                             <div class="modal-footer">
-                                                            <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                            <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?>
                                                                 <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Review</button>
                                                             <?php }?>
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -1523,7 +1570,7 @@
                                                                         <?php if ($validation->hasError('isiepic'.$epics['id_epic'])) {echo "Retrospective Analysis Harus Diisi";}?>
                                                                     </div>
                                                                 </div>
-                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                                 <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -1542,7 +1589,7 @@
                                                             }?>
                                                             </div>
                                                             <div class="modal-footer">
-                                                            <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                            <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?>
                                                                 <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Retrospective Analysis</button>
                                                             <?php }?>
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -1629,7 +1676,7 @@
                                                                         <?php if ($validation->hasError('isiepic'.$epics['id_epic'])) {echo "Retrospective Action Harus Diisi";}?>
                                                                     </div>
                                                                 </div>
-                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i></div>
+                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                                 <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -1648,7 +1695,7 @@
                                                             }?>
                                                             </div>
                                                             <div class="modal-footer">
-                                                            <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?>
+                                                            <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?>
                                                                 <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Retrospective Action</button>
                                                             <?php }?>
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>

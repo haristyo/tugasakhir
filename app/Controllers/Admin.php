@@ -366,7 +366,7 @@ class Admin extends BaseController
         if ($keyword) {
             $user = $user->like('username',$keyword)->orLike('nama_user',$keyword)->orLike('email',$keyword);
             if ($status == "admin") {
-                $user =  $user->where('is_admin','Y');
+                $user =  $user->where('is_admin','Y')->orwhere('is_admin','S');
             }
             elseif ($status == "bukanadmin"){
                 $user =  $user->where('is_admin','N');
@@ -374,7 +374,7 @@ class Admin extends BaseController
         }
         else {
             if ($status == "admin") {
-                $user =  $user->where('is_admin','Y');
+                $user =  $user->where('is_admin','Y')->orwhere('is_admin','S');
             }
             elseif ($status == "bukanadmin") {
                 $user =  $user->where('is_admin','N');
@@ -401,7 +401,9 @@ class Admin extends BaseController
             'status'=>esc($status),
             // 'resource' =>esc(),
 
+            
         ];
+        // dd($data);
         // $data = ['user' => ($user->where('id_user',$this->session->id_user)->first())];
         
         // d(($data));

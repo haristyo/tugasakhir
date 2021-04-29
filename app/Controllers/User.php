@@ -17,6 +17,15 @@ class User extends BaseController
 		// if (!isset($_SESSION['last'])) {
 		// 	$_SESSION['last'] = "";
 		// };
+		if ($this->userModel->getSuperAdmin() == null){
+			$this->userModel->save([
+				'username' 		=> 'superadmin',
+				'nama_user'  	=> 'Superadmin ScrumTool',
+				'email'     	=> 'superadmin@gmail.com',
+				'password' 		=>  password_hash('superadmin',PASSWORD_DEFAULT),
+				'is_admin'     	=> 'S'
+			]);
+		}
 	}
 	public function login()
 	{

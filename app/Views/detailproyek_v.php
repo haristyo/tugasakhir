@@ -1,7 +1,17 @@
     <div id="content" class="px-md-5 pt-5">
+    
+    
+            
         
     <?php if ($member['position']=="Scrum Master") {?>
     
+    <?php if ($incomingmeeting != null) {?>
+        <div class="section-title text-center">
+            <div class=" w-75 mx-auto alert alert-warning" role="alert">
+            <i class="fa fa-clock-o" aria-hidden="true"></i> Anda memiliki meeting hari ini pada <?php echo date('H:i:s',strtotime($incomingmeeting['time_meeting'])); ?>
+            </div>  
+        </div>
+    <?php }?>
     <div class="d-flex w-75 mx-auto">
           <h1 class="mr-0 ml-auto"> <?=$member['nama_project'];?> </h1>
           <h1 class="fa fa-pencil-square-o fa-2x mr-0 my-auto ml-auto" data-toggle="modal" data-target="#editproyek"></h1>
@@ -10,7 +20,7 @@
           
           
                         <!-- Button trigger modal -->
-                          <div class=" d-flex w-100 mx-auto">
+                                <div class=" d-flex w-100 mx-auto">
                               </div>
                               <!-- end Button trigger modal -->
                               <!-- Modal -->
@@ -73,7 +83,22 @@
                         <!-- end modal-->
                       <?php } else {?>
 
-                        <div class="d-flex w-75 mx-auto">
+                        <div class="w-75 mx-auto">
+                        <?php if ($ishavescrummaster == null) {?>
+                            <div class="section-title text-center">
+                                <div class="alert alert-danger" role="alert">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Anda tidak memiliki Scrum master, hubungi <a href="mailto:scrum.tool55@gmail.com">scrum.tool55@gmail.com</a> untuk mengganti Scrum master baru
+                                </div>  
+                            </div>
+                        <?php }?>
+
+                        <?php if ($incomingmeeting != null) {?>
+                            <div class="section-title text-center">
+                                <div class="alert alert-warning" role="warning">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Anda memiliki meeting hari ini pada <?php echo $incomingmeeting['time_meeting']; ?>
+                                </div>  
+                            </div>
+                        <?php }?>
           <h1 class="mx-auto"> <?=$member['nama_project'];?> </h1>
     </div>
 

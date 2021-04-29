@@ -1,4 +1,11 @@
-<div id="content" class="p-4 p-md-5 pt-5">
+<div id="content" class=" px-md-5 pb-md-5 ">
+    <?php if ($ishavescrummaster == null) { ?>
+        <div class="mx-auto w-75 section-title text-center">
+            <div class="mt-2 alert alert-danger" role="alert">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Anda tidak memiliki Scrum master, hubungi <a href="mailto:scrum.tool55@gmail.com">scrum.tool55@gmail.com</a> untuk mengganti Scrum master baru
+            </div>  
+        </div>
+    <?php }?>
     <h1 class="text-center"> Meeting </h1>
       <hr width="75%" color="black" style="height:3px;">
 
@@ -181,7 +188,7 @@
                                     <th scope="col"></th>
                                     <th scope="col">Username</th>
                                     <th scope="col">Posisi</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">Status Kehadiran</th>
                                 </tr>
                             </thead>
                             <tbody>

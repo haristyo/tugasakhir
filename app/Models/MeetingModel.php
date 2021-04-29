@@ -55,6 +55,11 @@ class MeetingModel extends Model
             return $this->join('member','member.id_member=meeting.creator_meeting')->join('project','project.id_project=meeting.id_project')->orderBy('time_meeting', 'ASC')->where('meeting.id_project',$id_project);
         }
     }
+    public function incomingmeeting($id_project)
+    {
+        $now = date('Y-m-d H:i:s', time());
+        return $this->where(['id_project'=>$id_project,'time_meeting >' => $now])->first();
+    }
     
 
 }

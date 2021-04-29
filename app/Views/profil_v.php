@@ -1,4 +1,4 @@
-<div class="container px-2 w-75 py-4 center"  style="background-color:#fbeeac; border-radius:10px; min-height:599px;">
+<div class="container px-2 w-75 py-4 center"  style="background-color:#fbeeac; border-radius:10px;">
 <h1 class="text-center"> Profil Saya</h1>
 <hr width="75%" color="black" style="height:5px;">
   <div class=" d-flex w-75 mx-auto">
