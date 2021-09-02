@@ -1,7 +1,7 @@
-<div class="container w-75 h-100"  style="background-color:#fbeeac; border-radius:10px;padding:1%;">
+<div class="container w-75 h-100 mt-2"  style="background-color:#fbeeac; border-radius:10px;padding:1%; min-height:88vh">
         <form class="" action="/user/update" method="post"  enctype="multipart/form-data">
             <?= csrf_field(); ?>
-    <div class="row  p-4">
+    <div class="row  p-4 my-auto">
         <div class="col-6 col-sm-12 col-md-6 h-100 p-2">
             <img src="<?= base_url('/img/profil/'.$profil['foto_profile'])?>" class="w-100" style="border-radius:10px;" alt="Login" >  
             <div class="form-control rows-2">

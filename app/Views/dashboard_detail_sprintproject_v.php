@@ -1,6 +1,6 @@
 <div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
     <!-- <div class="table-responsive-sm" style="width:100%"> -->
-    <h1 class="text-center"> Dashboard Meeting <?=$project['nama_project'];?></h1>
+    <h1 class="text-center"> Dashboard Sprint <?=$project['nama_project'];?></h1>
 <hr width="75%" color="black" style="height:5px;">
 <div class="d-flex row">
         <form action="" method="get">

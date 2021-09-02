@@ -99,7 +99,9 @@
                                 </div>  
                             </div>
                         <?php }?>
+                        <div class="d-flex w-75 mx-auto">
           <h1 class="mx-auto"> <?=$member['nama_project'];?> </h1>
+    </div>
     </div>
 
                         <?php ;}?>
