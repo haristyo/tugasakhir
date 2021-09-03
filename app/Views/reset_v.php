@@ -22,6 +22,7 @@
                         <?=$validation->getError('password1');?>
                     </div>
                 </div>
+                <input type="hidden" value="<?=$reset['token']?>" name="token">
                 <div class="form-group">
                     <label for="password2">Masukkan ulang Kata Sandi</label>
                     <input type="password" class="form-control <?= ($validation->hasError('password2')) ? 'is-invalid' : '' ;?>" id="password2" name="password2" value="<?= old('password2')?>">

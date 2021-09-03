@@ -473,6 +473,10 @@ class User extends BaseController
 			'reset' => esc($this->resetModel->getResetbyToken($token)),
 			'validation' =>  \Config\Services::validation()
 		];
+		if($this->resetModel->getResetbyToken($token) == null ) {
+			session()->setFlashdata('pesan', 'Token tidak valid, ulangi kembali');
+			return redirect()->to(base_url('/forgot_password'));
+		}
 		echo view('header1_v',$title);
         echo view('reset_v',$data);
 		echo view('footer1_v');
@@ -501,8 +505,10 @@ class User extends BaseController
 			$this->userModel->save([
 				'id_user'		=> $id_user,
 				'password' 		=>  password_hash($this->request->getVar('password2'),PASSWORD_DEFAULT)
-					
 			]);	
+			$token = $this->resetModel->getResetbyToken($this->request->getVar('token'));
+			// dd($token['id_reset']);
+			$this->resetModel->delete($token['id_reset']);
 
 
 
