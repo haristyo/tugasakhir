@@ -966,7 +966,7 @@ class Proyek extends BaseController
         if($this->sprintModel->getLastSprintbyProject($id_project) == null) {
             $this->sprintModel->save([
                 'id_project'    => $id_project,
-                'start_sprint'  => date('Y-m-d H:i:s', time()),
+                
                 ]); 
             $this->epicModel->save([
                 'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
@@ -984,7 +984,7 @@ class Proyek extends BaseController
         elseif ($this->sprintModel->getLastSprintbyProject($id_project)['end_sprint'] !=null && $this->sprintModel->getLastSprintbyProject($id_project)['end_sprint'] < date('Y-m-d H:i:s', time()) ) {
             $this->sprintModel->save([
                 'id_project'    => $id_project,
-                'start_sprint'  => date('Y-m-d H:i:s', time()),
+                
                 ]); 
             $this->epicModel->save([
                 'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],

@@ -6,7 +6,7 @@ class SprintModel extends Model
     protected $table         = 'sprint';
     protected $primaryKey    = 'id_sprint';
     protected $useTimestamps = true;
-    protected $createdField  = 'created_sprint';
+    protected $createdField  = 'start_sprint';
     protected $updatedField  = 'updated_sprint';
     protected $allowedFields = ['id_sprint','id_project','start_sprint','end_sprint','goal'];
     public function getSprintbyProject($id_project = false)
