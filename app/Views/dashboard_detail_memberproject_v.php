@@ -7,11 +7,10 @@
           <thead>
             <tr>
               <th scope="col">No.</th>
-              <th scope="col">Nama User</th>
+              <th scope="col">Nama Pengguna</th>
               <th scope="col">Nama Lengkap</th>
               <th scope="col">Nama Proyek</th>
               <th scope="col">Posisi</th>
-              <th scope="col">Email</th>
               <th scope="col">Tanggal Gabung</th>
               <th scope="col">Status</th>
               <th scope="col" colspan="3" class="text-center"> Aksi</th>
@@ -25,7 +24,6 @@
               <td><?=$members['nama_user'];?></td>
               <td><?=$members['nama_project'];?></td>
               <td><?=$members['position'];?></td>
-              <td><?=$members['email'];?></td>
               <td><?= date('d F Y H:i:s', strtotime($members['created_member']));?></td>
               <td><?php if ($members['left_at'] != null) {
                 # code...

@@ -6,7 +6,7 @@ use CodeIgniter\Validation\CreditCardRules;
 use CodeIgniter\Validation\FileRules;
 use CodeIgniter\Validation\FormatRules;
 use CodeIgniter\Validation\Rules;
-
+// Use \App\Validation\MyRules;
 class Validation
 {
 	//--------------------------------------------------------------------
@@ -24,7 +24,9 @@ class Validation
 		FormatRules::class,
 		FileRules::class,
 		CreditCardRules::class,
+		MyRules::class,
 	];
+	
 
 	/**
 	 * Specifies the views that are used to display the
@@ -40,4 +42,19 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+}
+class MyRules
+{
+	public function after($time): bool
+	{
+		$now =date('Y-m-d\TH:i');
+        // d($now);
+        // d( $this->$time);
+        if($now < $time){
+            return TRUE;
+        }else {
+            # code...
+            return FALSE;
+        }
+	}
 }

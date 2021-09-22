@@ -23,7 +23,7 @@
               <th scope="col">Nama Pengguna</th>
               <th scope="col">Nama Lengkap</th>
               <th scope="col">Posisi</th>
-              <th> Kehadiran </th>
+              <th scope="col"> Kehadiran </th>
               
             </tr>
           </thead>
@@ -116,7 +116,7 @@
                               
                           
                               <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                   
                               </form>
                               </div>

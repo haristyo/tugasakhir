@@ -25,7 +25,7 @@
         </button>
         <button type="button" class="btn btn-success d-flex p-4 mt-3 mx-2" data-toggle="modal" data-target="#createlink">
             <h6 class="my-auto" >Tambah Tautan</h6>
-            <span class="ml-2 my-auto fa fa-file" ></span>
+            <span class="ml-2 my-auto fa fa-link" ></span>
         </button>
     </div>
         <!-- end Button trigger modal -->
@@ -178,8 +178,10 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                <img src="<?=base_url("resource/".$files['id_project']."/".$files['nama_file']); ?>" class="w-100" alt="<?=$files['nama_asli']; ?>" height="auto">
-                                <h6 style="color:black;" class="mt-2"><?=$files['deskripsi_file']; ?> </h6>
+                                    <div class=" d-flex">
+                                        <img src="<?=base_url("resource/".$files['id_project']."/".$files['nama_file']); ?>" alt="<?=$files['nama_asli']; ?>"  style="max-height:500px" class="mx-auto" height="400px">
+                                    </div>
+                                <h6 style="color:black;" class="mt-2 text-center"><?=$files['deskripsi_file']; ?> </h6>
                                 </div>
                                 <div class="modal-footer">
                                     <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?>
@@ -239,7 +241,7 @@
                     <?php } elseif($files['type']=='tautan'){?>
                         <div class="card w-100 m-1 h-100" style="border-radius:5%;" data-toggle="modal" data-target="#file<?=$files['id_file'];?>">
                             <div style="overflow: hidden; padding: 5px; max-height: 150px; min-height: 150px;" class="mt-2 w-100">
-                                <div class="h-100 w-100 d-flex"><i class="m-auto fa fa-file fa-5x"></i></div>
+                                <div class="h-100 w-100 d-flex"><i class="m-auto fa fa-link fa-5x"></i></div>
                             </div>
                             <div class="card-body w-100 h-100">
                             <h5 class="card-title mx-atuo" ><?=$files['nama_asli']; ?></h5>
@@ -251,20 +253,19 @@
                             <div class="modal-dialog modal-dialog-centered modal-md" >
                             <div class="modal-content" style="background-color:#fbeeac;">
                                 <div class="modal-header d-flex py-2">
-                                    <div class="modal-title">
-                                        <h5 class="mr-auto ml-4 " id="exampleModalLabel"><?=$files['nama_asli']; ?></h5>
-                                        <h6 class="ml-auto mr-0 pl-2" style="color:black;" id="exampleModalLabel" ><?=$files['username']; ?> Pada <?=$files['created_file']; ?></h6>
-                                        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div> 
+                                    <h5 class="modal-title mr-auto ml-4" id="exampleModalLabel"><?=$files['nama_asli']; ?></h5>
+                                    <h6 class="modal-title ml-auto mr-0 pl-2" style="color:black;" id="exampleModalLabel" ><?=$files['username']; ?> Pada <?=$files['created_file']; ?></h6>
+                                    
+                                    <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body">
-                                <div class="h-100 w-100 d-flex"><i class="m-auto fa fa-external-link fa-5x"></i></div>
+                                <div class="h-100 w-100 d-flex"><i class="m-auto fa fa-link fa-5x"></i></div>
                                 <h6 style="color:black;" class="mt-2"><?=$files['deskripsi_file']; ?> </h6>
                                 </div>
                                 <div class="modal-footer d-flex">
-                                    <a class="btn btn-primary ml-0 mr-auto" href="<?=$files['nama_asli']?>" target="_blank">Buka tautan</a>
+                                    <a class="btn btn-primary ml-0 mr-auto" href="<?=$files['nama_asli']?>" target="_blank">Kunjungi tautan</a>
                                     <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?>
                                         <form action="proyek/deletefile/<?=$files['id_file']?>" method="post">
                                             <?= csrf_field();?>

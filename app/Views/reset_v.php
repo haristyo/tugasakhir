@@ -15,7 +15,7 @@
             <?= csrf_field(); ?>
             <input type=hidden value="<?=session()->get('_ci_previous_url');?>" name="back">
             <div class="form-group">
-                    <label for="password1">Kata Sandi</label>
+                    <label for="password1">Masukan kata sandi baru anda</label>
                     <input type="password" class="form-control <?= ($validation->hasError('password1')) ? 'is-invalid' : '' ;?>" id="password1" name="password1" value="<?= old('password1')?>">
                     <small id="passwordHelp" class="form-text text-muted">Kata sandi paling sedikit 8 karakter</small>
                     <div class="invalid-feedback">
@@ -24,13 +24,13 @@
                 </div>
                 <input type="hidden" value="<?=$reset['token']?>" name="token">
                 <div class="form-group">
-                    <label for="password2">Masukkan ulang Kata Sandi</label>
+                    <label for="password2">Masukan ulang kata sandi baru anda</label>
                     <input type="password" class="form-control <?= ($validation->hasError('password2')) ? 'is-invalid' : '' ;?>" id="password2" name="password2" value="<?= old('password2')?>">
                     <div class="invalid-feedback">
                         <?=$validation->getError('password2');?>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Reset Password</button>
+                <button type="submit" class="btn btn-success">Atur ulang kata sandi baru</button>
                 <div class="form-group">
                     <label class="form-check-label" for="exampleCheck1">Sudah Ingat ? 
                     <a class="" href="<?= base_url('/login');?>">Masuk</a>

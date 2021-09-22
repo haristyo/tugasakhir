@@ -7,7 +7,7 @@
             <form class="" method="post" action="/proyek/joined">
             <?= csrf_field(); ?>
                 <div class="form-group">
-                    <label for="kode_join">Kode Join</label>
+                    <label for="kode_join">Kode Proyek</label>
                     <input type="text" class="form-control <?php if ($validation->hasError('kode_join')) {echo 'is-invalid';} elseif(session()->getFlashData('kode_join')) {echo 'is-invalid';} ;?>" id="kode_join" name="kode_join"  value="<?=old('kode_join')?>">
                     <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                     <div class="invalid-feedback">
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password_project">Kata Sandi</label>
+                    <label for="password_project">Kata Sandi Proyek</label>
                     <input type="text" class="form-control <?= ($validation->hasError('password_project')) ? 'is-invalid' : '' ;?>" id="password_project" name="password_project"  value="<?=old('password_project')?>">
                     <div class="invalid-feedback">
                         <?=$validation->getError('password_project');?>
@@ -37,7 +37,7 @@
                     <a class="" href="<?= base_url('/proyek/create');?>">Membuat Proyek Baru ? </a>
                     
                 </div>
-                <button type="submit" class="btn btn-success">Bergabung</button>
+                <button type="submit" class="btn btn-success w-100">Bergabung</button>
             </form>
         </div>
 

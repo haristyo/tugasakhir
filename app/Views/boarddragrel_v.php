@@ -183,11 +183,11 @@
                         
                      
 
-                <div style="flex-grow: 1; flex-basis: 100%; overflow-y:auto; min-height:50%; height:58%; background-color:" id="backlog-product" class="mb-1 mt-2 mx-1" <?php if ($member['position'] !="Product Owner") {?> ondrop="onDropBacklog(event);"  ondragover="onDragOverBacklog(event);" <?php ;}?> >
+                <div style="flex-grow: 1; flex-basis: 100%; overflow-y:auto; min-height:50%; height:58%; background-color:" id="backlog-product" class="mb-1 mt-2 mx-1" <?php if ($member['position'] =="Scrum Master") {?> ondrop="onDropBacklog(event);"  ondragover="onDragOverBacklog(event);" <?php ;}?> >
                     <?php foreach ($backlog as $backlogs) {
                         if ($backlogs['sprint'] == null) {?>
                             <!-- Button trigger modal -->
-                            <div class=" d-flex w-100 mx-auto" <?php if ($member['position'] !="Product Owner") {?> draggable="true" id="item-<?=$backlogs['id_backlog']?>" ondragstart="onDragStart(event);" <?php ;}?>>
+                            <div class=" d-flex w-100 mx-auto" <?php if ($member['position'] =="Scrum Master") {?> draggable="true" id="item-<?=$backlogs['id_backlog']?>" ondragstart="onDragStart(event);" <?php ;}?>>
                             <button type="button" class="p-0 m-1 w-100" data-toggle="modal" data-target="#backlog<?=$backlogs['id_backlog'];?>">
                                 <div class='pl-1 mr-auto text-white text-left my-0'  style='background-color:grey;'><?=$backlogs['point'] ;?></div>
                                 <div class='mx-auto text-white'  style='background-color:grey;'><?=$backlogs['isi'] ;?></div>
@@ -232,8 +232,10 @@
                                             </div>
                                     </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Backlog</button>
-                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Backlog</button>
+			<?php if ($member['position'] !="Development Team") {?>
+                                            		<button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Backlog</button>
+	                                   	<button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Backlog</button>
+			<?php } ?>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                         </form>
                                     </div>
@@ -358,7 +360,7 @@
                                     <div class="modal-dialog modal-dialog-centered modal-lg" >
                                     <div class="modal-content" style="background-color:#c5efe5;">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Tambah Notes</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Tambah Sprint Notes</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -518,7 +520,7 @@
                                         ?>
                                         <div class="my-auto mx-auto text-center">Sprint Backlog</div>
                                     </div>
-                                    <div style="background-color:#c5efe5; overflow-y:auto; height: 45vh; flex-grow: 1; flex-basis: 100%;" class="mb-auto py-1"  <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="backlog-<?=$sprints['id_sprint'];?>"  ondragover="onDragOverBacklog(event);" ondrop="onDropBacklog(event);"<?php } ?>>
+                                    <div style="background-color:#c5efe5; overflow-y:auto; height: 45vh; flex-grow: 1; flex-basis: 100%;" class="mb-auto py-1"  <?php if($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) {?> id="backlog-<?=$sprints['id_sprint'];?>"  <?php if ($member['position'] =="Scrum Master") {?> ondragover="onDragOverBacklog(event);" ondrop="onDropBacklog(event);"<?php }} ?>>
                                     <?php foreach ($backlog as $backlogs){
                                         if ($backlogs['sprint']==$sprints['id_sprint']) {?>
                                         <!-- Button trigger modal -->
@@ -644,7 +646,7 @@
                                 <div class="modal-dialog modal-dialog-centered modal-lg" >
                                 <div class="modal-content" style="background-color:#fbeeac;">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Tambah Epic</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">Tambah Task</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                             </button>
@@ -654,7 +656,7 @@
                                             <?= csrf_field(); ?>
                                             <input type="hidden" class="form-control" name="id_sprint" value="<?=$sprints['id_sprint']?>" >
                                             <div class="form-group form-row">
-                                                <label for="estimated" class="col-2 text-left" style="float: left; color:black;">Estimated</label>
+                                                <label for="estimated" class="col-2 text-left" style="float: left; color:black;">Estimasi </label>
                                                 <input type="number" class="form-control col-10" name="estimated" value="<?= old('estimated')?>">
                                                 <small class="form-text text-muted">Estimasi waktu pengerjaan dalam satuan jam</small>
                                             </div>
@@ -668,7 +670,7 @@
                                             </div>
                                         </div>
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-success">Tambah Epic</button>
+                                                <button type="submit" class="btn btn-success">Tambah Task</button>
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                             </form>
                                         </div>
@@ -720,7 +722,7 @@
                                             <div class="modal-dialog modal-dialog-centered modal-lg ">
                                             <div class="modal-content" style="background-color:#8be0cc;">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Epic</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Task</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-target="#epic<?=$epics['id_epic'] ;?>">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -740,12 +742,12 @@
                                                             </div>
                                                             <div class="form-row">
                                                                 <div class="form-group col">
-                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Elapsed</label>
+                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Dihabiskan</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
                                                                     <small class="form-text text-muted text-left"  style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
                                                                 <div class="form-group col">
-                                                                    <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimated</label>
+                                                                    <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimasi</label>
                                                                     <input type="number" class="form-control" name="estimated<?=$epics['id_epic'];?>" value="<?=$epics['estimated'];?>">
                                                                     <small class="form-text text-muted"  style="float: left;">Estimasi waktu pengerjaan dalam satuan jam</small>
                                                                 </div>
@@ -780,8 +782,8 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
-                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
-                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
+                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
+                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
                                             <?php }?>
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal" >Tutup</button>
                                                         </form>
@@ -893,7 +895,7 @@
                                             <div class="modal-dialog modal-dialog-centered modal-lg ">
                                             <div class="modal-content" style="background-color:#51d0b2;">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Epic</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Task</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -913,12 +915,12 @@
                                                             </div>
                                                             <div class="form-row">
                                                                 <div class="form-group col">
-                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Elapsed</label>
+                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Dihabiskan</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
                                                                     <small class="form-text text-muted" style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
                                                                 <div class="form-group col">
-                                                                    <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimated</label>
+                                                                    <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimasi</label>
                                                                     <input type="number" class="form-control" name="estimated<?=$epics['id_epic'];?>" value="<?=$epics['estimated'];?>">
                                                                     <small class="form-text text-muted" style="float: left;">Estimasi waktu pengerjaan dalam satuan jam</small>
                                                                 </div>
@@ -952,8 +954,8 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
-                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
-                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
+                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
+                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
                                             <?php }?>
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                                         </form>
@@ -1064,7 +1066,7 @@
                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content" style="background-color:#2ea98c;">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Epic</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Task</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -1084,12 +1086,12 @@
                                                             </div>
                                                             <div class="form-row">
                                                                 <div class="form-group col">
-                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Elapsed</label>
+                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:black;">Dihabiskan</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
                                                                     <small class="form-text" style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
                                                                 <div class="form-group col">
-                                                                    <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimated</label>
+                                                                    <label for="estimated<?=$epics['id_epic'];?>" style="float: left; color:black;">Estimasi</label>
                                                                     <input type="number" class="form-control" name="estimated<?=$epics['id_epic'];?>" value="<?=$epics['estimated'];?>">
                                                                     <small class="form-text" style="float: left;">Estimasi waktu pengerjaan dalam satuan jam</small>
                                                                 </div>
@@ -1123,8 +1125,8 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
-                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
-                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
+                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
+                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
                                             <?php }?>
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                                         </form>
@@ -1235,7 +1237,7 @@
                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content" style="background-color:#1e6f5c;">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title text-white" id="exampleModalLabel">Epic</h5>
+                                                        <h5 class="modal-title text-white" id="exampleModalLabel">Task</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -1255,7 +1257,7 @@
                                                             </div>
                                                             <div class="form-row">
                                                                 <div class="form-group col">
-                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:white;">Elapsed</label>
+                                                                    <label for="Elapsed<?=$epics['id_epic'];?>" style="float: left; color:white;">Dihabiskan</label>
                                                                     <input type="number" class="form-control" name="elapsed<?=$epics['id_epic'];?>" value="<?=$epics['elapsed'];?>">
                                                                     <small class="form-text" style="float: left;">Waktu yang digunakan dalam satuan jam</small>
                                                                 </div>
@@ -1294,8 +1296,8 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
-                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Epic</button>
-                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Epic</button>
+                                                            <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
+                                                            <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
                                                             <?php }?>
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                                         </form>
@@ -1570,7 +1572,7 @@
                                                                         <?php if ($validation->hasError('isiepic'.$epics['id_epic'])) {echo "Retrospective Analysis Harus Diisi";}?>
                                                                     </div>
                                                                 </div>
-                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
+                                                                <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                                 <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -1580,9 +1582,9 @@
                                                                             </div>
                                                                         </div>
                                                                         <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
-                                                                        
-                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
-                                                                        
+                                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?>
+                                                                            <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        <?php    }?>
 
                                                                     </div>
                                                             <?php    }
@@ -1686,9 +1688,9 @@
                                                                             </div>
                                                                         </div>
                                                                         <input type="text" class="form-control" aria-label="Text input with checkbox" value="<?=$checkboxes['isi'];?>" disabled>
-                                                                        
-                                                                        <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
-                                                                        
+                                                                        <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?>
+                                                                            <a href="<?=base_url('proyek/deleteCheckbox/'.$checkboxes['id_checkbox'])?>" class="fa fa-minus-circle fa-2x my-auto  mx-1" style="color:red;"></a>
+                                                                        <?php } ?>
 
                                                                     </div>
                                                             <?php    }

@@ -17,7 +17,7 @@
         <div class="col-6 col-sm-12 col-md-6 h-100 w-100">
             <input type="hidden" name="is_admin" value="N">
                 <div class="form-group">
-                    <label for="username">Nama User</label>
+                    <label for="username">Nama Pengguna</label>
                     <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ;?>" id="username" name="username" autofocus value="<?php if ($back == base_url('/user/update')) { echo old('username');} else { echo $profil['username'];}?>">
                     <small id="emailHelp" class="form-text text-muted">masukkan username</small>
                     <div class="invalid-feedback">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password">Kata Sandi Untuk Mengkonfirmasi</label>
+                    <label for="password">Masukkan Kata Sandi Untuk Mengkonfirmasi</label>
                     <input type="password" class="form-control <?php if($validation->hasError('password'))  {echo 'is-invalid';} elseif(session()->getFlashData('password')) {echo 'is-invalid';} ;?>" id="password" name="password" value="">
                     <div class="invalid-feedback">
                         <?=$validation->getError('password');?>

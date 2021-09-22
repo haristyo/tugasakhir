@@ -1,4 +1,4 @@
-<div id="content" class="px-4 pl-md-5 pr-md-4 pt-5 center">
+<div id="content" class="px-4 pl-md-5 pr-md-4 center">
 <div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px;padding:1%;">
     <div class="row  p-4">
         <div class="col-6 col-sm-12 col-md-6 h-100 p-2">
@@ -54,7 +54,7 @@
                         <?=$validation->getError('sk');?>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary my-2 w-100">Daftar</button>
+                <button type="submit" class="btn btn-primary my-2 w-100">Daftarkan</button>
 
             </form>
         </div>

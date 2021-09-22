@@ -95,8 +95,8 @@
                     
                 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success">Tambah Meeting</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                     </form>
                     </div>
                 </div>
@@ -186,7 +186,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col"></th>
-                                    <th scope="col">Username</th>
+                                    <th scope="col">Nama Pengguna</th>
                                     <th scope="col">Posisi</th>
                                     <th scope="col">Status Kehadiran</th>
                                 </tr>

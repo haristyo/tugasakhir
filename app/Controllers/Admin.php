@@ -381,7 +381,7 @@ class Admin extends BaseController
             }
         }
         $title = [
-            'title' => 'Dashboard Member | Scrum Tool',
+            'title' => 'Dashboard User | Scrum Tool',
             'link' => 	$this->request->uri->getSegment(1)
         ];
         
@@ -419,6 +419,7 @@ class Admin extends BaseController
         // dd($sprint->findAll());
         $keyword =  $this->request->getVar('search');
         $tanggal =  $this->request->getVar('tanggal');
+        // d($sprint->first());
         if($keyword){
             if ($tanggal) {
                 $sprint = $sprint->where(['sprint.start_sprint <'=>date("Y-m-d H:i:s", strtotime($tanggal)),'sprint.end_sprint >'=>date("Y-m-d H:i:s", strtotime($tanggal))])->like('sprint.goal',$keyword);
@@ -429,7 +430,8 @@ class Admin extends BaseController
         }
         else {
             if ($tanggal) {
-            $sprint = $sprint->where(['sprint.start_sprint <'=>date("Y-m-d H:i:s", strtotime($tanggal))])->orWhere(['sprint.end_sprint >'=>date("Y-m-d H:i:s", strtotime($tanggal))]);
+                // dd(date("Y-m-d H:i:s", strtotime($tanggal)));
+            $sprint = $sprint->where(['sprint.start_sprint <'=>date("Y-m-d H:i:s", strtotime($tanggal))])->Where(['sprint.end_sprint >'=>date("Y-m-d H:i:s", strtotime($tanggal))]);
             }
         }
         $title = [

@@ -28,7 +28,7 @@
                               <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content" style="background-color:#dcf5ef;">
                                       <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLabel">Edit Proyek</h5>
+                                          <h5 class="modal-title" id="exampleModalLabel">Ubah Proyek</h5>
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                           <span aria-hidden="true">&times;</span>
                                           </button>
@@ -124,13 +124,13 @@
     </div>
     <div class="d-flex w-75 ml-auto mr-auto">
     
-        <div class="ml-0 mr-auto"><h5>Kode Gabung</h5></div>
+        <div class="ml-0 mr-auto"><h5>Kode Proyek</h5></div>
         
         <div class="mr-0 ml-auto"><h5><?=$project['kode_join'];?></h5></div> 
     </div>
     <div class="d-flex w-75 ml-auto mr-auto">
     
-        <div class="ml-0 mr-auto"><h5>Kata Sandi Project</h5></div>
+        <div class="ml-0 mr-auto"><h5>Kata Sandi Proyek</h5></div>
         
         <div class="mr-0 ml-auto"><h5><?=$project['password_project'];?></h5></div> 
     </div>

@@ -25,8 +25,8 @@
           <thead>
             <tr style="text-align:center">
               <th scope="col">No.</th>
-              <th scope="col">Username</th>
-              <th scope="col">Nama</th>
+              <th scope="col">Nama Pengguna</th>
+              <th scope="col">Nama Lengkap</th>
               <th scope="col">Foto Profil</th>
               <th scope="col">Email</th>
               <th scope="col">Status Admin</th>

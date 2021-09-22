@@ -19,7 +19,7 @@
                     <input type="text" class="form-control" id="useremail" name="useremail"  value="<?=old('useremail')?>">
                     <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                 </div>
-                <button type="submit" class="btn btn-success">Atur Ulang password</button>
+                <button type="submit" class="btn btn-success">Atur Ulang Kata Sandi</button>
                 <div class="form-group">
                     <label class="form-check-label mt-2" for="exampleCheck1">Sudah ingat ? 
                     <a class="" href="<?= base_url('/login');?>">Masuk</a>

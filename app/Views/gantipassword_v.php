@@ -27,13 +27,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password2">Konfirmasi Password Baru</label>
+                    <label for="password2">Konfirmasi Kata Sandi Baru</label>
                     <input type="password" class="form-control <?= ($validation->hasError('password2')) ? 'is-invalid' : '' ;?>" id="password2" name="password2"  value="<?=old('password2')?>">
                     <div class="invalid-feedback">
                         <?=$validation->getError('password2');?>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Masuk</button>
+                <button type="submit" class="btn btn-success w-100">Ganti Kata Sandi</button>
             </form>
         </div>
 

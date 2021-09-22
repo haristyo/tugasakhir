@@ -29,8 +29,8 @@
                     <input type="password" class="form-control" id="password" name="password"  value="<?=old('password')?>">
                 </div>
                 <div class="form-group">
-                    <label class="form-check-label mb-0 pb-0" for="exampleCheck1">Lupa Password ?
-                    <a class="" href="<?= base_url('/forgot_password');?>">Setel Ulang password</a>
+                    <label class="form-check-label mb-0 pb-0" for="exampleCheck1">Lupa Kata Sandi ?
+                    <a class="" href="<?= base_url('/forgot_password');?>">Setel Ulang Kata Sandi</a>
                     </label>
                 </div>
                 <button type="submit" class="btn btn-success my-0">Masuk</button>

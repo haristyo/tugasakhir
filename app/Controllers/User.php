@@ -21,7 +21,7 @@ class User extends BaseController
 			$this->userModel->save([
 				'username' 		=> 'superadmin',
 				'nama_user'  	=> 'Superadmin ScrumTool',
-				'email'     	=> 'superadmin@gmail.com',
+				'email'     	=> 'scrum.tool55@gmail.com',
 				'password' 		=>  password_hash('superadmin',PASSWORD_DEFAULT),
 				'is_admin'     	=> 'S'
 			]);

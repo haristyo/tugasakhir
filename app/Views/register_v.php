@@ -1,6 +1,6 @@
 <div class="container-fluid w-75 h-100"  style="background-color:#fbeeac; border-radius:10px;padding:1%;">
-    <div class="row  p-4">
-        <div class="col-6 col-sm-12 col-md-6 h-100 p-2">
+    <div class="row  pt-4">
+        <div class="col-6 col-sm-12 col-md-6 h-100 pb-0 mb-0">
             <img src="<?=base_url('/img/register.png')?>" class="w-100" style="border-radius:10px;" alt="Register" >  
         </div>
         <div class="col-6 col-sm-12 col-md-6 h-100 w-100">
@@ -8,7 +8,7 @@
         <?= csrf_field(); ?>
             <input type="hidden" name="is_admin" value="N">
                 <div class="form-group">
-                    <label for="username">Nama User</label>
+                    <label for="username">Nama Pengguna</label>
                     <input type="text" class="form-control <?= ($validation->hasError('username')) ? 'is-invalid' : '' ;?>" id="username" name="username" autofocus value="<?= old('username')?>">
                     <!-- <small id="emailHelp" class="form-text text-muted">masukkan username</small> -->
                     <div class="invalid-feedback">

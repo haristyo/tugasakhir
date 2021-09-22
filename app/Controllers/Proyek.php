@@ -117,8 +117,7 @@ class Proyek extends BaseController
 			// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
 			return redirect()->to(base_url('/proyek/create'))->withInput();
 		}
-        if ($this->request->getVar('csrf_test_name')) {
-            $this->proyekModel->save([
+        $this->proyekModel->save([
                 'nama_project' 		=> $this->request->getVar('nama_project'),
                 'kode_join'  	    => $this->request->getVar('kode_join'),
                 'creator_project'   => $this->session->id_user,
@@ -126,13 +125,12 @@ class Proyek extends BaseController
                 'deskripsi'     	=> $this->request->getVar('deskripsi')
             
             ]);
-            $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
-            $this->memberModel->save([
+        $data = esc($this->proyekModel->getProjectbyKode($this->request->getVar('kode_join')));
+        $this->memberModel->save([
                 'id_project'    => $data['id_project'],
                 'id_user'       => $this->session->id_user,
                 'position'      => 'Scrum Master'
             ]);
-        }
         // return redirect()->to(base_url('/proyek/'.$data['id_project']));
         
 		return redirect()->to(base_url('/proyek'));
@@ -369,24 +367,39 @@ class Proyek extends BaseController
             }
         }
     }
+    public function after($time)
+    {
+        $now =date('Y-m-d\TH:i');
+        // d($now);
+        // d( $this->$time);
+        if($now < $time){
+            return TRUE;
+        }else {
+            # code...
+            return FALSE;
+        }
+    }
     public function createmeeting($id_project)
     {
-        // dd($_POST);
+        
+        // d($this->request->getVar('time_meeting'));
+       
         if(!$this->validate([
             'link_meeting' => ['rules'=>'required',
-            'errors'=>[ 'required'=> 'Tautan Meeting Harus diisi']
-        ],
-        'time_meeting' => ['rules'=>'required',
-        'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi']
-    ],
-    'agenda' => ['rules'=> 'in_list[Sprint Planning,Sprint Retrospective,Daily Scrum,Sprint Review]',
-    'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
-    ]
-    ]) ) {
+                                'errors'=>[ 'required'=> 'Tautan Meeting Harus diisi']
+                                ],
+            'time_meeting' => ['rules'=>'required|after',
+                                'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi',
+                                'after'=> 'Waktu Meeting Harus Lebih Besar dari sekarang']
+                                ],
+            'agenda' => ['rules'=> 'in_list[Sprint Planning,Sprint Retrospective,Daily Scrum,Sprint Review]',
+                        'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
+                        ]
+        ]) ) {
         // $validation = \Config\Services::validation();
         // return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
         return redirect()->to(base_url('/proyek/'.$id_project.'/meeting'))->withInput();
-    }
+        }
     // $creator=$this->memberModel->getIdbyUserProject($this->session->id_user, $id_project);
     // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'] );
     // dd($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project),);
@@ -409,8 +422,9 @@ class Proyek extends BaseController
             'link_meeting'.$id_meeting => ['rules'=>'required',
                                         'errors'=>[ 'required'=> 'Tautan Meeting Harus diisi']
                                                     ],
-                                                    'time_meeting'.$id_meeting => ['rules'=>'required',
-                                            'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi']
+            'time_meeting'.$id_meeting => ['rules'=>'required|after',
+                                            'errors'=>[ 'required'=> 'Waktu Meeting Harus diisi',
+                                            'after'=> 'Waktu Meeting Harus Lebih Besar dari sekarang']
                                         ],
             'agenda'.$id_meeting => ['rules'=> 'in_list[Sprint Planning,Sprint Retrospective,Daily Scrum,Sprint Review]',
             'errors'=>[ 'in_list'=>  'Pilih Agenda Anda' ] 
@@ -610,7 +624,7 @@ class Proyek extends BaseController
 			'file' =>['rules'=>'uploaded[file]|is_image[file]|mime_in[file,image/jpg,image/jpeg,image/png]|max_size[file,10240]',
 			          'errors'=>[  'uploaded'   => 'Pilih file anda',
                                     'is_image'	=> 'File harus berupa gambar',
-                                    'mime_in'	=> 'File berformat jpg/jpeg/png',
+                                    'mime_in'	=> 'File harus berformat jpg/jpeg/png',
                                     'size'      => 'File lebih besar dari 10MB']
 			         ]
 		])) {
@@ -661,7 +675,7 @@ class Proyek extends BaseController
 			
 			'filedocument' =>['rules'=>'uploaded[filedocument]|ext_in[filedocument,doc,docx,ppt,pptx,xls,xlsx,pdf,txt]|max_size[filedocument,10240]',
 			          'errors'=>[  'uploaded'   => 'Pilih file anda',
-                                    'ext_in'	=> 'Format File Salah',
+                                    'ext_in'	=> 'File harus berformat doc/docx/ppt/pptx/xls/xlsx/pdf/txt',
                                     'size'      => 'File lebih besar dari 10MB']
 			         ]
 		])) {

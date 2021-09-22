@@ -31,6 +31,16 @@
 
 	        <div class="footer">
 	        	<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+				<div class="row  my-auto w-100">
+					<div class="col-6 col-md-6 col-lg-6 col-sm-12 my-auto">
+					<!-- <img src="https://dsitd.ipb.ac.id/wp-content/uploads/2017/04/Logo-IPB-baru.png" alt="Logo IPB" height="90px" style="display: block;margin-left: auto; margin-right: auto;"> -->
+					<img src="<?php  echo base_url('img/Logo-IPB-baru.svg'); ?>" alt="Logo IPB" height="90px" style="display: block;margin-left: auto; margin-right: auto;">
+					</div>
+					<div class="col-6 col-md-6 col-lg-6 col-sm-12 my-auto">
+						<!-- <img src="https://o.remove.bg/downloads/2f8cabef-5b6a-4a0d-93d5-fe83eeb47c85/e3003bd36ebc05272061db2d627ddbb6_400x400-removebg-preview.png" alt="Logo INF" height="90px" style="display: block;margin-left: auto; margin-right: auto;"> -->
+					<img src="<?php echo base_url('img/Logo-INF2.svg')?>" alt="Logo INF" height="90px" style="display: block;margin-left: auto; margin-right: auto;">
+					</div>
+				</div>
 						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved</p>
 	        </div>
 

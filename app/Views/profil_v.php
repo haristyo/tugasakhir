@@ -12,7 +12,7 @@
   <!-- <table> -->
     <thead>
       <tr>
-        <th scope="col" colspan="3" class="text-center">Profil</th>
+        <!-- <th scope="col" colspan="3" class="text-center">Profil</th> -->
       </tr>
     </thead>
     <tbody >

@@ -37,7 +37,7 @@ class SprintModel extends Model
     public function pagination($id_project = FALSE)
     {
         if ($id_project != FALSE) {
-            return $this->where('sprint.id_project',$id_project)->orderBy('created_sprint','DESC');
+            return $this->where('sprint.id_project',$id_project)->orderBy('start_sprint','DESC');
         }
     }
     

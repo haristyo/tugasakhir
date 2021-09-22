@@ -24,7 +24,7 @@
           <thead>
             <tr>
             <th scope="col">No.</th>
-              <th scope="col">Project</th>
+              <th scope="col">Nama Proyek</th>
               <th scope="col">Agenda</th>
               <th scope="col">Waktu Meeting</th>
               <!-- <th scope="col">Tautan Meeting</th> --><!-- <td><?php //echo $meetings['link_meeting'];?></td> -->
@@ -37,7 +37,7 @@
               <th scope="row"><?=$i;?></th>
               <td><?=$meetings['nama_project'];?></td>
               <td><?=$meetings['agenda'];?></td>
-              <td><?=date('d-F-Y H:i:s', strtotime($meetings['time_meeting']));?></td>
+              <td><?=date('d F Y H:i', strtotime($meetings['time_meeting']));?></td>
               
               <td>
                 <form action="/admin/deleteMeeting/<?=$meetings['id_meeting'].'/'.$meetings['id_project'];?>" method="post">
