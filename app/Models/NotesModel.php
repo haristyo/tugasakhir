@@ -8,7 +8,7 @@ class NotesModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_notes';
     protected $updatedField  = 'updated_notes';
-    protected $allowedFields = ['id_notes','id_project','isi','sprint'];
+    protected $allowedFields = ['id_notes','id_project','isi','sprint','creator_notes','editor_notes'];
     public function getNotesbyProject($id_project = false)
     {
         if($id_project == false)

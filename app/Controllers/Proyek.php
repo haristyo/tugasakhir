@@ -1052,6 +1052,7 @@ class Proyek extends BaseController
                 
                 'id_notes'        => $id_notes,
                 'isi'            => $this->request->getVar('isinotesedit'.$id_notes),
+                'editor_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 
                 ]);
         }
@@ -1080,6 +1081,7 @@ class Proyek extends BaseController
                 'id_project' => $id_project,
                 'sprint'        => $sprint,
                 'creator_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                'editor_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 ]);
         }
         else {
@@ -1094,6 +1096,7 @@ class Proyek extends BaseController
                 'isi'            => $this->request->getVar('isinotes'),
                 'id_project' => $id_project,
                 'creator_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                'editor_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 ]);
         }
     }

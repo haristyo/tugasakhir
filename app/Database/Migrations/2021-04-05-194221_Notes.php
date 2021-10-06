@@ -43,10 +43,16 @@ class Notes extends Migration
 				'unsigned'		 => true,
 				'null'           => false,
 			],
+			'editor_notes' => [
+				'type'           => 'INT',
+				'unsigned'		 => true,
+				'null'           => false,
+			],
 		]);
 		$this->forge->addKey('id_notes', true);
 		$this->forge->addForeignKey('id_project','Project','id_project','CASCADE','CASCADE');
 		$this->forge->addForeignKey('creator_notes','Member','id_member','NO ACTION','CASCADE');
+		$this->forge->addForeignKey('editor_notes','Member','id_member','NO ACTION','CASCADE');
 		$this->forge->addForeignKey('sprint','Sprint','id_sprint','CASCADE','CASCADE');
 		$this->forge->createTable($this->table);
 	}
