@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Controllers;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 use App\Models\UserModel;
 use App\Models\ResetModel;
+
 class User extends BaseController
 {
 	protected $userModel;
@@ -10,6 +14,7 @@ class User extends BaseController
 	protected $session;
 	public function __construct()
 	{
+		$this->mail = new PHPMailer(true);
 		helper('text');
 		$this->userModel = new UserModel();
 		$this->resetModel = new ResetModel();
@@ -122,8 +127,8 @@ class User extends BaseController
 					   ],
             'email' => ['rules'=>'required|is_unique[user.email]|ipbemail|valid_email',
                         'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
+									'ipbemail'=>'Alamat Surel Bukan alamat email ipb',
                                     'is_unique'=>'Alamat Surel Pernah digunakan',
-                                    'ipbemail'=>'Alamat Surel Bukan alamat email ipb',
                                     'valid_email'=>'Alamat Surel Tidak Valid',
 									]
                         ],
@@ -147,33 +152,73 @@ class User extends BaseController
 			return redirect()->to(base_url('/register/'))->withInput();
 		}
 		
-		$this->userModel->save([
-			'username' 		=> $this->request->getVar('username'),
-			'nama_user'  	=> $this->request->getVar('nama_user'),
-			'email'     	=> $this->request->getVar('email'),
-            'password' 		=>  password_hash($this->request->getVar('password2'),PASSWORD_DEFAULT),
-            'is_admin'     	=> 'N'
+		// $this->userModel->save([
+		// 	'username' 		=> $this->request->getVar('username'),
+		// 	'nama_user'  	=> $this->request->getVar('nama_user'),
+		// 	'email'     	=> $this->request->getVar('email'),
+        //     'password' 		=>  password_hash($this->request->getVar('password2'),PASSWORD_DEFAULT),
+        //     'is_admin'     	=> 'N'
 				
-		]);
+		// ]);
 		$recepient = $this->request->getVar('email');
-		$email = \Config\Services::email();
+		// $email = \Config\Services::email();
 		$message = "<p>Anda Berhasil melakukan pendaftaran akun</p>";
 		$message .= "<a href='".base_url('login')."'>klik untuk login</a>";
-		$email->setFrom('scrum.tool55@gmail.com');
-		$email->setTo($recepient);
-		$email->setSubject("Anda berhasil mendaftarkan akun");
-		$email->setMessage($message);
+		// $email->setFrom('scrum.tool55@gmail.com');
+		// $email->setTo($recepient);
+		// $email->setSubject("Anda berhasil mendaftarkan akun");
+		// $email->setMessage($message);
 		
-		$email->send();
-			if ($email->send()) {
-				# code...
-				session()->setFlashdata('pesan', 'User Berhasil Ditambahkan');
-			}
-			else {
-				# code...
-				session()->setFlashdata('pesan', 'Email gagal dikirim');
-			}
-		return redirect()->to(base_url('/login'));
+		// $email->send();
+		// 	if ($email->send()) {
+		// 		# code...
+		// 		session()->setFlashdata('pesan', 'User Berhasil Ditambahkan');
+		// 	}
+		// 	else {
+		// 		# code...
+		// 		session()->setFlashdata('pesan', 'Email gagal dikirim');
+		// 	}
+		// return redirect()->to(base_url('/login'));
+		
+
+        try {
+            $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $this->mail->isSMTP();
+            $this->mail->Host       = 'smtp.googlemail.com';
+            $this->mail->SMTPAuth   = true;
+            $this->mail->Username   = 'scrum.tool55@gmail.com'; // ubah dengan alamat email Anda
+            $this->mail->Password   = 'ScrumTool2021'; // ubah dengan password email Anda
+            $this->mail->SMTPSecure = 'tls';
+            $this->mail->Port       = 587;
+
+            $this->mail->setFrom('scrum.tool55@gmail.com', 'Scrum Tool'); // ubah dengan alamat email Anda
+            $this->mail->addAddress($recepient);
+            $this->mail->addReplyTo('scrum.tool55@gmail.com', 'Scrum Tool'); // ubah dengan alamat email Anda
+
+            // Isi Email
+            $this->mail->isHTML(true);
+            $this->mail->Subject = "Anda berhasil mendaftarkan akun";
+            $this->mail->Body    = $message;
+
+            $this->mail->send();
+
+
+   // Pesan Berhasil Kirim Email/Pesan Error
+			$this->userModel->save([
+				'username' 		=> $this->request->getVar('username'),
+				'nama_user'  	=> $this->request->getVar('nama_user'),
+				'email'     	=> $this->request->getVar('email'),
+				'password' 		=>  password_hash($this->request->getVar('password2'),PASSWORD_DEFAULT),
+				'is_admin'     	=> 'N'
+					
+			]);
+            session()->setFlashdata('pesan', 'User Berhasil Ditambahkan');
+            return redirect()->to('/login');
+        } catch (Exception $e) {
+            session()->setFlashdata('pesan', "User gagal ditambahkan. Error: " . $this->mail->ErrorInfo);
+            return redirect()->to('/login');
+        }
+    
 	}
 	public function logout()
     {
@@ -441,23 +486,53 @@ class User extends BaseController
 		$message = "<p>Anda melakukan permintaan atur ulang password</p>";
 		$message .= "<a href='".base_url('resetpassword/'.$token)."'>klik untuk atur ulang password</a>";
 
-		$email = \Config\Services::email();
+		try {
+            $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $this->mail->isSMTP();
+            $this->mail->Host       = 'smtp.googlemail.com';
+            $this->mail->SMTPAuth   = true;
+            $this->mail->Username   = 'scrum.tool55@gmail.com'; // ubah dengan alamat email Anda
+            $this->mail->Password   = 'ScrumTool2021'; // ubah dengan password email Anda
+            $this->mail->SMTPSecure = 'tls';
+            $this->mail->Port       = 587;
 
-		$email->setFrom('scrum.tool55@gmail.com');
-		$email->setTo($data['email']);
-		$email->setSubject("Atur Ulang Password");
-		$email->setMessage($message);
-		
-		$email->send();
-		if($email->send())
-		{
+            $this->mail->setFrom('scrum.tool55@gmail.com', 'Scrum Tool'); // ubah dengan alamat email Anda
+            $this->mail->addAddress($data['email']);
+            $this->mail->addReplyTo('scrum.tool55@gmail.com', 'Scrum Tool'); // ubah dengan alamat email Anda
+
+            // Isi Email
+            $this->mail->isHTML(true);
+            $this->mail->Subject = "Anda berhasil mendaftarkan akun";
+            $this->mail->Body    = $message;
+
+            $this->mail->send();
+
+
+   // Pesan Berhasil Kirim Email/Pesan Error
+			
 			session()->setFlashdata('pesan', "Silahkan cek email anda");
 			return redirect()->to(base_url('/login'));
-		}
-		else {
-			session()->setFlashdata('pesan', 'Gagal atur ulang password, masukan email yang benar');
-			return redirect()->to(base_url('/forgot_password'));
-		}
+        } catch (Exception $e) {
+            session()->setFlashdata('pesan', "Gagal atur ulang password. Error: " . $this->mail->ErrorInfo);
+            return redirect()->to('/forgot_password');
+        }
+		// $email = \Config\Services::email();
+
+		// $email->setFrom('scrum.tool55@gmail.com');
+		// $email->setTo($data['email']);
+		// $email->setSubject("Atur Ulang Password");
+		// $email->setMessage($message);
+		
+		// $email->send();
+		// if($email->send())
+		// {
+		// 	session()->setFlashdata('pesan', "Silahkan cek email anda");
+		// 	return redirect()->to(base_url('/login'));
+		// }
+		// else {
+		// 	session()->setFlashdata('pesan', 'Gagal atur ulang password, masukan email yang benar');
+		// 	return redirect()->to(base_url('/forgot_password'));
+		// }
 		// 
 		// $token = ($this->resetModel->getResetbyEmailUser($data['email'])['token']);
 		// // dd($token);
