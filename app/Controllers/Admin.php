@@ -10,6 +10,8 @@ use App\Models\EpicModel;
 use App\Models\UserModel;
 use App\Models\UsersModel;
 use App\Models\SprintModel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Admin extends BaseController
 {
@@ -63,6 +65,7 @@ class Admin extends BaseController
         echo view('dashboard_v',$data);
         echo view('footer1_v');
     }
+   
     public function project($id_project = false)
     {
         $keyword =  $this->request->getVar('search');
@@ -422,6 +425,117 @@ class Admin extends BaseController
             echo view('dashboard_user_v',$data);
         echo view('footer1_v');
     }
+
+    public function exportUser()
+    {
+            
+            // $user = esc($this->userModel->getDetailbyId($this->session->id_user)),
+            $user = esc($this->userModel->getUser());
+            $member= esc($this->memberModel->getMemberbyUser());
+            $backlog = esc($this->backlogModel->countBacklogbyUserProject());
+            $epic = esc($this->epicModel->countEpicbyUserProject());
+            // 'resource' =>esc(),
+
+        // dd($member);
+    
+        $spreadsheet = new Spreadsheet();
+        // tulis header/nama kolom 
+        $spreadsheet->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Nama Pengguna')
+                    ->setCellValue('B1', 'Nama Lengkap')
+                    ->setCellValue('C1', 'Email')
+                    ->setCellValue('D1', 'Nama Proyek')
+                    ->setCellValue('E1', 'Posisi')
+                    ->setCellValue('F1', 'Tanggal Bergabung')
+                    ->setCellValue('G1', 'Backlog Dibuat')
+                    ->setCellValue('H1', 'Task Dibuat');
+        
+        $kolom = 2;
+        // tulis data mobil ke cell
+        foreach($user as $users) {
+           
+            $i = 0;
+            foreach ($member as $members) {
+                if ($users['id_user']== $members['id_user']) {
+
+                   $backlog_total = 0; 
+                   foreach ($backlog as $backlogs ) {
+                      if ($members['id_member']==$backlogs['creator_backlog']) {
+                        $backlog_total += $backlogs['id_backlog'];
+                      }
+                    }
+                      
+                    $epic_total = 0; 
+                    foreach ($epic as $epics) {
+                      if ($members['id_member']==$epics['creator_epic']) {
+                        $epic_total += $epics['id_epic'];
+                      }
+                    }
+
+                    $spreadsheet->setActiveSheetIndex(0)
+                        ->setCellValue('A' . $kolom, $members['username'])
+                        ->setCellValue('B' . $kolom, $members['nama_user'])
+                        ->setCellValue('C' . $kolom, $members['email'])
+                        ->setCellValue('D' . $kolom, $members['nama_project'])
+                        ->setCellValue('E' . $kolom, $members['position'])
+                        ->setCellValue('F' . $kolom, $members['created_member'])
+                        ->setCellValue('G' . $kolom, $backlog_total)
+                        ->setCellValue('H' . $kolom, $epic_total);
+                    $i++;
+                    $kolom++;
+                }
+            }
+
+            if ($i==0) {
+                $spreadsheet->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $kolom, $users['username'])
+                    ->setCellValue('B' . $kolom, $users['nama_user'])
+                    ->setCellValue('C' . $kolom, $users['email'])
+                    ->setCellValue('D' . $kolom, 'Belum Bergabung dengan proyek')
+                    ->setCellValue('E' . $kolom, '-')
+                    ->setCellValue('F' . $kolom, '-')
+                    ->setCellValue('G' . $kolom, '-')
+                    ->setCellValue('H' . $kolom, '-');
+                $spreadsheet->getActiveSheet()->getStyle('A'.$kolom.':H'.$kolom.'')->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setRGB('FF0000');
+                $spreadsheet->getActiveSheet()->getStyle('A'.$kolom.':H'.$kolom.'')
+                    ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $kolom++;
+            }
+        }
+        $spreadsheet->getActiveSheet()->setAutoFilter(
+            $spreadsheet->getActiveSheet()->calculateWorksheetDimension()
+        );
+
+        $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('74A4F2');
+
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(32);
+        $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(16);
+        // tulis dalam format .xlsx
+        // $writer = new Xlsx($spreadsheet);
+        $fileName = 'Export Data User '.date('Y-m-d_H-i');
+        
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->setOffice2003Compatibility(true);
+        
+        die($writer->save('php://output'));
+    }
+
+
     public function projectSprint($id_project)
     {
         $sprint = $this->sprintModel->pagination($id_project);

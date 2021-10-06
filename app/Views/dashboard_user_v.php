@@ -14,9 +14,14 @@
                 </select>
                 
                 <button class="btn btn-secondary" type="submit">Cari</button>
+        </form>  
+                <form action="<?php echo base_url('admin/exportUser')?>" method="post">
+                    <?= csrf_field();?>
+                    <button type="submit" class="btn btn-success ml-2 py-2">Export Data User</button>
+                </form>
                 
             </div>
-        </form>    
+         
         <div class="ml-auto mr-3 right"><?= $pager->links('user','pagers') ;?></div>
       </div>
 

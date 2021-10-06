@@ -25,5 +25,9 @@ class UserModel extends Model
     {
         return $this->where('is_admin','S')->first();
     }
+    public function getUser()
+    {
+        return $this->where('is_admin','N')->findAll();
+    }
 
 }
