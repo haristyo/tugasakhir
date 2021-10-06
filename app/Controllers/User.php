@@ -22,7 +22,7 @@ class User extends BaseController
 				'username' 		=> 'superadmin',
 				'nama_user'  	=> 'Superadmin ScrumTool',
 				'email'     	=> 'scrum.tool55@gmail.com',
-				'password' 		=>  password_hash('superadmin',PASSWORD_DEFAULT),
+				'password' 		=>  password_hash('ScrumTool2021',PASSWORD_DEFAULT),
 				'is_admin'     	=> 'S'
 			]);
 		}
@@ -120,9 +120,12 @@ class User extends BaseController
 						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
 									'max_length'=> 'Maksimal 50 karakter']
 					   ],
-            'email' => ['rules'=>'required|is_unique[user.email]',
+            'email' => ['rules'=>'required|is_unique[user.email]|ipbemail|valid_email',
                         'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
-                                    'is_unique'=>'Alamat Surel Pernah digunakan']
+                                    'is_unique'=>'Alamat Surel Pernah digunakan',
+                                    'ipbemail'=>'Alamat Surel Bukan alamat email ipb',
+                                    'valid_email'=>'Alamat Surel Tidak Valid',
+									]
                         ],
 			'password1' => ['rules'=>'required|min_length[8]',
 							 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
@@ -227,9 +230,11 @@ class User extends BaseController
 						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
 						'max_length'=> 'Maksimal 50 karakter']
 					   ],
-            'email' => ['rules'=>'required|is_unique[user.email,id_user,{id_user}]',
+            'email' => ['rules'=>'required|is_unique[user.email,id_user,{id_user}]|ipbemail|valid_email',
                         'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
-                                    'is_unique'=>'Alamat Surel Pernah digunakan']
+                                    'is_unique'=>'Alamat Surel Pernah digunakan',
+                                    'ipbemail'=>'Alamat Surel Bukan alamat email ipb',
+                                    'valid_email'=>'Alamat Surel Tidak Valid',]
 								],
 			'password' => ['rules'=>'required|min_length[8]',
 							 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
@@ -363,9 +368,12 @@ class User extends BaseController
 						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
 						'max_length'=> 'Maksimal 50 karakter']
 					],
-			'email' => ['rules'=>'required|is_unique[user.email]',
+			'email' => ['rules'=>'required|is_unique[user.email]|ipbemail|valid_email',
 						'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
-									'is_unique'=>'Alamat Surel Pernah digunakan']
+									'is_unique'=>'Alamat Surel Pernah digunakan',
+                                    'ipbemail'=>'Alamat Surel Bukan alamat email ipb',
+                                    'valid_email'=>'Alamat Surel Tidak Valid'
+									]
 						],
 			'password1' => ['rules'=>'required|min_length[8]',
 							'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',

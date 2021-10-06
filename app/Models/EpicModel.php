@@ -8,7 +8,7 @@ class EpicModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_epic';
     protected $updatedField  = 'updated_epic';
-    protected $allowedFields = ['id_epic','id_sprint','isi','status','estimated','elapsed'];
+    protected $allowedFields = ['id_epic','id_sprint','isi','status','estimated','elapsed','creator_epic'];
     public function getEpicbyProject($id_project = false)
     {
         if($id_project == false)
@@ -32,6 +32,14 @@ class EpicModel extends Model
     public function getCountDo($id_project)
     {
         return $this->select("epic.id_sprint,sprint.start_sprint , DATE_FORMAT(sprint.start_sprint,'%Y-%m-%d') as tanggal_mulai")->selectSum('estimated')->join('sprint','sprint.id_sprint=epic.id_sprint')->join('project','project.id_project=sprint.id_project')->groupBy(['epic.id_sprint'])->where('sprint.id_project',$id_project)->whereIn('epic.status',['TO DO','ON PROGRESS','VERIFY','DONE'])->findAll();
+    }
+
+    public function countEpicbyUserProject()
+    {
+        return $this->select('user.id_user,epic.creator_epic,sprint.id_project')->selectCount('epic.id_epic')
+        ->join('member','member.id_member=epic.creator_epic')->join('user','user.id_user=member.id_user')
+        ->join('sprint','sprint.id_sprint=epic.id_sprint')
+        ->groupBy('epic.creator_epic','sprint.id_project,')->findAll();
     }
     
 

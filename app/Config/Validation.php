@@ -57,4 +57,13 @@ class MyRules
             return FALSE;
         }
 	}
+	public function ipbemail($email): bool
+	{
+		if (strpos($email, '@apps.ipb.ac.id')) {
+			return TRUE;
+		}
+		else {
+			return FALSE;
+		}
+	}
 }

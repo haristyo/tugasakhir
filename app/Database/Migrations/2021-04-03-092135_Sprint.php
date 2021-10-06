@@ -32,11 +32,15 @@ class Sprint extends Migration
 			'updated_sprint' => [
 				'type'           => 'DATETIME',
 				'null'           => true,
-			]
+			],
+			'goal' => [
+				'type'           => 'text',
+				'null'           => true,
+			],
 			
 		]);
 		$this->forge->addKey('id_sprint', true);
-		$this->forge->addForeignKey('id_project','project','id_project','CASCADE','CASCADE');
+		$this->forge->addForeignKey('id_project','Project','id_project','CASCADE','CASCADE');
 		$this->forge->createTable($this->table);
 	}
 

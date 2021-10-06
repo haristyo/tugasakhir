@@ -5,6 +5,8 @@ use App\Models\ProjectModel;
 use App\Models\MemberModel;
 use App\Models\MeetingModel;
 use App\Models\PresensiModel;
+use App\Models\BacklogModel;
+use App\Models\EpicModel;
 use App\Models\UserModel;
 use App\Models\UsersModel;
 use App\Models\SprintModel;
@@ -16,6 +18,8 @@ class Admin extends BaseController
     protected $memberModel;
     protected $meetingModel;
     protected $presensiModel;
+    protected $backlogModel;
+    protected $epicModel;
     protected $userModel;
     protected $usersModel;
     protected $sprintModel;
@@ -26,6 +30,8 @@ class Admin extends BaseController
         $this->memberModel = new MemberModel();
         $this->meetingModel = new MeetingModel();
         $this->presensiModel = new PresensiModel();
+        $this->backlogModel = new BacklogModel();
+        $this->epicModel = new EpicModel();
         $this->userModel = new UserModel();
         $this->usersModel = new UsersModel();
         $this->sprintModel = new SprintModel();
@@ -399,11 +405,14 @@ class Admin extends BaseController
             'page'=>$this->request->getVar('page_user'),
             'keyword'=>esc($keyword),
             'status'=>esc($status),
+            'member'=>esc($this->memberModel->getMemberbyUser()),
+            'backlog'=>esc($this->backlogModel->countBacklogbyUserProject()),
+            'epic'=>esc($this->epicModel->countEpicbyUserProject()),
             // 'resource' =>esc(),
 
             
         ];
-        // dd($data);
+        // dd($data['epic']);
         // $data = ['user' => ($user->where('id_user',$this->session->id_user)->first())];
         
         // d(($data));

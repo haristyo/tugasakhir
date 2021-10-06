@@ -47,11 +47,16 @@ class Epic extends Migration
 				'type'			=> 'INT',
 				'null'			=> true,
 				'default'        => '0'
-			]
+			],
+			'creator_epic' => [
+				'type'           => 'INT',
+				'unsigned'		 => true,
+				'null'           => true,
+			],
 		]);
 		$this->forge->addKey('id_epic', true);
-		$this->forge->addForeignKey('id_project','project','id_project','CASCADE','CASCADE');
-		$this->forge->addForeignKey('id_sprint','sprint','id_sprint','CASCADE','CASCADE');
+		$this->forge->addForeignKey('creator_epic','Member','id_member','NO ACTION','CASCADE');
+		$this->forge->addForeignKey('id_sprint','Sprint','id_sprint','CASCADE','CASCADE');
 		$this->forge->createTable($this->table);
 	}
 

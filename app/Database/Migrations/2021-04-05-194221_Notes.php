@@ -45,9 +45,9 @@ class Notes extends Migration
 			],
 		]);
 		$this->forge->addKey('id_notes', true);
-		$this->forge->addForeignKey('id_project','project','id_project','CASCADE','CASCADE');
-		$this->forge->addForeignKey('creator_notes','member','id_member','NO ACTION','CASCADE');
-		$this->forge->addForeignKey('sprint','sprint','id_sprint','CASCADE','CASCADE');
+		$this->forge->addForeignKey('id_project','Project','id_project','CASCADE','CASCADE');
+		$this->forge->addForeignKey('creator_notes','Member','id_member','NO ACTION','CASCADE');
+		$this->forge->addForeignKey('sprint','Sprint','id_sprint','CASCADE','CASCADE');
 		$this->forge->createTable($this->table);
 	}
 

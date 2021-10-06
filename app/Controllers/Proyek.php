@@ -815,11 +815,13 @@ class Proyek extends BaseController
 			
 			return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
         }
+        $creator_backlog = ($this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member']);
         if ($this->request->getVar('csrf_test_name')) {
             $this->backlogModel->save([
                 'isi'            => $this->request->getVar('isibacklog'),
                 'id_project'     => $id_project,
-                'point'      => $this->request->getVar('point')
+                'point'          => $this->request->getVar('point'),
+                'creator_backlog'=> $creator_backlog
                 ]);
         }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'))->withInput();
@@ -906,7 +908,7 @@ class Proyek extends BaseController
                 'isi'           => $this->request->getVar('isiepic'.$id_epic),
                 'status'        => $this->request->getVar('status'.$id_epic),
                 'elapsed'       => $this->request->getVar('elapsed'.$id_epic),
-                'estimated'     => $estimated,
+                'estimated'     => $estimated
                 ]);
             $selected = $this->request->getVar('checkbox');
             // d($selected)    ;
@@ -967,7 +969,8 @@ class Proyek extends BaseController
                 'isi'       => $this->request->getVar('isiepic'),
                 'status'    => 'TO DO',
                 'id_sprint' => $id_sprint,
-                'estimated' => $this->request->getVar('estimated')
+                'estimated' => $this->request->getVar('estimated'),
+                'creator_epic'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 ]);
             }
         return redirect()->to(base_url('/proyek/'.$id_project.'/board'));
@@ -1075,7 +1078,8 @@ class Proyek extends BaseController
             $this->notesModel->save([
                 'isi'            => $this->request->getVar('isinotes'.$sprint),
                 'id_project' => $id_project,
-                'sprint'        => $sprint
+                'sprint'        => $sprint,
+                'creator_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 ]);
         }
         else {
@@ -1089,6 +1093,7 @@ class Proyek extends BaseController
             $this->notesModel->save([
                 'isi'            => $this->request->getVar('isinotes'),
                 'id_project' => $id_project,
+                'creator_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 ]);
         }
     }
