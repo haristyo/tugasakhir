@@ -265,39 +265,75 @@ class User extends BaseController
 	}
 	public function update()
 	{
-		if(!$this->validate([
-			'username' => ['rules'=>'required|is_unique[user.username,id_user,{id_user}]|max_length[32]',
-						'errors'=>[ 'required'=>  'Nama User Harus diisi',
-									'is_unique'=> 'Nama User telah digunakan',
-									'max_length'=> 'Maksimal 32 karakter']
-								],
-			'nama_user' => ['rules'=>'required|max_length[50]',
-						'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
-						'max_length'=> 'Maksimal 50 karakter']
-					   ],
-            'email' => ['rules'=>'required|is_unique[user.email,id_user,{id_user}]|ipbemail|valid_email',
-                        'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
-                                    'is_unique'=>'Alamat Surel Pernah digunakan',
-                                    'ipbemail'=>'Alamat Surel Bukan alamat email ipb',
-                                    'valid_email'=>'Alamat Surel Tidak Valid',]
-								],
-			'password' => ['rules'=>'required|min_length[8]',
-							 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
-										 'min_length'=> 'Kata Sandi minimal 8 karakter']
-                              ],
-			'foto_profile' =>['rules'=>'is_image[foto_profile]|mime_in[foto_profile,image/jpg,image/jpeg,image/png]',
-			'errors'=>[  'is_image'	=> 'File harus berupa gambar',
-										   'mime_in'	=> 'File berformat jpg/jpeg/png']
-							]
-                               
-                               
-		])) {
-			// $validation = \Config\Services::validation();
-			// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
-			return redirect()->to(base_url('/profil/edit'))->withInput();
+		$data = esc($this->userModel->where('id_user',$this->request->getVar('id_user'))->first());
+		if ($data['is_admin']=='N') {
+			if(!$this->validate([
+				'username' => ['rules'=>'required|is_unique[user.username,id_user,{id_user}]|max_length[32]',
+							'errors'=>[ 'required'=>  'Nama User Harus diisi',
+										'is_unique'=> 'Nama User telah digunakan',
+										'max_length'=> 'Maksimal 32 karakter']
+									],
+				'nama_user' => ['rules'=>'required|max_length[50]',
+							'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
+							'max_length'=> 'Maksimal 50 karakter']
+						   ],
+				'email' => ['rules'=>'required|is_unique[user.email,id_user,{id_user}]|ipbemail|valid_email',
+							'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
+										'is_unique'=>'Alamat Surel Pernah digunakan',
+										'ipbemail'=>'Alamat Surel Bukan alamat email ipb',
+										'valid_email'=>'Alamat Surel Tidak Valid',]
+									],
+				'password' => ['rules'=>'required|min_length[8]',
+								 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
+											 'min_length'=> 'Kata Sandi minimal 8 karakter']
+								  ],
+				'foto_profile' =>['rules'=>'is_image[foto_profile]|mime_in[foto_profile,image/jpg,image/jpeg,image/png]',
+				'errors'=>[  'is_image'	=> 'File harus berupa gambar',
+											   'mime_in'	=> 'File berformat jpg/jpeg/png']
+								]
+								   
+								   
+			])) {
+				// $validation = \Config\Services::validation();
+				// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+				return redirect()->to(base_url('/profil/edit'))->withInput();
+			}
 		}
+		else {
+			if(!$this->validate([
+				'username' => ['rules'=>'required|is_unique[user.username,id_user,{id_user}]|max_length[32]',
+							'errors'=>[ 'required'=>  'Nama User Harus diisi',
+										'is_unique'=> 'Nama User telah digunakan',
+										'max_length'=> 'Maksimal 32 karakter']
+									],
+				'nama_user' => ['rules'=>'required|max_length[50]',
+							'errors'=>[ 'required'=>  'Nama Lengkap Harus diisi',
+							'max_length'=> 'Maksimal 50 karakter']
+						   ],
+				'email' => ['rules'=>'required|is_unique[user.email,id_user,{id_user}]|valid_email',
+							'errors'=>[ 'required'=> 'Alamat Surel Harus diisi',
+										'is_unique'=>'Alamat Surel Pernah digunakan',
+										'valid_email'=>'Alamat Surel Tidak Valid',]
+									],
+				'password' => ['rules'=>'required|min_length[8]',
+								 'errors'=>[ 'required'=>  'Kata Sandi wajib diisi',
+											 'min_length'=> 'Kata Sandi minimal 8 karakter']
+								  ],
+				'foto_profile' =>['rules'=>'is_image[foto_profile]|mime_in[foto_profile,image/jpg,image/jpeg,image/png]',
+				'errors'=>[  'is_image'	=> 'File harus berupa gambar',
+											   'mime_in'	=> 'File berformat jpg/jpeg/png']
+								]
+								   
+								   
+			])) {
+				// $validation = \Config\Services::validation();
+				// return redirect()->to(base_url('/recipe/create'))->withInput()->with('validation',$validation);
+				return redirect()->to(base_url('/profil/edit'))->withInput();
+			}
+		}
+		
 	// dd($this->request->getFile('foto_profile'));
-	$data = esc($this->userModel->where('id_user',$this->request->getVar('id_user'))->first());
+	
 	if (password_verify($this->request->getVar('password'),$data['password'])) {
 			
 			$foto_profile = $this->request->getFile('foto_profile');
@@ -502,7 +538,7 @@ class User extends BaseController
 
             // Isi Email
             $this->mail->isHTML(true);
-            $this->mail->Subject = "Anda berhasil mendaftarkan akun";
+            $this->mail->Subject = "Permintaan Atur Ulang Kata Sandi";
             $this->mail->Body    = $message;
 
             $this->mail->send();

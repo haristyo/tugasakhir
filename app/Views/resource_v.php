@@ -69,7 +69,7 @@
         <!-- end modal-->
 
         <!-- Modal -->
-            <div class="modal fade" id="createdocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade " id="createdocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" >
             <div class="modal-content" style="background-color:#fbeeac;">
                 <div class="modal-header">
@@ -209,11 +209,11 @@
                             </div>
                         </div>
                         <div class="modal fade" id="file<?=$files['id_file'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-md" >
+                            <div class="modal-dialog modal-dialog-centered modal-lg" >
                             <div class="modal-content" style="background-color:#fbeeac;">
-                                <div class="modal-header d-flex py-2">
+                                <div class="modal-header d-flex my-auto ">
                                     <h5 class="modal-title mr-auto ml-4" id="exampleModalLabel"><?=$files['nama_asli']; ?></h5>
-                                    <h6 class="modal-title ml-auto mr-0 pl-2" style="color:black;" id="exampleModalLabel" ><?=$files['username']; ?> Pada <?=$files['created_file']; ?></h6>
+                                    <h6 class="modal-title ml-auto mr-0 pl-2 mt-1" style="color:black;" id="exampleModalLabel" ><?=$files['username']; ?> Pada <?=$files['created_file']; ?></h6>
                                     
                                     <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -226,7 +226,8 @@
                                 <div class="modal-footer d-flex">
                                     <a class="btn btn-primary ml-0 mr-auto" href="<?=base_url("resource/".$files['id_project']."/".$files['nama_file']); ?>" >Unduh Dokumen</a>
                                     <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?>
-                                    <form action="proyek/deletefile/<?=$files['id_file']?>" method="post">
+                                    <form action="<?= base_url('proyek/deletefile/'.$files['id_file'])?>" method="post">
+                                    
                                         <?= csrf_field();?>
                                         <button type="submit" class="btn btn-danger">Hapus Dokumen</button>
                                     </form>
@@ -244,18 +245,18 @@
                                 <div class="h-100 w-100 d-flex"><i class="m-auto fa fa-link fa-5x"></i></div>
                             </div>
                             <div class="card-body w-100 h-100">
-                            <h5 class="card-title mx-atuo" ><?=$files['nama_asli']; ?></h5>
+                            <h5 class="card-title mx-auto" ><?=$files['nama_asli']; ?></h5>
                             <p class="card-text "><?php echo nl2br(substr($files['deskripsi_file'],0,75))."..."; ?></p>
                             
                             </div>
                         </div>
                         <div class="modal fade" id="file<?=$files['id_file'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-md" >
+                            <div class="modal-dialog modal-dialog-centered modal-lg" >
                             <div class="modal-content" style="background-color:#fbeeac;">
-                                <div class="modal-header d-flex py-2">
+                                <div class="modal-header d-flex py-2  mt-auto">
                                     <h5 class="modal-title mr-auto ml-4" id="exampleModalLabel"><?=$files['nama_asli']; ?></h5>
-                                    <h6 class="modal-title ml-auto mr-0 pl-2" style="color:black;" id="exampleModalLabel" ><?=$files['username']; ?> Pada <?=$files['created_file']; ?></h6>
-                                    
+                                    <h6 class="modal-title ml-auto mr-0 pl-2 mt-1" style="color:black;" id="exampleModalLabel" ><?=$files['username']; ?> Pada <?=$files['created_file']; ?></h6>
+        
                                     <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -267,7 +268,7 @@
                                 <div class="modal-footer d-flex">
                                     <a class="btn btn-primary ml-0 mr-auto" href="<?=$files['nama_asli']?>" target="_blank">Kunjungi tautan</a>
                                     <?php if ($member['position'] == "Scrum Master" || $member['id_member']==$files['uploader_file']) {?>
-                                        <form action="proyek/deletefile/<?=$files['id_file']?>" method="post">
+                                        <form action="<?= base_url('proyek/deletefile/'.$files['id_file'])?>" method="post">
                                             <?= csrf_field();?>
                                             <button type="submit" class="btn btn-danger">Hapus Tautan</button>
                                         </form>

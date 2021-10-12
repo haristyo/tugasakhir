@@ -8,7 +8,7 @@ class EpicModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_epic';
     protected $updatedField  = 'updated_epic';
-    protected $allowedFields = ['id_epic','id_sprint','isi','status','estimated','elapsed','creator_epic'];
+    protected $allowedFields = ['id_epic','id_sprint','isi','status','estimated','elapsed','creator_epic','editor_epic'];
     public function getEpicbyProject($id_project = false)
     {
         if($id_project == false)
@@ -17,7 +17,15 @@ class EpicModel extends Model
         }
         else {
             
-            return $this->join('sprint','sprint.id_sprint=epic.id_sprint')->join('project','project.id_project=sprint.id_project')->where('sprint.id_project',$id_project)->orderBy('updated_epic', 'DESC')
+            // return $this->join('sprint','sprint.id_sprint=epic.id_sprint')->join('project','project.id_project=sprint.id_project')
+            return $this->select('epic.*, sprint.*, project.*, creator.id_user AS pembuat, editor.id_user AS pengedit, user_creator.nama_user AS nama_pembuat, user_editor.nama_user AS nama_pengedit')
+            ->join('sprint','sprint.id_sprint=epic.id_sprint')
+            ->join('project','project.id_project=sprint.id_project')
+            ->join("member creator" ,'creator.id_member=epic.creator_epic','left')
+            ->join("member editor",'editor.id_member=epic.editor_epic','left')
+            ->join('user user_creator','user_creator.id_user=creator.id_user','left')
+            ->join('user user_editor','user_editor.id_user=editor.id_user','left')
+            ->where('sprint.id_project',$id_project)->orderBy('updated_epic', 'DESC')
             ->findAll();
         }
     }

@@ -48,10 +48,16 @@ class Backlog extends Migration
 				'unsigned'		 => true,
 				'null'           => false,
 			],
+			'editor_backlog' => [
+				'type'           => 'INT',
+				'unsigned'		 => true,
+				'null'           => false,
+			],
 		]);
 		$this->forge->addKey('id_backlog', true);
 		$this->forge->addForeignKey('id_project','Project','id_project','CASCADE','CASCADE');
 		$this->forge->addForeignKey('creator_backlog','Member','id_member','NO ACTION','CASCADE');
+		$this->forge->addForeignKey('editor_backlog','Member','id_member','NO ACTION','CASCADE');
 		$this->forge->addForeignKey('sprint','Sprint','id_sprint','CASCADE','CASCADE');
 		$this->forge->createTable($this->table);
 	}

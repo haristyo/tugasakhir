@@ -165,7 +165,7 @@
               <!-- end Button trigger modal -->
               <!-- Modal -->
               <div class="modal fade" id="exampleModal<?=$meetings['id_meeting'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
+                  <div class="modal-dialog modal-lg modal-dialog-centered">
                       <div class="modal-content">
                           <div class="modal-header d-flex">
                               <h5 class="modal-title mr-auto" id="exampleModalLabel"><?=$meetings['agenda'].' '.date("d-F-Y", strtotime($meetings['time_meeting'])).' '.date("H:i", strtotime($meetings['time_meeting']));?></h5>

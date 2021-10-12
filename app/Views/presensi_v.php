@@ -37,7 +37,7 @@
               <td> 
               <!-- Button trigger modal -->
               <div class=" d-flex w-100 mx-auto">
-                  <button type="button" class="btn btn-success mr-0 ml-auto" data-toggle="modal" data-target="#exampleModal<?=$members['id_member'];?>" clicked="clicked">
+                  <button type="button" class="btn btn-success mx-auto" data-toggle="modal" data-target="#exampleModal<?=$members['id_member'];?>" clicked="clicked">
                   <?php $x = 0;
                 foreach ($presensi as $presensis) {
                   if ($presensis['id_member'] == $members['id_member']) {
@@ -60,7 +60,7 @@
               <!-- end Button trigger modal -->
               <!-- Modal -->
               <div class="modal fade" id="exampleModal<?=$members['id_member'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
+                  <div class="modal-dialog modal-lg modal-dialog-centered">
                       <div class="modal-content">
                           <div class="modal-header d-flex">
                               <h5 class="modal-title mr-auto" id="exampleModalLabel"><?=$members['username'];?></h5>

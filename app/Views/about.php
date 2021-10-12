@@ -45,6 +45,7 @@
 <section id="how5" style="background-color: #3445b4;" class="p-2">
 <div class="container">
   <div class="row  my-auto w-100">
+    <div class="col-12 col-md-12 text-center"> <a href="<?= base_url('Panduan Penggunaan Scrum Tool.pdf')?>" class="btn btn-success" target="_blank"> <span class="mx-2 my-auto fa fa-download" ></span>  Unduh Panduan Penggunaan Scrum Tool</a></div>
     <div class="col-6 col-md-6 col-lg-6 col-sm-12 my-auto">
       <img src="<?= base_url('img/Logo-IPB-baru.svg')?>" alt="Logo IPB" height="200px" style="display: block;margin-left: auto; margin-right: auto;">
     </div>

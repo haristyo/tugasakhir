@@ -17,7 +17,14 @@ class NotesModel extends Model
         }
         else {
             
-            return $this->join('project','project.id_project=notes.id_project')->where('notes.id_project',$id_project)
+            // return $this->join('project','project.id_project=notes.id_project')
+            return $this->select('notes.*, project.*, creator.id_user AS pembuat, editor.id_user AS pengedit, user_creator.nama_user AS nama_pembuat, user_editor.nama_user AS nama_pengedit')
+            ->join('project','project.id_project=notes.id_project')
+            ->join("member creator" ,'creator.id_member=notes.creator_notes')
+            ->join("member editor",'editor.id_member=notes.editor_notes','left')
+            ->join('user user_creator','user_creator.id_user=creator.id_user')
+            ->join('user user_editor','user_editor.id_user=editor.id_user','left')
+            ->where('notes.id_project',$id_project)
             ->findAll();
         }
     }

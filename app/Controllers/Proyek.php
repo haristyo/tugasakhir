@@ -306,12 +306,12 @@ class Proyek extends BaseController
             if($agenda) {
                 $meeting = $project = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
                 ->join('project','project.id_project=meeting.id_project')->where(['meeting.id_project'=>$id_project,'meeting.agenda'=>$agenda])->orderBy('time_meeting', 'DESC')
-                ->like('agenda',$keyword)->orLike('deskripsi_meeting',$keyword);
+                ->HavingLike('agenda',$keyword)->orHavingLike('deskripsi_meeting',$keyword);
             }
             else {
                 $meeting = $this->meetingModel->join('member','member.id_member=meeting.creator_meeting')
                 ->join('project','project.id_project=meeting.id_project')->where('meeting.id_project',$id_project)->orderBy('time_meeting', 'DESC')
-                ->like('agenda',$keyword)->orLike('deskripsi_meeting',$keyword);
+                ->HavingLike('agenda',$keyword)->orHavingLike('deskripsi_meeting',$keyword);
             }
         }
         else {
@@ -561,7 +561,7 @@ class Proyek extends BaseController
 
             ];
             // dd($data);
-            // dd($data['lastsprint']);
+            // dd($data['epic']);
             // d($data['checkboxall']);
             // dd($data['checkboxchecked']);
             //     d($this->epicModel->getEpicbyProject());
@@ -740,7 +740,7 @@ class Proyek extends BaseController
                 'id_project'    => $id_project,
                 'nama_asli'  	=> $this->request->getVar('link'),
                 'type' 	        => 'tautan',
-                'deskripsi_file'=> $this->request->getVar('deskripsi_file'),
+                'deskripsi_file'=> $this->request->getVar('deskripsi_link'),
                 'uploader_file' => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 'sprint'        => $sprint
                 ]);
@@ -757,7 +757,7 @@ class Proyek extends BaseController
             $id_project =  $this->fileModel->getFilebyId($id_file)['id_project'];
             $type =  $this->fileModel->getFilebyId($id_file)['type'];
             $file =  $this->fileModel->getFilebyId($id_file)['nama_file'];
-            if ($type != 'link') {
+            if ($type != 'tautan') {
                 unlink('resource/'.$id_project.'/'.$file);
             }
 
@@ -794,7 +794,8 @@ class Proyek extends BaseController
                     'id_backlog'        => $id_backlog,
                     'isi'            => $this->request->getVar('isibacklog'.$id_backlog),
                     'sprint'        => $sprint,
-                    'point'      => $this->request->getVar('point')
+                    'point'      => $this->request->getVar('point'),
+                    'editor_backlog'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                     ]);
             }
             else {
@@ -908,7 +909,8 @@ class Proyek extends BaseController
                 'isi'           => $this->request->getVar('isiepic'.$id_epic),
                 'status'        => $this->request->getVar('status'.$id_epic),
                 'elapsed'       => $this->request->getVar('elapsed'.$id_epic),
-                'estimated'     => $estimated
+                'estimated'     => $estimated,
+                'editor_epic'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 ]);
             $selected = $this->request->getVar('checkbox');
             // d($selected)    ;
@@ -983,18 +985,18 @@ class Proyek extends BaseController
         if($this->sprintModel->getLastSprintbyProject($id_project) == null) {
             $this->sprintModel->save([
                 'id_project'    => $id_project,
-                
                 ]); 
+            $id_sprint = esc($this->sprintModel->getLastSprintbyProject($id_project)['id_sprint']);
             $this->epicModel->save([
-                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'id_sprint' =>  $id_sprint,
                 'status'    => 'REVIEW'
             ]);
             $this->epicModel->save([
-                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'id_sprint' =>  $id_sprint,
                 'status'    => 'ANALYSIS'
             ]);
             $this->epicModel->save([
-                'id_sprint' => $this->sprintModel->getLastSprintbyProject($id_project)['id_sprint'],
+                'id_sprint' =>  $id_sprint,
                 'status'    => 'ACTION'
             ]);
         }
@@ -1080,8 +1082,8 @@ class Proyek extends BaseController
                 'isi'            => $this->request->getVar('isinotes'.$sprint),
                 'id_project' => $id_project,
                 'sprint'        => $sprint,
-                'creator_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
-                'editor_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
+                'creator_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member']
+                
                 ]);
         }
         else {
@@ -1096,7 +1098,6 @@ class Proyek extends BaseController
                 'isi'            => $this->request->getVar('isinotes'),
                 'id_project' => $id_project,
                 'creator_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
-                'editor_notes'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
                 ]);
         }
     }
@@ -1132,21 +1133,25 @@ class Proyek extends BaseController
     }
     public function editdragepic(Type $var = null)
     {
+        $id_project = $this->epicModel->getEpicbyId($this->request->getVar('id_epic'))['id_project'];
         $this->epicModel->save([
             'id_epic'    => $this->request->getVar('id_epic'),
-            'status'     => $this->request->getVar('status')
+            'status'     => $this->request->getVar('status'),
+            'editor_epic'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
             ]);
-            dd($_POST);
+            // dd($_POST);
     }
     public function editdragbacklog(Type $var = null)
     {
+        $id_project = $this->backlogModel->getBacklogbyId($this->request->getVar('id_backlog'))['id_project'];
         if($this->request->getVar('sprint')=='product') { $sprint = null;} else {
             $sprint = $this->request->getVar('sprint');
         }
         $this->backlogModel->save([
             'id_backlog'    => $this->request->getVar('id_backlog'),
-            'sprint'     => $sprint
+            'sprint'     => $sprint,
+            'editor_backlog'     => $this->memberModel->getIdbyUserProject($this->session->id_user, $id_project)['id_member'],
             ]);
-            dd($_POST);
+            // dd($_POST);
     }
 }

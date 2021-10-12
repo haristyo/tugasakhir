@@ -8,7 +8,7 @@ class BacklogModel extends Model
     protected $useTimestamps = true;
     protected $createdField  = 'created_backlog';
     protected $updatedField  = 'updated_backlog';
-    protected $allowedFields = ['id_backlog','id_project','isi','sprint','point','creator_backlog'];
+    protected $allowedFields = ['id_backlog','id_project','isi','sprint','point','creator_backlog','editor_backlog'];
     public function getBacklogbyProject($id_project = false)
     {
         if($id_project == false)
@@ -17,7 +17,13 @@ class BacklogModel extends Model
         }
         else {
             
-            return $this->join('project','project.id_project=backlog.id_project')->where('backlog.id_project',$id_project)->orderBy('point', 'DESC')
+            return $this->select('backlog.*, project.*, creator.id_user AS pembuat, editor.id_user AS pengedit, user_creator.nama_user AS nama_pembuat, user_editor.nama_user AS nama_pengedit')
+            ->join('project','project.id_project=backlog.id_project')
+            ->join("member creator" ,'creator.id_member=backlog.creator_backlog')
+            ->join("member editor",'editor.id_member=backlog.editor_backlog','left')
+            ->join('user user_creator','user_creator.id_user=creator.id_user')
+            ->join('user user_editor','user_editor.id_user=editor.id_user','left')
+            ->where('backlog.id_project',$id_project)->orderBy('point', 'DESC')
             ->findAll();
         }
     }

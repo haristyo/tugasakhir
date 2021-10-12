@@ -99,6 +99,11 @@
                                             </div>
                                     </div>
                                         <div class="modal-footer">
+                                            <?php if($notes['editor_notes']==null){?>
+                                                <p class="ml-0 mr-auto" style="color:black;">Dibuat oleh <?= $notes['nama_pembuat'];?></p>
+                                            <?php } else{?>
+                                                <p class="ml-0 mr-auto" style="color:black;">Diubah oleh <?= $notes['nama_pengedit'];?></p>
+                                            <?php } ?> 
                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Notes</button>
                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Notes</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -211,7 +216,9 @@
                                                 <label for="posisi" class="text-left" style="float: left; color:black;">To</label>
                                                 <select class="custom-select" name="posisi">
                                                     <option value="Product Backlog" selected >Product Backlog</option>
-                                                    <option value="Sprint Backlog" >Sprint Backlog</option>
+                                                    <?php if ($lastsprint['id_sprint']!=null) {?>
+                                                        <option value="Sprint Backlog" >Sprint Backlog</option>
+                                                    <?php };?>
                                                 </select>
                                             </div>
                                     
@@ -232,10 +239,15 @@
                                             </div>
                                     </div>
                                         <div class="modal-footer">
-			<?php if ($member['position'] !="Development Team") {?>
-                                            		<button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Backlog</button>
-	                                   	<button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Backlog</button>
-			<?php } ?>
+                                            <?php if($backlogs['editor_backlog']==null){?>
+                                                <p class="ml-0 mr-auto" style="color:black;">Dibuat oleh <?= $backlogs['nama_pembuat'];?></p>
+                                            <?php } else{?>
+                                                <p class="ml-0 mr-auto" style="color:black;">Diubah oleh <?= $backlogs['nama_pengedit'];?></p>
+			                                <?php } ?> 
+                                            <?php if ($member['position'] !="Development Team") {?>
+                                                <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Backlog</button>
+	                                   	        <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Backlog</button>
+                                            <?php } ?>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                                         </form>
                                     </div>
@@ -428,6 +440,11 @@
                                                             </div>
                                                     </div>
                                                         <div class="modal-footer">
+                                                        <?php if($notes['editor_notes']==null){?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Dibuat oleh <?= $notes['nama_pembuat'];?></p>
+                                                        <?php } else{?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Diubah oleh <?= $notes['nama_pengedit'];?></p>
+                                                        <?php } ?> 
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Notes</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Notes</button>
@@ -536,13 +553,13 @@
                                             <div class="modal fade" id="backlog<?=$backlogs['id_backlog'];?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content" style="background-color:#dcf5ef;">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Sprint Backlog</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <form class="" method="post" action="/proyek/editbacklog/<?=$backlogs['id_backlog'] ;?>">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Sprint Backlog</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form class="" method="post" action="/proyek/editbacklog/<?=$backlogs['id_backlog'] ;?>">
                                                     <div class="modal-body">
                                                             <?= csrf_field(); ?>
                                                             <div class="form-group">
@@ -569,15 +586,21 @@
                                                                 <!-- <small id="emailHelp" class="form-text text-muted">enter your email or username</small> -->
                                                             </div>
                                                     </div>
-                                                        <div class="modal-footer">
+                                                    <div class="modal-footer">
+                                                        <?php if($backlogs['editor_backlog']==null){?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Dibuat oleh <?= $backlogs['nama_pembuat'];?></p>
+                                                        <?php } else{?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Diubah oleh <?= $backlogs['nama_pengedit'];?></p>
+                                                        <?php } ?>
+
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] =="Scrum Master")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Backlog</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Backlog</button>
-                                            <?php }?>
+                                                        <?php }?>
+                                                    </form>
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                        </form>
                                                     </div>
-                                                </div>
+                                            </div>
 
                                             </div>
                                             </div>
@@ -781,6 +804,11 @@
                                                            
                                                         </div>
                                                         <div class="modal-footer">
+                                                        <?php if($epics['editor_epic']==null){?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Dibuat oleh <?= $epics['nama_pembuat'];?></p>
+                                                        <?php } else{?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Diubah oleh <?= $epics['nama_pengedit'];?></p>
+                                                        <?php } ?> 
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
@@ -953,6 +981,11 @@
                                                             }?>
                                                         </div>
                                                         <div class="modal-footer">
+                                                        <?php if($epics['editor_epic']==null){?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Dibuat oleh <?= $epics['nama_pembuat'];?></p>
+                                                        <?php } else{?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Diubah oleh <?= $epics['nama_pengedit'];?></p>
+                                                        <?php } ?> 
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
@@ -1124,6 +1157,11 @@
                                                             }?>
                                                         </div>
                                                         <div class="modal-footer">
+                                                        <?php if($epics['editor_epic']==null){?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Dibuat oleh <?= $epics['nama_pembuat'];?></p>
+                                                        <?php } else{?>
+                                                            <p class="ml-0 mr-auto" style="color:black;">Diubah oleh <?= $epics['nama_pengedit'];?></p>
+                                                        <?php } ?> 
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
@@ -1276,7 +1314,7 @@
                                                                     <?=$validation->getError('isiepic'.$epics['id_epic']);?>
                                                                 </div>
                                                             </div>
-                                                            <div class="ml-0 mr-auto d-flex" style="color:black;"><h4 class="my-auto">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
+                                                            <div class="ml-0 mr-auto d-flex" ><h4 class="my-auto" style="color:white;">Checkbox</h4><?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?> <i class="fa fa-plus-circle fa-2x mx-1 my-auto" style="color:blue;" data-toggle="modal" data-target="#createcheckbox<?=$epics['id_epic']?>"></i> <?php }?></div>
                                                             <?php foreach ($checkbox as $checkboxes) {
                                                                 if ($checkboxes['id_epic']==$epics['id_epic']) {?>
                                                                      <div class="input-group mb-3">
@@ -1295,6 +1333,11 @@
                                                             }?>
                                                         </div>
                                                         <div class="modal-footer">
+                                                        <?php if($epics['editor_epic']==null){?>
+                                                            <p class="ml-0 mr-auto" style="color:white;">Dibuat oleh <?= $epics['nama_pembuat'];?></p>
+                                                        <?php } else{?>
+                                                            <p class="ml-0 mr-auto" style="color:white;">Diubah oleh <?= $epics['nama_pengedit'];?></p>
+                                                        <?php } ?> 
                                                         <?php if(($sprints['end_sprint'] == null || $sprints['end_sprint'] > date('Y-m-d H:i:s', time())) && ($member['position'] !="Product Owner")) {?>
                                                             <button type="submit" class="btn btn-danger" value="delete" name="submit">Hapus Task</button>
                                                             <button type="submit" class="btn btn-success" value="edit" name="submit">Ubah Task</button>
@@ -1465,6 +1508,7 @@
                                             }
                                         }
                                         ?>
+
                                         <?php foreach ($epic as $epics){
                                             if ($epics['status']=="ANALYSIS" && $epics['id_sprint']==$sprints['id_sprint'] ) {?>
                                                 <div class=" d-flex w-100 mx-auto" style=' height:24%;'>
@@ -1555,7 +1599,7 @@
                                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                                 <div class="modal-content" style="background-color:#8be0cc;">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Sprint <?=$ke?> Analysis</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Sprint <?=$ke?> Retrospecive Analysis</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                             </button>
